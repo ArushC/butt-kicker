@@ -1,0 +1,17 @@
+{
+  "name": "butt-kicker-prototype",
+  "version": "1.0.0",
+  "description": "An app to finally help you quit smoking",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && node server.js",
+    "client": "cd frontend && npm start"
+  },
+  "devDependencies": {
+    "concurrently": "^6.5.1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

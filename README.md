@@ -1,2 +1,1 @@
-# butt-kicker
-An app to help you finally quit smoking!
+After installing all dependencies, run "npm start" to preview the app locally. 

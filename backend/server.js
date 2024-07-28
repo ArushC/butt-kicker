@@ -20,7 +20,6 @@ app.use(session({
 
 //Route to which users POST if creating a new account
 app.post('/api/register', async (req, res) => {
-  debugger;
   const { username, password, name } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
   try {
@@ -53,7 +52,6 @@ app.get('/api/logout', (req, res) => {
 
 //Route to view this user's welcome page
 app.get('/api/user', (req, res) => {
-  debugger;
   if (req.session.userId) {
     res.json({ username: req.session.username, name: req.session.name });
   } else {

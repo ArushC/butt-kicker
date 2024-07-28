@@ -30,17 +30,22 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-//Route to which users POST if logging into an existing account
+// Route to login
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
-  const user = await knex('users').where({ username }).first();
-  if (user && await bcrypt.compare(password, user.password)) {
-    req.session.userId = user.id;
-    req.session.username = user.username;
-    req.session.name = user.name;
-    res.status(200).send('Login successful');
-  } else {
-    res.status(401).send('Invalid username or password');
+  try {
+    const user = await knex('users').where({ username }).first();
+    if (user && await bcrypt.compare(password, user.password)) {
+      req.session.userId = user.id;
+      req.session.username = user.username;
+      req.session.name = user.name;
+      res.status(200).json({ userId: user.id });
+    } else {
+      res.status(401).send('Invalid username or password');
+    }
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).send('Internal server error');
   }
 });
 
@@ -50,12 +55,36 @@ app.get('/api/logout', (req, res) => {
   res.status(200).send('Logout successful');
 });
 
-//Route to view this user's welcome page
+// Middleware to check authentication
+const checkAuth = (req, res, next) => {
+  if (!req.session.userId) {
+    return res.status(401).send('Not authenticated');
+  }
+  next();
+};
+
+// Route to get current user
 app.get('/api/user', (req, res) => {
   if (req.session.userId) {
-    res.json({ username: req.session.username, name: req.session.name });
+    res.status(200).json({ userId: req.session.userId });
   } else {
     res.status(401).send('Not authenticated');
+  }
+});
+
+// Route to get user by ID
+app.get('/api/users/:id', checkAuth, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await knex('users').where({ id }).first();
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).send('User not found');
+    }
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    res.status(500).send('Internal server error');
   }
 });
 

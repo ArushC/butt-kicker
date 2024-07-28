@@ -5,7 +5,6 @@
 const bcrypt = require('bcrypt');
 
 exports.seed = async function(knex) {
-  // Hash the password inside the async function
 
   // Purge ALL existing entries
   await knex('users').del();

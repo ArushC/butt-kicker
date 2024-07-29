@@ -7,9 +7,11 @@ function Register() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
-  const navigate = useNavigate(); // Changed from 'history' to 'navigate'
+  const navigate = useNavigate();
 
-  const handleRegister = async () => {
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
     if (password !== confirmPassword) {
       alert('Passwords do not match');
       return;
@@ -20,13 +22,16 @@ function Register() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password, name })
     });
+
     if (response.ok) {
-      navigate('/login'); // Use navigate directly for navigation
+      navigate(`/login?flashMessage=Successfully registered an account for ${username}. Please log in.`);
     } else {
-      const errorText = await response.text(); // Get the error message from the response
+      const errorText = await response.text();
       alert(`Error registering: ${errorText}`);
     }
   };
+
+  const isFormValid = password === confirmPassword && username && password && confirmPassword;
 
   return (
     <div style={styles.container}>
@@ -63,7 +68,9 @@ function Register() {
           onChange={e => setName(e.target.value)}
           style={styles.input}
         />
-        <button type="submit" style={styles.button}>Register</button>
+        <button type="submit" style={isFormValid ? styles.button : {...styles.button, ...styles.buttonDisabled}} disabled={!isFormValid}>
+          Register
+        </button>
       </form>
     </div>
   );
@@ -108,6 +115,10 @@ const styles = {
     borderRadius: '5px',
     cursor: 'pointer',
     marginTop: '10px'
+  },
+  buttonDisabled: {
+    backgroundColor: '#ccc',
+    cursor: 'not-allowed'
   }
 };
 

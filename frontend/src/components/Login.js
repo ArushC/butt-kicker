@@ -1,11 +1,21 @@
 // src/components/Login.js
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Login = ({ setIsAuthenticated }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
+  const [flashMessage, setFlashMessage] = useState('');
+
+  useEffect(() => {
+    const query = new URLSearchParams(location.search);
+    const message = query.get('flashMessage');
+    if (message) {
+      setFlashMessage(message);
+    }
+  }, [location]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -37,28 +47,31 @@ const Login = ({ setIsAuthenticated }) => {
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Butt Kicker</h1>
-      <h2 style={styles.subtitle}>Description of my app</h2>
+      <h2 style={styles.description}>Description of my app</h2>
+      {flashMessage && <div style={styles.flashMessage}>{flashMessage}</div>}
       <form onSubmit={handleSubmit} style={styles.form}>
-        <input 
-          type="text" 
-          value={username} 
-          onChange={e => setUsername(e.target.value)} 
-          placeholder="Username" 
-          required 
+        <input
+          type="text"
+          value={username}
+          onChange={e => setUsername(e.target.value)}
+          placeholder="Username"
+          required
           style={styles.input}
         />
-        <input 
-          type="password" 
-          value={password} 
-          onChange={e => setPassword(e.target.value)} 
-          placeholder="Password" 
-          required 
+        <input
+          type="password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          placeholder="Password"
+          required
           style={styles.input}
         />
         <button type="submit" style={styles.button}>Login</button>
       </form>
-      <p style={styles.question}>Is this your first time here?</p>
-      <button onClick={() => navigate('/register')} style={styles.registerButton}>Create A New Account</button>
+      <p>Is this your first time here?</p>
+      <button onClick={() => navigate('/register')} style={styles.registerButton}>
+        Create A New Account
+      </button>
     </div>
   );
 };
@@ -81,10 +94,18 @@ const styles = {
     color: '#4B0082',
     textAlign: 'center'
   },
-  subtitle: {
-    fontSize: '18px',
+  description: {
+    fontSize: '24px',
     marginBottom: '20px',
     color: '#4B0082',
+    textAlign: 'center'
+  },
+  flashMessage: {
+    backgroundColor: '#d4edda',
+    color: '#155724',
+    padding: '10px',
+    borderRadius: '5px',
+    marginBottom: '20px',
     textAlign: 'center'
   },
   form: {
@@ -109,18 +130,14 @@ const styles = {
     cursor: 'pointer',
     marginTop: '10px'
   },
-  question: {
-    marginTop: '20px',
-    color: '#4B0082'
-  },
   registerButton: {
-    marginTop: '10px',
     padding: '10px 20px',
-    backgroundColor: '#F0E68C',
+    backgroundColor: '#ffa500',
+    color: '#fff',
     border: 'none',
     borderRadius: '5px',
     cursor: 'pointer',
-    color: '#4B0082'
+    marginTop: '10px'
   }
 };
 

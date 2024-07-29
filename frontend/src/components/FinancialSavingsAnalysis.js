@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 
@@ -7,7 +7,7 @@ const FinancialSavingsAnalysis = () => {
   const navigate = useNavigate();
   const selectRef = useRef(null);
   const [streak, setStreak] = useState(0);
-  const [location, setLocation] = useState({ value: 'Berkeley', label: 'Berkeley'});
+  const [location, setLocation] = useState({ value: '', label: '' });
   const [averageCigarettes, setAverageCigarettes] = useState(3);
   const [cities, setCities] = useState([]);
   const [filteredCities, setFilteredCities] = useState([]);
@@ -29,11 +29,9 @@ const FinancialSavingsAnalysis = () => {
     fetch('/api/cities')
       .then(response => response.json())
       .then(data => {
-        //console.log('Fetched cities data:', data);
         const cityOptions = data.map(city => ({ value: city, label: city }));
         setCities(cityOptions);
-        /*console.log('Processed city options:', cityOptions);*/
-        setFilteredCities(cityOptions);
+        setFilteredCities([]);
       })
       .catch(error => {
         console.error('Error fetching cities:', error);
@@ -52,7 +50,7 @@ const FinancialSavingsAnalysis = () => {
     setLocation(selectedOption);
   };
 
-  const handleInputChange = (inputValue) => {
+  const handleInputChange = inputValue => {
     if (inputValue) {
       const filtered = cities.filter(city =>
         city.label.toLowerCase().includes(inputValue.toLowerCase())
@@ -62,6 +60,9 @@ const FinancialSavingsAnalysis = () => {
       setFilteredCities([]);
     }
   };
+
+  // Determine if the "Interpret My Savings" button should be disabled
+  const isInterpretButtonDisabled = location.value === '';
 
   return (
     <div style={styles.container}>
@@ -103,7 +104,13 @@ const FinancialSavingsAnalysis = () => {
       </div>
       <div style={styles.buttonGroup}>
         <button onClick={() => navigate('/')} style={styles.navigationButton}>Back</button>
-        <button onClick={() => alert('Interpreting Savings')} style={styles.navigationButton}>Interpret My Savings</button>
+        <button
+          onClick={() => alert('Interpreting Savings')}
+          style={{ ...styles.navigationButton, opacity: isInterpretButtonDisabled ? 0.5 : 1 }}
+          disabled={isInterpretButtonDisabled}
+        >
+          Interpret My Savings
+        </button>
       </div>
     </div>
   );
@@ -152,7 +159,7 @@ const styles = {
   cigaretteInput: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'flex-start'
   },
   cigaretteCount: {
     width: '50px',
@@ -164,6 +171,7 @@ const styles = {
   },
   button: {
     padding: '10px',
+    width: '40px',
     backgroundColor: '#4B0082',
     color: '#fff',
     border: 'none',

@@ -1,13 +1,9 @@
 const bcrypt = require('bcrypt');
 const fetch = require('node-fetch');
 
-async function batchInsert(knex, tableName, data, batchSize = 100) {
-  const chunkedData = [];
+async function batchInsert(knex, table, data, batchSize = 100) {
   for (let i = 0; i < data.length; i += batchSize) {
-    chunkedData.push(data.slice(i, i + batchSize));
-  }
-  for (const chunk of chunkedData) {
-    await knex(tableName).insert(chunk);
+    await knex(table).insert(data.slice(i, i + batchSize));
   }
 }
 
@@ -16,7 +12,7 @@ exports.seed = async function(knex) {
   await knex('users').del();
   await knex('cities').del();
 
-  // Then add new ones
+  // Then add new users
   await knex('users').insert([
     { id: 1, name: 'Billy', username: 'billy', 
       password: await bcrypt.hash('test', 10), max_streak: 0, current_streak: 0 },
@@ -26,11 +22,17 @@ exports.seed = async function(knex) {
       password: await bcrypt.hash('test', 10), max_streak: 0, current_streak: 0 },
   ]);
 
-  // Fetch cities data and insert into the database in batches
+  // Fetch cities data and process to remove duplicates
   const response = await fetch('https://countriesnow.space/api/v0.1/countries');
   const data = await response.json();
   const cities = data.data.reduce((acc, country) => acc.concat(country.cities), []);
 
-  const citiesData = cities.map((city, index) => ({ id: index + 1, name: city }));
+  // Remove duplicates
+  const uniqueCities = Array.from(new Set(cities));
+
+  // Prepare data for insertion
+  const citiesData = uniqueCities.map((city, index) => ({ id: index + 1, name: city }));
+
+  // Insert unique cities data into the database in batches
   await batchInsert(knex, 'cities', citiesData);
 };

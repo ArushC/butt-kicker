@@ -15,11 +15,13 @@ exports.seed = async function(knex) {
   // Then add new users
   await knex('users').insert([
     { id: 1, name: 'Billy', username: 'billy', 
-      password: await bcrypt.hash('test', 10), max_streak: 0, current_streak: 0 },
+      password: await bcrypt.hash('test', 10), max_streak: 0, 
+      current_streak: 0, location: 'Berkeley'},
     { id: 2, name: 'Bob', username: 'bob', 
-      password: await bcrypt.hash('test', 10), max_streak: 0, current_streak: 0 },
-    { id: 3, name: 'Joe', username: 'joe', 
-      password: await bcrypt.hash('test', 10), max_streak: 0, current_streak: 0 },
+      password: await bcrypt.hash('test', 10), max_streak: 0, 
+      current_streak: 0, location: 'Berkeley' },
+    { id: 3, name: 'Joe', username: 'joe', password: await bcrypt.hash('test', 10), 
+      max_streak: 0, current_streak: 0, location: 'Berkeley' },
   ]);
 
   // Fetch cities data and process to remove duplicates

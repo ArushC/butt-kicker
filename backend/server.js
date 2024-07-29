@@ -115,6 +115,23 @@ app.get('/api/cities', async (req, res) => {
   }
 });
 
+//route to update the location of user with id :id
+app.put('/:id/location', async (req, res) => {
+  const { id } = req.params;
+  const { location } = req.body;
+
+  try {
+    await knex('users')
+      .where({ id })
+      .update({ location });
+
+    res.status(200).json({ message: 'Location updated successfully' });
+  } catch (error) {
+    console.error('Error updating location:', error);
+    res.status(500).json({ message: 'Failed to update location' });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

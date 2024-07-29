@@ -7,7 +7,7 @@ const FinancialSavingsAnalysis = () => {
   const navigate = useNavigate();
   const selectRef = useRef(null);
   const [streak, setStreak] = useState(0);
-  const [location, setLocation] = useState({ value: '', label: '' });
+  const [location, setLocation] = useState({value: '', label: '' });
   const [averageCigarettes, setAverageCigarettes] = useState(3);
   const [cities, setCities] = useState([]);
   const [filteredCities, setFilteredCities] = useState([]);
@@ -22,7 +22,12 @@ const FinancialSavingsAnalysis = () => {
         }
       })
       .then(data => {
+        //value of the user's streak is retrieved from the DB
         setStreak(data.current_streak);
+        if (data.location) {
+          //default dropdown value of the user's location is the location in the database
+          setLocation({ value: data.location, label: data.location }); 
+        }
       })
       .catch(() => navigate('/login'));
 
@@ -48,6 +53,22 @@ const FinancialSavingsAnalysis = () => {
 
   const handleCityChange = selectedOption => {
     setLocation(selectedOption);
+    // Update the location in the database
+    fetch(`/api/users/${id}/location`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ location: selectedOption.value })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to update location');
+      }
+    })
+    .catch(error => {
+      console.error('Error updating location:', error);
+    });
   };
 
   const handleInputChange = inputValue => {

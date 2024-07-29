@@ -29,35 +29,86 @@ function Register() {
   };
 
   return (
-    <div>
-      <h2>Register</h2>
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={e => setUsername(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Confirm Password"
-        value={confirmPassword}
-        onChange={e => setConfirmPassword(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Name (optional)"
-        value={name}
-        onChange={e => setName(e.target.value)}
-      />
-      <button onClick={handleRegister}>Register</button>
+    <div style={styles.container}>
+      <h1 style={styles.title}>Create a New Account</h1>
+      <form onSubmit={handleRegister} style={styles.form}>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={e => setUsername(e.target.value)}
+          required
+          style={styles.input}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          required
+          style={styles.input}
+        />
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          onChange={e => setConfirmPassword(e.target.value)}
+          required
+          style={styles.input}
+        />
+        <input
+          type="text"
+          placeholder="Name (optional)"
+          value={name}
+          onChange={e => setName(e.target.value)}
+          style={styles.input}
+        />
+        <button type="submit" style={styles.button}>Register</button>
+      </form>
     </div>
   );
-}
+};
+
+const styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '20px',
+    backgroundColor: '#d3f0ff',
+    borderRadius: '10px',
+    maxWidth: '400px',
+    margin: 'auto',
+    marginTop: '50px'
+  },
+  title: {
+    fontSize: '32px',
+    marginBottom: '10px',
+    color: '#4B0082',
+    textAlign: 'center'
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    alignItems: 'center'
+  },
+  input: {
+    width: '100%',
+    padding: '10px',
+    margin: '10px 0',
+    borderRadius: '5px',
+    border: '1px solid #ccc'
+  },
+  button: {
+    padding: '10px 20px',
+    backgroundColor: '#4B0082',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    marginTop: '10px'
+  }
+};
 
 export default Register;

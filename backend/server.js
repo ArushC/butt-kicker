@@ -26,7 +26,8 @@ app.post('/api/register', async (req, res) => {
     await knex('users').insert({ username, password: hashedPassword, name });
     res.status(201).send('User registered');
   } catch (error) {
-    res.status(400).send('Error registering user');
+    //This error can happen if trying to insert a record with a duplicate username
+    res.status(400).send(`username "${username}" is already in use.`);
   }
 });
 
@@ -75,16 +76,11 @@ app.get('/api/user', (req, res) => {
 // Route to get user by ID
 app.get('/api/users/:id', checkAuth, async (req, res) => {
   const { id } = req.params;
-  try {
-    const user = await knex('users').where({ id }).first();
-    if (user) {
-      res.json(user);
-    } else {
-      res.status(404).send('User not found');
-    }
-  } catch (error) {
-    console.error('Error fetching user:', error);
-    res.status(500).send('Internal server error');
+  const user = await knex('users').where({ id }).first();
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404).send('User not found');
   }
 });
 

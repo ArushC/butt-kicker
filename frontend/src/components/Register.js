@@ -7,13 +7,14 @@ function Register() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
+  const [flashMessage, setFlashMessage] = useState(''); // New state for flash message
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      alert('Passwords do not match');
+      setFlashMessage('Passwords do not match'); // Set flash message for password mismatch
       return;
     }
 
@@ -27,7 +28,7 @@ function Register() {
       navigate(`/login?flashMessage=Successfully registered an account for ${username}. Please log in.`);
     } else {
       const errorText = await response.text();
-      alert(`Error registering: ${errorText}`);
+      setFlashMessage(`Registration failed: ${errorText}`); // Set flash message for registration error
     }
   };
 
@@ -36,6 +37,7 @@ function Register() {
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Create a New Account</h1>
+      {flashMessage && <div style={styles.flashMessage}>{flashMessage}</div>} {/* Display flash message */}
       <form onSubmit={handleRegister} style={styles.form}>
         <input
           type="text"
@@ -92,6 +94,14 @@ const styles = {
     fontSize: '32px',
     marginBottom: '10px',
     color: '#4B0082',
+    textAlign: 'center'
+  },
+  flashMessage: {
+    backgroundColor: '#f8d7da', // Red background for error messages
+    color: '#721c24', // Dark red text for error messages
+    padding: '10px',
+    borderRadius: '5px',
+    marginBottom: '20px',
     textAlign: 'center'
   },
   form: {

@@ -28,11 +28,11 @@ const Home = () => {
   const displayName = user.name || user.username;
 
   const buttons = [
-    { text: 'Daily Check In', backgroundColor: '#F0E68C' },
-    { text: 'View Savings', backgroundColor: '#F0E68C' },
-    { text: 'My Journal', backgroundColor: '#F0E68C' },
-    { text: 'Community', backgroundColor: '#F0E68C' },
-    { text: 'I Slipped', backgroundColor: '#F0E68C' },
+    { text: 'Daily Check In', backgroundColor: '#F0E68C', onClick: () => console.log('Daily Check In') },
+    { text: 'View Savings', backgroundColor: '#F0E68C', onClick: () => navigate(`/savings/${id}`) },
+    { text: 'My Journal', backgroundColor: '#F0E68C', onClick: () => console.log('My Journal') },
+    { text: 'Community', backgroundColor: '#F0E68C', onClick: () => console.log('Community') },
+    { text: 'I Slipped', backgroundColor: '#F0E68C', onClick: () => console.log('I Slipped') },
   ];
 
   return (
@@ -50,7 +50,7 @@ const Home = () => {
             key={index}
             text={btn.text}
             backgroundColor={btn.backgroundColor}
-            onClick={() => console.log(btn.text)}
+            onClick={btn.onClick}
           />
         ))}
       </div>

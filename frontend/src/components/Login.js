@@ -7,7 +7,8 @@ const Login = ({ setIsAuthenticated }) => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
-  const [flashMessage, setFlashMessage] = useState('');
+  const [flashMessage, setFlashMessage] = useState(''); //State for success message
+  const [errorMessage, setErrorMessage] = useState(''); // State for error message
 
   useEffect(() => {
     const query = new URLSearchParams(location.search);
@@ -31,7 +32,7 @@ const Login = ({ setIsAuthenticated }) => {
       if (response.ok) {
         return response.json();
       }
-      throw new Error('Login failed');
+      throw new Error('Login failed: invalid username or password');
     })
     .then(data => {
       sessionStorage.setItem('userId', data.userId);
@@ -40,7 +41,7 @@ const Login = ({ setIsAuthenticated }) => {
     })
     .catch(error => {
       console.error('Error:', error);
-      alert('Login failed');
+      setErrorMessage('Login failed: invalid username or password'); // Set error message
     });
   };
 
@@ -49,6 +50,7 @@ const Login = ({ setIsAuthenticated }) => {
       <h1 style={styles.title}>Butt Kicker</h1>
       <h2 style={styles.description}>Description of my app</h2>
       {flashMessage && <div style={styles.flashMessage}>{flashMessage}</div>}
+      {errorMessage && <div style={styles.errorMessage}>{errorMessage}</div>} {/* Display error message */}
       <form onSubmit={handleSubmit} style={styles.form}>
         <input
           type="text"
@@ -103,6 +105,14 @@ const styles = {
   flashMessage: {
     backgroundColor: '#d4edda',
     color: '#155724',
+    padding: '10px',
+    borderRadius: '5px',
+    marginBottom: '20px',
+    textAlign: 'center'
+  },
+  errorMessage: {
+    backgroundColor: '#f8d7da',
+    color: '#721c24',
     padding: '10px',
     borderRadius: '5px',
     marginBottom: '20px',

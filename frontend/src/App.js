@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Login from './components/Login';
 import Register from './components/Register';
 import Home from './components/Home';
+import FinancialSavingsAnalysis from './components/FinancialSavingsAnalysis';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -41,6 +42,10 @@ const App = () => {
         <Route 
           path="/home/:id" 
           element={isAuthenticated ? <Home /> : <Navigate to="/login" />} 
+        />
+        <Route 
+          path="/savings/:id" 
+          element={isAuthenticated ? <FinancialSavingsAnalysis /> : <Navigate to="/login" />} 
         />
       </Routes>
     </Router>

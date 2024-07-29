@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 
 const FinancialSavingsAnalysis = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const selectRef = useRef(null);
   const [streak, setStreak] = useState(0);
-  const [location, setLocation] = useState({value: '', label: '' });
+  const [location, setLocation] = useState('');
   const [averageCigarettes, setAverageCigarettes] = useState(3);
   const [cities, setCities] = useState([]);
   const [filteredCities, setFilteredCities] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
     fetch(`/api/users/${id}`)
@@ -22,11 +22,9 @@ const FinancialSavingsAnalysis = () => {
         }
       })
       .then(data => {
-        //value of the user's streak is retrieved from the DB
         setStreak(data.current_streak);
         if (data.location) {
-          //default dropdown value of the user's location is the location in the database
-          setLocation({ value: data.location, label: data.location }); 
+          setLocation({ value: data.location, label: data.location });
         }
       })
       .catch(() => navigate('/login'));
@@ -71,7 +69,8 @@ const FinancialSavingsAnalysis = () => {
     });
   };
 
-  const handleInputChange = inputValue => {
+  const handleInputChange = (inputValue) => {
+    setSearchValue(inputValue);
     if (inputValue) {
       const filtered = cities.filter(city =>
         city.label.toLowerCase().includes(inputValue.toLowerCase())
@@ -82,8 +81,9 @@ const FinancialSavingsAnalysis = () => {
     }
   };
 
-  // Determine if the "Interpret My Savings" button should be disabled
-  const isInterpretButtonDisabled = location.value === '';
+  const handleMenuOpen = () => {
+    setLocation('');
+  };
 
   return (
     <div style={styles.container}>
@@ -103,6 +103,8 @@ const FinancialSavingsAnalysis = () => {
           value={location}
           onChange={handleCityChange}
           onInputChange={handleInputChange}
+          inputValue={searchValue}
+          onMenuOpen={handleMenuOpen}
           options={filteredCities}
           styles={customSelectStyles}
         />
@@ -125,13 +127,7 @@ const FinancialSavingsAnalysis = () => {
       </div>
       <div style={styles.buttonGroup}>
         <button onClick={() => navigate('/')} style={styles.navigationButton}>Back</button>
-        <button
-          onClick={() => alert('Interpreting Savings')}
-          style={{ ...styles.navigationButton, opacity: isInterpretButtonDisabled ? 0.5 : 1 }}
-          disabled={isInterpretButtonDisabled}
-        >
-          Interpret My Savings
-        </button>
+        <button onClick={() => alert('Interpreting Savings')} style={styles.navigationButton} disabled={location.value === ''}>Interpret My Savings</button>
       </div>
     </div>
   );

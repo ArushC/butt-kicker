@@ -1,14 +1,16 @@
-// src/components/FinancialSavingsAnalysis.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import Select from 'react-select';
 
 const FinancialSavingsAnalysis = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const selectRef = useRef(null);
   const [streak, setStreak] = useState(0);
-  const [location, setLocation] = useState('Berkeley');
+  const [location, setLocation] = useState({ value: 'Berkeley', label: 'Berkeley'});
   const [averageCigarettes, setAverageCigarettes] = useState(3);
   const [cities, setCities] = useState([]);
+  const [filteredCities, setFilteredCities] = useState([]);
 
   useEffect(() => {
     fetch(`/api/users/${id}`)
@@ -24,13 +26,17 @@ const FinancialSavingsAnalysis = () => {
       })
       .catch(() => navigate('/login'));
 
-    fetch('https://countriesnow.space/api/v0.1/countries')
+    fetch('/api/cities')
       .then(response => response.json())
       .then(data => {
-        const allCities = data.data.reduce((acc, country) => {
-          return acc.concat(country.cities);
-        }, []);
-        setCities(allCities);
+        //console.log('Fetched cities data:', data);
+        const cityOptions = data.map(city => ({ value: city, label: city }));
+        setCities(cityOptions);
+        /*console.log('Processed city options:', cityOptions);*/
+        setFilteredCities(cityOptions);
+      })
+      .catch(error => {
+        console.error('Error fetching cities:', error);
       });
   }, [id, navigate]);
 
@@ -40,6 +46,21 @@ const FinancialSavingsAnalysis = () => {
 
   const handleIncrement = () => {
     setAverageCigarettes(averageCigarettes + 1);
+  };
+
+  const handleCityChange = selectedOption => {
+    setLocation(selectedOption);
+  };
+
+  const handleInputChange = (inputValue) => {
+    if (inputValue) {
+      const filtered = cities.filter(city =>
+        city.label.toLowerCase().includes(inputValue.toLowerCase())
+      );
+      setFilteredCities(filtered);
+    } else {
+      setFilteredCities([]);
+    }
   };
 
   return (
@@ -56,17 +77,13 @@ const FinancialSavingsAnalysis = () => {
       </div>
       <div style={styles.inputGroup}>
         <label>Location:</label>
-        <select
+        <Select
           value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          style={styles.input}
-        >
-          {cities.map(city => (
-            <option key={city} value={city}>
-              {city}
-            </option>
-          ))}
-        </select>
+          onChange={handleCityChange}
+          onInputChange={handleInputChange}
+          options={filteredCities}
+          styles={customSelectStyles}
+        />
       </div>
       <div style={styles.inputGroup}>
         <label>Average Cigarettes Smoked Each Day:</label>
@@ -82,14 +99,24 @@ const FinancialSavingsAnalysis = () => {
         </div>
       </div>
       <div style={styles.savingsMessage}>
-        By not smoking for <span>{streak}</span> days in <span>{location}</span>, you avoided smoking <span>{streak * averageCigarettes}</span> cigarettes and saved <span>${(streak * averageCigarettes * 0.50).toFixed(2)}</span>.
+        By not smoking for <span>{streak}</span> days in <span>{location.label}</span>, you avoided smoking <span>{streak * averageCigarettes}</span> cigarettes and saved <span>${(streak * averageCigarettes * 0.50).toFixed(2)}</span>.
       </div>
       <div style={styles.buttonGroup}>
-        <button onClick={() => navigate(-1)} style={styles.navigationButton}>Back</button>
+        <button onClick={() => navigate('/')} style={styles.navigationButton}>Back</button>
         <button onClick={() => alert('Interpreting Savings')} style={styles.navigationButton}>Interpret My Savings</button>
       </div>
     </div>
   );
+};
+
+const customSelectStyles = {
+  control: (base) => ({
+    ...base,
+    padding: '5px',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
+    width: '100%'
+  })
 };
 
 const styles = {

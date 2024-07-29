@@ -105,6 +105,16 @@ app.get('/api/users', async (req, res) => {
   }
 });
 
+//endpoint to get cities
+app.get('/api/cities', async (req, res) => {
+  try {
+    const cities = await knex('cities').select('name');
+    res.json(cities.map(city => city.name));
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch cities' });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

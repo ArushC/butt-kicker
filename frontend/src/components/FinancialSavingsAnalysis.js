@@ -11,7 +11,9 @@ const FinancialSavingsAnalysis = () => {
   const [cities, setCities] = useState([]);
   const [filteredCities, setFilteredCities] = useState([]);
   const [searchValue, setSearchValue] = useState('');
-
+  const [modalOpen, setModalOpen] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
+  
   useEffect(() => {
     fetch(`/api/users/${id}`)
       .then(response => {
@@ -87,6 +89,28 @@ const FinancialSavingsAnalysis = () => {
     setLocation('');
   };
 
+  const interpretSavings = async () => {
+    const amountSaved = (streak * averageCigarettes * 0.50).toFixed(2);
+    const response = await fetch(
+      'https://noggin.rea.gent/aggressive-tyrannosaurus-2172',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer rg_v1_ooknwbh9rwcd0ap99o7iq0p0eqf600md0f17_ngk',
+        },
+        body: JSON.stringify({
+          savings: amountSaved,
+          location: location.value,
+        }),
+      }
+    ).then(response => response.text());
+    console.log(response);
+    const data = JSON.parse(response);
+    setSuggestions(data);
+    setModalOpen(true);
+  };
+
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Financial Savings Analysis</h1>
@@ -129,8 +153,31 @@ const FinancialSavingsAnalysis = () => {
       </div>
       <div style={styles.buttonGroup}>
         <button onClick={() => navigate('/')} style={styles.navigationButton}>Back</button>
-        <button onClick={() => alert('Interpreting Savings')} style={isInterpretSavingsDisabled ? styles.disabledButton : styles.navigationButton} disabled={isInterpretSavingsDisabled}>Interpret My Savings</button>
+        <button 
+          onClick={interpretSavings} 
+          style={isInterpretSavingsDisabled ? styles.disabledButton : styles.navigationButton} 
+          disabled={isInterpretSavingsDisabled}
+        >
+          Interpret My Savings
+        </button>
       </div>
+      {modalOpen && (
+        <div style={styles.modalOverlay}>
+          <div style={styles.modal}>
+            <button style={styles.closeButton} onClick={() => setModalOpen(false)}>X</button>
+            <h2 style={styles.modalTitle}>Here are suggestions for things to do with ${((streak * averageCigarettes * 0.50).toFixed(2))} in {location.label}:</h2>
+            <div style={styles.suggestionsList}>
+              {Object.keys(suggestions).map(key => (
+                <div key={key} style={styles.suggestionItem}>
+                  <h3 style={styles.suggestionTitle}>{suggestions[key].suggestion}</h3>
+                  <p style={styles.suggestionDescription}>{suggestions[key].description}</p>
+                  <p style={styles.suggestionCost}>Cost: {suggestions[key].cost}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -236,6 +283,67 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  modalOverlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  modal: {
+    backgroundColor: '#fff',
+    padding: '20px',
+    borderRadius: '10px',
+    maxWidth: '500px',
+    width: '100%',
+    position: 'relative'
+  },
+  closeButton: {
+    position: 'absolute',
+    top: '10px',
+    right: '10px',
+    backgroundColor: 'red',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '50%',
+    width: '30px',
+    height: '30px',
+    textAlign: 'center',
+    lineHeight: '30px',
+    cursor: 'pointer'
+  },
+  modalTitle: {
+    fontSize: '24px',
+    marginBottom: '20px',
+    color: '#4B0082'
+  },
+  suggestionsList: {
+    maxHeight: '300px',
+    overflowY: 'auto'
+  },
+  suggestionItem: {
+    marginBottom: '15px',
+    padding: '10px',
+    backgroundColor: '#f9f9f9',
+    borderRadius: '5px',
+    border: '1px solid #ddd'
+  },
+  suggestionTitle: {
+    fontSize: '18px',
+    marginBottom: '5px',
+    color: '#4B0082'
+  },
+  suggestionDescription: {
+    marginBottom: '5px',
+    color: '#555'
+  },
+  suggestionCost: {
+    color: '#555'
   }
 };
 

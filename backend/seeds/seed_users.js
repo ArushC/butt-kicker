@@ -16,7 +16,7 @@ exports.seed = async function(knex) {
   await knex('users').insert([
     { id: 1, name: 'Billy', username: 'billy', 
       password: await bcrypt.hash('test', 10), max_streak: 0, 
-      current_streak: 0, location: 'Berkeley'},
+      current_streak: 3, location: 'Berkeley'},
     { id: 2, name: 'Bob', username: 'bob', 
       password: await bcrypt.hash('test', 10), max_streak: 0, 
       current_streak: 0, location: 'Berkeley' },

@@ -116,7 +116,7 @@ app.get('/api/cities', async (req, res) => {
 });
 
 //route to update the location of user with id :id
-app.put('/:id/location', async (req, res) => {
+app.put('/api/users/:id/location', async (req, res) => {
   const { id } = req.params;
   const { location } = req.body;
 

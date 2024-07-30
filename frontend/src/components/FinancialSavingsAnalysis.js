@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 
@@ -40,6 +40,8 @@ const FinancialSavingsAnalysis = () => {
         console.error('Error fetching cities:', error);
       });
   }, [id, navigate]);
+
+  const isInterpretSavingsDisabled = location === '' || averageCigarettes * streak === 0;
 
   const handleDecrement = () => {
     if (averageCigarettes > 0) setAverageCigarettes(averageCigarettes - 1);
@@ -127,7 +129,7 @@ const FinancialSavingsAnalysis = () => {
       </div>
       <div style={styles.buttonGroup}>
         <button onClick={() => navigate('/')} style={styles.navigationButton}>Back</button>
-        <button onClick={() => alert('Interpreting Savings')} style={styles.navigationButton} disabled={location.value === ''}>Interpret My Savings</button>
+        <button onClick={() => alert('Interpreting Savings')} style={isInterpretSavingsDisabled ? styles.disabledButton : styles.navigationButton} disabled={isInterpretSavingsDisabled}>Interpret My Savings</button>
       </div>
     </div>
   );
@@ -141,6 +143,15 @@ const customSelectStyles = {
     border: '1px solid #ccc',
     width: '100%'
   })
+};
+
+const button = {
+  padding: '10px',
+  backgroundColor: '#4B0082',
+  color: '#fff',
+  border: 'none',
+  borderRadius: '5px',
+  cursor: 'pointer'
 };
 
 const styles = {
@@ -187,13 +198,8 @@ const styles = {
     border: '1px solid #ccc'
   },
   button: {
-    padding: '10px',
-    width: '40px',
-    backgroundColor: '#4B0082',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer'
+    ...button,
+    width: '40px' // explicitly set width to 40px for button
   },
   savingsMessage: {
     marginTop: '20px',
@@ -215,7 +221,21 @@ const styles = {
     color: '#fff',
     border: 'none',
     borderRadius: '5px',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    display: 'flex', // ensure flex display for consistency
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  disabledButton: {
+    ...button,
+    backgroundColor: '#A9A9A9', // A different color to indicate disabled state
+    cursor: 'not-allowed',
+    opacity: 0.5, // To give a visual cue that the button is disabled
+    width: 'auto', // ensure width is consistent with navigationButton
+    padding: '10px 20px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 };
 

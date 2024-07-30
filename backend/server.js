@@ -25,6 +25,9 @@ const journalRoutes = require('./routes/journal');
 // Use routes
 app.use('/api/journal', journalRoutes);
 
+//use cors
+app.use(cors());
+
 // Route to which users POST if creating a new account
 app.post('/api/register', async (req, res) => {
   const { username, password, name } = req.body;

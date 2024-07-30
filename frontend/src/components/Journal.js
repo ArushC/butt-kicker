@@ -78,57 +78,38 @@ const Journal = () => {
           onBlur={handleBlur}
           readOnly={dateParam && date !== new Date().toLocaleDateString()}
         />
-        <hr />
-        <textarea
-          style={{
-            width: '100%',
-            height: '100px',
-            padding: '10px',
-            fontSize: '16px',
-            lineHeight: '1.5',
-            border: 'none',
-            outline: 'none',
-            resize: 'none',
-            backgroundColor: 'transparent',
-            borderBottom: '1px solid #ccc'
-          }}
-          value={entry}
-          onChange={e => setEntry(e.target.value)}
-          onBlur={handleBlur}
-          readOnly={dateParam && date !== new Date().toLocaleDateString()}
-        />
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px', width: '100%', maxWidth: '600px', margin: '20px auto 0 auto' }}>
-        <button
-          style={{
-            flex: '1',
-            marginRight: '10px',
-            padding: '10px 20px',
-            backgroundColor: '#4B0082',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer'
-          }}
-          onClick={() => navigate('/')}
-        >
-          Back
-        </button>
-        <button
-          style={{
-            flex: '1',
-            marginLeft: '10px',
-            padding: '10px 20px',
-            backgroundColor: '#4B0082',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer'
-          }}
-          onClick={() => setModalIsOpen(true)}
-        >
-          View A Different Entry
-        </button>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px', width: '100%', maxWidth: '600px', margin: '20px auto 0 auto' }}>
+          <button
+            style={{
+              flex: '1',
+              marginRight: '10px',
+              padding: '10px 20px',
+              backgroundColor: '#4B0082',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer'
+            }}
+            onClick={() => navigate('/')}
+          >
+            Back
+          </button>
+          <button
+            style={{
+              flex: '1',
+              marginLeft: '10px',
+              padding: '10px 20px',
+              backgroundColor: '#4B0082',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer'
+            }}
+            onClick={() => setModalIsOpen(true)}
+          >
+            View A Different Entry
+          </button>
+        </div>
       </div>
       <Modal
         isOpen={modalIsOpen}

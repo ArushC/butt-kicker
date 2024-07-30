@@ -113,24 +113,47 @@ const Journal = () => {
             borderRadius: '10px',
             width: '80%',
             maxWidth: '400px',
-            margin: '0 auto'
+            margin: '0 auto',
+            position: 'relative'
           }
         }}
       >
-        <h2>View A Different Entry</h2>
+        <button
+        style={{
+            position: 'absolute',
+            top: '10px',
+            right: '10px',
+            backgroundColor: 'red',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '50%',
+            width: '30px',
+            height: '30px',
+            textAlign: 'center',
+            lineHeight: '30px',
+            fontSize: '20px', // Adjust font size to make the X larger
+            cursor: 'pointer'
+        }}
+        onClick={() => setModalIsOpen(false)}
+        >
+  &times;
+</button>
+        <h2 style={{ textAlign: 'center', marginTop: '40px' }}>View A Different Entry</h2>
         <div>
           {entryDates.map((entryDate, index) => (
             <button
               key={index}
               style={{
                 display: 'block',
-                margin: '10px auto',
-                padding: '10px 20px',
+                width: '100%',
+                margin: '10px 0',
+                padding: '15px 0',
                 backgroundColor: '#4B0082',
                 color: '#fff',
                 border: 'none',
                 borderRadius: '5px',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                fontSize: '16px'
               }}
               onClick={() => handleDateClick(entryDate)}
             >
@@ -138,20 +161,6 @@ const Journal = () => {
             </button>
           ))}
         </div>
-        <button
-          style={{
-            marginTop: '20px',
-            padding: '10px 20px',
-            backgroundColor: '#4B0082',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer'
-          }}
-          onClick={() => setModalIsOpen(false)}
-        >
-          Close
-        </button>
       </Modal>
     </div>
   );

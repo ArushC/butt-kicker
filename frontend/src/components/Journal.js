@@ -6,12 +6,12 @@ const Journal = () => {
   const { id, dateParam } = useParams();
   const navigate = useNavigate();
   const [entry, setEntry] = useState('');
-  const date = dateParam ? new Date(dateParam).toLocaleDateString() : new Date().toLocaleDateString();
+  const date = dateParam !== 'today' ? new Date(dateParam).toLocaleDateString() : new Date().toLocaleDateString();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [entryDates, setEntryDates] = useState([]);
 
   useEffect(() => {
-    fetch(`/api/journal/${id}/${dateParam ? dateParam : 'today'}`)
+    fetch(`/api/journal/${id}/${dateParam}`)
       .then(response => response.json())
       .then(data => {
         if (data.entry) {
@@ -25,11 +25,7 @@ const Journal = () => {
     fetch(`/api/journal/${id}/dates`)
       .then(response => response.json())
       .then(data => {
-        if (Array.isArray(data)) {
-          setEntryDates(data);
-        } else {
-          console.error('Expected array but got:', data);
-        }
+        setEntryDates(data);
       })
       .catch(err => console.error('Error fetching journal entry dates:', err));
   }, [id]);

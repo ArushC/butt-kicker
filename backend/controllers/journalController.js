@@ -3,7 +3,7 @@ const knex = require('../knex'); // Adjust the path to where you export knex
 
 exports.getJournalEntry = async (req, res) => {
   const { id, date } = req.params;
-  const entry_date = date === 'today' ? new Date().toLocaleDateString() : new Date(date).toLocaleDateString();
+  const entry_date = date === undefined ? new Date().toLocaleDateString() : new Date(date).toLocaleDateString();
 
   try {
     const entry = await knex('journal_entries').where({ user_id: id, entry_date }).first();

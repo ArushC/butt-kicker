@@ -48,7 +48,6 @@ const App = () => {
           path="/savings/:id" 
           element={isAuthenticated ? <FinancialSavingsAnalysis /> : <Navigate to="/login" />} 
         />
-        <Route path="/journal/:id/today" element={isAuthenticated ? <Journal /> : <Navigate to="/login" />} />
         <Route path="/journal/:id/:dateParam" element={isAuthenticated ? <Journal /> : <Navigate to="/login" />} />
       </Routes>
     </Router>

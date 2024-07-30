@@ -11,6 +11,7 @@ exports.seed = async function(knex) {
   // Purge ALL existing entries
   await knex('users').del();
   await knex('cities').del();
+  await knex('journal_entries').del();
 
   // Then add new users
   await knex('users').insert([
@@ -23,6 +24,15 @@ exports.seed = async function(knex) {
     { id: 3, name: 'Joe', username: 'joe', password: await bcrypt.hash('test', 10), 
       max_streak: 0, current_streak: 0, location: 'Berkeley' },
   ]);
+
+  await knex('journal_entries').insert([
+    { user_id: 1, entry_date: new Date('2024-07-26').toISOString().split('T')[0], entry: 'Had a great day working on my project. Made some good progress!' },
+    { user_id: 1, entry_date: new Date('2024-07-28').toISOString().split('T')[0], entry: 'Feeling a bit tired today. Need to get more sleep.' },
+    { user_id: 2, entry_date: new Date('2024-07-29').toISOString().split('T')[0], entry: 'Busy day at work. Managed to finish all my tasks.' },
+    { user_id: 2, entry_date: new Date('2024-07-27').toISOString().split('T')[0], entry: 'Took a long walk in the park. It was refreshing.' },
+    { user_id: 3, entry_date: new Date('2024-07-28').toISOString().split('T')[0], entry: 'Did some reading and had a quiet day.' },
+    { user_id: 3, entry_date: new Date('2024-07-26').toISOString().split('T')[0], entry: 'Worked on a new hobby project. Feeling excited about it!' }
+]);
 
   // Fetch cities data and process to remove duplicates
   const response = await fetch('https://countriesnow.space/api/v0.1/countries');

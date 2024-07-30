@@ -1,24 +1,31 @@
+// server.js
 const express = require('express');
-const knex = require('knex')(require('./knexfile').development);
+const knex = require('./knex'); // Import knex instance
 const session = require('express-session');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 const app = express();
 const port = 5000;
 
-//Generate session secret
-const crypto = require('crypto');
+// Generate session secret
 const session_secret = crypto.randomBytes(64).toString('hex');
 
 app.use(express.json());
 app.use(session({
-  secret: 'your-secret-key',
+  secret: session_secret, // Use the generated secret
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false } // Set to true in production with HTTPS
 }));
 
-//Route to which users POST if creating a new account
+// Import routes
+const journalRoutes = require('./routes/journal');
+
+// Use routes
+app.use('/api/journal', journalRoutes);
+
+// Route to which users POST if creating a new account
 app.post('/api/register', async (req, res) => {
   const { username, password, name } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -26,8 +33,8 @@ app.post('/api/register', async (req, res) => {
     await knex('users').insert({ username, password: hashedPassword, name });
     res.status(201).send('User registered');
   } catch (error) {
-    //This error can happen if trying to insert a record with a duplicate username
-    res.status(400).send(`username "${username}" is already in use.`);
+    // This error can happen if trying to insert a record with a duplicate username
+    res.status(400).send(`Username "${username}" is already in use.`);
   }
 });
 

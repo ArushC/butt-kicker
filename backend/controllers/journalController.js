@@ -43,6 +43,7 @@ exports.getJournalEntryDates = async (req, res) => {
       .where({ user_id: id })
       .select('entry_date');
     const dates = entries.map(entry => entry.entry_date);
+    console.log("Dates: ", dates);
     res.json(dates);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch journal entry dates' });

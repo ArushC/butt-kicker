@@ -6,7 +6,7 @@ const Journal = () => {
   const { id, dateParam } = useParams();
   const navigate = useNavigate();
   const [entry, setEntry] = useState('');
-  const date = dateParam !== 'today' ? new Date(dateParam).toLocaleDateString() : new Date().toLocaleDateString();
+  const date = dateParam !== 'today' ? new Date(dateParam).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [entryDates, setEntryDates] = useState([]);
 
@@ -31,7 +31,7 @@ const Journal = () => {
   }, [id]);
 
   const handleBlur = () => {
-    if (entry.trim() && date === new Date().toLocaleDateString()) {
+    if (entry.trim() && date === new Date().toISOString().split('T')[0]) {
       fetch(`/api/journal/${id}/today`, {
         method: 'POST',
         headers: {
@@ -44,12 +44,7 @@ const Journal = () => {
 
   const handleDateClick = (clickedDate) => {
     setModalIsOpen(false);
-    const formattedDate = new Date(clickedDate).toLocaleDateString();
-    if (formattedDate === new Date().toLocaleDateString()) {
-      navigate(`/journal/${id}/today`);
-    } else {
-      navigate(`/journal/${id}/${clickedDate}`);
-    }
+    navigate(`/journal/${id}/${clickedDate}`);
   };
 
   return (
@@ -72,7 +67,7 @@ const Journal = () => {
           value={entry}
           onChange={e => setEntry(e.target.value)}
           onBlur={handleBlur}
-          readOnly={dateParam && date !== new Date().toLocaleDateString()}
+          readOnly={dateParam && date !== new Date().toISOString().split('T')[0]}
         />
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px', width: '100%', maxWidth: '600px', margin: '20px auto 0 auto' }}>
           <button
@@ -139,7 +134,7 @@ const Journal = () => {
               }}
               onClick={() => handleDateClick(entryDate)}
             >
-              {new Date(entryDate).toLocaleDateString()}
+              {entryDate}
             </button>
           ))}
         </div>

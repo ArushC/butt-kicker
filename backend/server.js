@@ -4,6 +4,7 @@ const session = require('express-session');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+const { Server } = require('socket.io'); // Import socket.io
 const app = express();
 const port = 5000;
 
@@ -27,6 +28,10 @@ app.use(session({
 // Import and use routes
 const journalRoutes = require('./routes/journal');
 app.use('/api/journal', journalRoutes);
+
+// Chat routes
+const chatRoutes = require('./routes/chat'); // Create a chat.js file in the routes folder
+app.use('/api/', chatRoutes);
 
 // Route to register a new user
 app.post('/api/register', async (req, res) => {
@@ -133,6 +138,22 @@ app.put('/api/users/:id/location', async (req, res) => {
     console.error('Error updating location:', error);
     res.status(500).json({ message: 'Failed to update location' });
   }
+});
+
+// Set up WebSocket server for real-time chat
+const io = new Server(5002, {
+  cors: {
+    origin: "*", // Allow all origins for WebSocket connections
+  },
+});
+
+// Handle WebSocket connections
+io.on('connection', (socket) => {
+  console.log('A user connected');
+
+  socket.on('disconnect', () => {
+    console.log('A user disconnected');
+  });
 });
 
 // Start the server

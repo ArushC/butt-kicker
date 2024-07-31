@@ -6,6 +6,7 @@ import Register from './components/Register';
 import Home from './components/Home';
 import Journal from './components/Journal';
 import FinancialSavingsAnalysis from './components/FinancialSavingsAnalysis';
+import Forum from './components/Forum';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -49,6 +50,7 @@ const App = () => {
           element={isAuthenticated ? <FinancialSavingsAnalysis /> : <Navigate to="/login" />} 
         />
         <Route path="/journal/:id/:dateParam" element={isAuthenticated ? <Journal /> : <Navigate to="/login" />} />
+        <Route path="/forum/:id" element={isAuthenticated ? <Forum /> : <Navigate to="/login" />} />
       </Routes>
     </Router>
   );

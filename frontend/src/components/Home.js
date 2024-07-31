@@ -31,7 +31,7 @@ const Home = () => {
     { text: 'Daily Check In', backgroundColor: '#F0E68C', onClick: () => console.log('Daily Check In') },
     { text: 'View Savings', backgroundColor: '#F0E68C', onClick: () => navigate(`/savings/${id}`) },
     { text: 'My Journal', backgroundColor: '#F0E68C', onClick: () => navigate(`/journal/${id}/today`) },
-    { text: 'Community', backgroundColor: '#F0E68C', onClick: () => console.log('Community') },
+    { text: 'Community', backgroundColor: '#F0E68C', onClick: () => navigate(`/forum/${id}`) },
     { text: 'I Slipped', backgroundColor: '#F0E68C', onClick: () => console.log('I Slipped') },
   ];
 

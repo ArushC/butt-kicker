@@ -2,7 +2,7 @@
 
 ## Description
 
-An application to help users quit smoking.
+A high-fidelity prototype of an application to help users quit smoking.
 
 ## Prerequisites
 

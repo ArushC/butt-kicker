@@ -39,7 +39,7 @@ const Forum = () => {
       })
         .then(response => response.json())
         .then(newMessage => {
-          setMessages(prevMessages => [newMessage, ...prevMessages]);
+          // Removed state update here
           setMessage('');
         })
         .catch(err => console.error('Error posting message:', err));
@@ -64,7 +64,7 @@ const Forum = () => {
       <div style={{ backgroundColor: '#ffffe0', padding: '20px', borderRadius: '10px', width: '100%', maxWidth: '600px', margin: '0 auto' }}>
         {messages.map((msg, index) => (
           <div key={index} style={{ padding: '10px', margin: '10px 0', backgroundColor: 'white', borderRadius: '10px' }}>
-            <p><strong>{msg.anonymous ? 'Anonymous' : msg.user_id}</strong></p>
+            <p><strong>{msg.anonymous ? 'Anonymous' : msg.username}</strong></p> {/* Changed user_id to username */}
             <p>{msg.message}</p>
           </div>
         ))}

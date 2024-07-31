@@ -12,6 +12,7 @@ const Forum = () => {
   const [anonymous, setAnonymous] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const typingTimeoutRef = useRef(null);
+  const messagesEndRef = useRef(null);
 
   useEffect(() => {
     fetch(`/api/forum/${id}`)
@@ -20,13 +21,19 @@ const Forum = () => {
       .catch(err => console.error('Error fetching messages:', err));
 
     socket.on('new_message', (newMessage) => {
-      setMessages(prevMessages => [newMessage, ...prevMessages]);
+      setMessages(prevMessages => [...prevMessages, newMessage]);
     });
 
     return () => {
       socket.off('new_message');
     };
   }, [id]);
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
 
   const handleSendMessage = () => {
     if (message.trim()) {
@@ -39,7 +46,6 @@ const Forum = () => {
       })
         .then(response => response.json())
         .then(newMessage => {
-          // Removed state update here
           setMessage('');
         })
         .catch(err => console.error('Error posting message:', err));
@@ -62,12 +68,15 @@ const Forum = () => {
   return (
     <div style={{ textAlign: 'center', padding: '20px', backgroundColor: '#d3f0ff' }}>
       <div style={{ backgroundColor: '#ffffe0', padding: '20px', borderRadius: '10px', width: '100%', maxWidth: '600px', margin: '0 auto' }}>
-        {messages.map((msg, index) => (
-          <div key={index} style={{ padding: '10px', margin: '10px 0', backgroundColor: 'white', borderRadius: '10px' }}>
-            <p><strong>{msg.anonymous ? 'Anonymous' : msg.username}</strong></p> {/* Changed user_id to username */}
-            <p>{msg.message}</p>
-          </div>
-        ))}
+        <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
+          {messages.map((msg, index) => (
+            <div key={index} style={{ padding: '10px', margin: '10px 0', backgroundColor: 'white', borderRadius: '10px' }}>
+              <p><strong>{msg.anonymous ? 'Anonymous' : msg.username}</strong></p>
+              <p>{msg.message}</p>
+            </div>
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
         {isTyping && <div style={{ textAlign: 'right', fontSize: '12px' }}>...</div>}
         <div style={{ display: 'flex', alignItems: 'center', marginTop: '20px' }}>
           <input

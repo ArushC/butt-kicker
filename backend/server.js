@@ -11,7 +11,11 @@ const port = 5000;
 const session_secret = crypto.randomBytes(64).toString('hex');
 
 // Middleware setup
-app.use(cors()); // Apply CORS before other middlewares and routes
+app.use(cors({
+  origin: ['http://localhost:3000'], // Add other allowed origins here
+  methods: ['POST', 'GET', 'PUT', 'DELETE'], // Add the methods you want to allow
+  credentials: true // Allow credentials if you're using cookies for authentication
+}));
 app.use(express.json()); // Parse JSON bodies
 app.use(session({
   secret: session_secret,

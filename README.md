@@ -1,2 +1,71 @@
-Load the seed data by running "npx knex seed:run" in the backend/ directory.
-After installing all dependencies ("npm install"), run "npm start" in the root directory to preview the app locally. 
+# Butt Kicker
+
+## Description
+
+An application to help users quit smoking.
+
+## Prerequisites
+
+- Node.js
+- npm
+
+## Installation
+
+Follow these steps to set up the project on your local machine:
+
+1. **Clone the repository:**
+
+    ```sh
+    git clone https://github.com/ArushC/butt-kicker.git butt-kicker
+    cd butt-kicker
+    ```
+
+2. **Install dependencies:**
+
+    Run `npm install` in the following directories:
+
+    - **Root Directory:**
+
+        ```sh
+        npm install
+        ```
+
+    - **Frontend Directory:**
+
+        ```sh
+        cd frontend
+        npm install
+        cd ..
+        ```
+
+    - **Backend Directory:**
+
+        ```sh
+        cd backend
+        npm install
+        cd ..
+        ```
+
+## Database Setup
+
+3. **Run migrations and seed data:**
+
+    Navigate to the backend directory and execute the following commands:
+
+    ```sh
+    cd backend
+    npx knex migrate:latest
+    npx knex seed:run
+    cd ..
+    ```
+
+## Running the Application
+
+4. **Start the local server:**
+
+    From the root directory, run:
+
+    ```sh
+    npm start
+    ```
+

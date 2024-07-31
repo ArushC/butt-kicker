@@ -23,7 +23,7 @@ router.post('/forum/:id', async (req, res) => {
     const { user_id, anonymous, message } = req.body;
   
     try {
-      // Fetch the username based on user_id
+      //Fetch the username based on user_id
       const user = await knex('users').where({ id: user_id }).first();
       const username = anonymous ? 'Anonymous' : user.username;
   

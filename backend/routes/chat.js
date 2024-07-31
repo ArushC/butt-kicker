@@ -29,7 +29,7 @@ router.post('/forum/:id', async (req, res) => {
   
       // Insert the new message into the database
       const [newMessage] = await knex('chat_messages')
-        .insert({ user_id, anonymous, message, username })
+        .insert({ user_id, anonymous, message })
         .returning('*');
   
       // Emit the new message to all connected clients

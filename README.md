@@ -50,8 +50,6 @@ Follow these steps to set up the project on your local machine:
 
 3. **Run migrations and seed data:**
 
-    Navigate to the backend directory and execute the following commands:
-
     ```sh
     cd backend
     npx knex migrate:latest

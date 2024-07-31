@@ -45,8 +45,8 @@ const Forum = () => {
         body: JSON.stringify({ user_id: id, anonymous, message })
       })
         .then(response => response.json())
-        .then(newMessage => {
-          setMessage('');
+        .then(() => {
+          setMessage(''); // Clear the input field without updating the messages state
         })
         .catch(err => console.error('Error posting message:', err));
     }

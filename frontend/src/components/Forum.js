@@ -47,6 +47,7 @@ const Forum = () => {
         .then(response => response.json())
         .then(() => {
           setMessage(''); // Clear the input field without updating the messages state
+          socket.emit('message_sent'); // Notify the server that a message was sent
         })
         .catch(err => console.error('Error posting message:', err));
     }

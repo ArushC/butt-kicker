@@ -1,4 +1,3 @@
-// src/components/CheckInModal.js
 import React from 'react';
 
 const CheckInModal = ({ isOpen, onClose, onCheckIn, title }) => {
@@ -14,8 +13,10 @@ const CheckInModal = ({ isOpen, onClose, onCheckIn, title }) => {
       <div style={styles.modal}>
         <button style={styles.closeButton} onClick={onClose}>X</button>
         <h2>{title}</h2>
-        <button style={styles.yesButton} onClick={() => handleCheckIn(false)}>Yes, I was smoke-free</button>
-        <button style={styles.noButton} onClick={() => handleCheckIn(true)}>No, I smoked</button>
+        <div style={styles.buttonContainer}>
+          <button style={styles.yesButton} onClick={() => handleCheckIn(false)}>Yes, I was smoke-free</button>
+          <button style={styles.noButton} onClick={() => handleCheckIn(true)}>No, I smoked</button>
+        </div>
       </div>
     </div>
   );
@@ -35,10 +36,11 @@ const styles = {
   },
   modal: {
     backgroundColor: '#fff',
-    padding: '20px',
+    padding: '40px',
     borderRadius: '10px',
-    width: '300px',
+    width: '400px',
     textAlign: 'center',
+    position: 'relative',
   },
   closeButton: {
     position: 'absolute',
@@ -46,26 +48,31 @@ const styles = {
     right: '10px',
     background: 'none',
     border: 'none',
-    fontSize: '16px',
+    fontSize: '20px',
     cursor: 'pointer',
+  },
+  buttonContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginTop: '20px',
   },
   yesButton: {
     backgroundColor: '#4CAF50',
     color: '#fff',
     border: 'none',
-    padding: '10px 20px',
+    padding: '15px 30px',
     borderRadius: '5px',
-    margin: '10px',
     cursor: 'pointer',
+    fontSize: '16px',
   },
   noButton: {
-    backgroundColor: '#f44336',
+    backgroundColor: '#FFA500',
     color: '#fff',
     border: 'none',
-    padding: '10px 20px',
+    padding: '15px 30px',
     borderRadius: '5px',
-    margin: '10px',
     cursor: 'pointer',
+    fontSize: '16px',
   },
 };
 

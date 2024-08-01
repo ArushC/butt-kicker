@@ -1,4 +1,3 @@
-// src/components/Home.js
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import HomeButton from './HomeButton';

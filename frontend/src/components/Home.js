@@ -73,7 +73,7 @@ const Home = () => {
     { text: 'View Savings', backgroundColor: '#F0E68C', onClick: () => navigate(`/savings/${id}`) },
     { text: 'My Journal', backgroundColor: '#F0E68C', onClick: () => navigate(`/journal/${id}/today`) },
     { text: 'Community', backgroundColor: '#F0E68C', onClick: () => navigate(`/forum/${id}`) },
-    { text: 'I Slipped', backgroundColor: '#F0E68C', onClick: () => console.log('I Slipped') },
+    { text: 'I Smoked', backgroundColor: '#F0E68C', onClick: () => navigate(`/smoked/${id}`) },
   ];
 
   return (

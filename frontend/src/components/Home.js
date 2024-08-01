@@ -11,7 +11,7 @@ const Home = () => {
   const [checkInTitle, setCheckInTitle] = useState('');
   const [checkInForYesterday, setCheckInForYesterday] = useState(false);
 
-  useEffect(() => {
+  const fetchUserData = () => {
     fetch(`/api/users/${id}`)
       .then(response => {
         if (response.status === 401) {
@@ -22,6 +22,10 @@ const Home = () => {
       })
       .then(data => setUser(data))
       .catch(() => navigate('/login'));
+  };
+
+  useEffect(() => {
+    fetchUserData();
   }, [id, navigate]);
 
   if (!user) {
@@ -42,13 +46,18 @@ const Home = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
-    }).then(response => {
-      if (response.ok) {
-        console.log('Check-in successful');
-      } else {
-        console.error('Check-in failed');
-      }
-    });
+    })
+      .then(response => {
+        if (response.ok) {
+          console.log('Check-in successful');
+          fetchUserData(); // Fetch updated user data after successful check-in
+        } else {
+          console.error('Check-in failed');
+        }
+      })
+      .catch(error => {
+        console.error('Check-in failed', error);
+      });
   };
 
   const buttons = [

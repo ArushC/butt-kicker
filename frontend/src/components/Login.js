@@ -48,7 +48,7 @@ const Login = ({ setIsAuthenticated }) => {
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Butt Kicker</h1>
-      <h2 style={styles.description}>Description of my app</h2>
+      <h2 style={styles.description}>Put smoking in the past</h2>
       {flashMessage && <div style={styles.flashMessage}>{flashMessage}</div>}
       {errorMessage && <div style={styles.errorMessage}>{errorMessage}</div>} {/* Display error message */}
       <form onSubmit={handleSubmit} style={styles.form}>

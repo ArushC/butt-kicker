@@ -25,9 +25,13 @@ app.use(session({
   cookie: { secure: false } // Set to true in production with HTTPS
 }));
 
-// Import and use routes
+// Import and use journal routes
 const journalRoutes = require('./routes/journal');
 app.use('/api/journal', journalRoutes);
+
+// Checkin routes
+const checkinRouter = require('./routes/checkin');
+app.use('/api/checkin', checkinRouter);
 
 // Chat routes
 const chatRoutes = require('./routes/chat'); // Create a chat.js file in the routes folder

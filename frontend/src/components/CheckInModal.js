@@ -12,7 +12,7 @@ const CheckInModal = ({ isOpen, onClose, onCheckIn, title }) => {
     <div style={styles.overlay}>
       <div style={styles.modal}>
         <button style={styles.closeButton} onClick={onClose}>X</button>
-        <h2>{title}</h2>
+        <h2 style={styles.title}>{title}</h2>
         <div style={styles.buttonContainer}>
           <button style={styles.yesButton} onClick={() => handleCheckIn(false)}>Yes, I was smoke-free</button>
           <button style={styles.noButton} onClick={() => handleCheckIn(true)}>No, I smoked</button>
@@ -29,10 +29,11 @@ const styles = {
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 1000,
   },
   modal: {
     backgroundColor: '#fff',
@@ -40,16 +41,27 @@ const styles = {
     borderRadius: '10px',
     width: '400px',
     textAlign: 'center',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
     position: 'relative',
   },
   closeButton: {
     position: 'absolute',
     top: '10px',
     right: '10px',
-    background: 'none',
+    backgroundColor: 'red',
+    color: '#fff',
     border: 'none',
-    fontSize: '20px',
+    borderRadius: '50%',
+    width: '30px',
+    height: '30px',
+    textAlign: 'center',
+    lineHeight: '30px',
     cursor: 'pointer',
+  },
+  title: {
+    margin: '20px 0',
+    fontSize: '24px',
+    color: '#333',
   },
   buttonContainer: {
     display: 'flex',
@@ -62,17 +74,21 @@ const styles = {
     border: 'none',
     padding: '15px 30px',
     borderRadius: '5px',
-    cursor: 'pointer',
     fontSize: '16px',
+    cursor: 'pointer',
+    flex: '1',
+    margin: '0 10px',
   },
   noButton: {
-    backgroundColor: '#FFA500',
+    backgroundColor: 'orange',  // Changed color back to orange
     color: '#fff',
     border: 'none',
     padding: '15px 30px',
     borderRadius: '5px',
-    cursor: 'pointer',
     fontSize: '16px',
+    cursor: 'pointer',
+    flex: '1',
+    margin: '0 10px',
   },
 };
 

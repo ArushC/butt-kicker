@@ -9,6 +9,43 @@ const Journal = () => {
   const date = dateParam !== 'today' ? new Date(dateParam).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [entryDates, setEntryDates] = useState([]);
+  const [isListening, setIsListening] = useState(false);
+  const [interimTranscript, setInterimTranscript] = useState('');
+
+  // Speech recognition setup
+  const speechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recognition = new speechRecognition();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+
+  recognition.onresult = event => {
+    for (let i = event.resultIndex; i < event.results.length; ++i) {
+      if (event.results[i].isFinal) {
+        setEntry(prev => prev + ' ' + event.results[i][0].transcript);
+      } else {
+        setInterimTranscript(event.results[i][0].transcript);
+      }
+    }
+  };
+
+  recognition.onerror = event => {
+    console.error('Speech recognition error', event.error);
+    setIsListening(false);
+  };
+
+  recognition.onend = () => {
+    setIsListening(false);
+  };
+
+  const startListening = () => {
+    setIsListening(true);
+    recognition.start();
+  };
+
+  const stopListening = () => {
+    recognition.stop();
+    setIsListening(false);
+  };
 
   useEffect(() => {
     fetch(`/api/journal/${id}/${dateParam}`)
@@ -69,6 +106,29 @@ const Journal = () => {
           onBlur={handleBlur}
           readOnly={dateParam && date !== new Date().toISOString().split('T')[0]}
         />
+        {date === new Date().toISOString().split('T')[0] && (
+          <div>
+            <button
+              style={{
+                padding: '10px 20px',
+                backgroundColor: isListening ? 'red' : '#4B0082',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                margin: '10px 0'
+              }}
+              onClick={() => isListening ? stopListening() : startListening()}
+            >
+              {isListening ? 'Stop Listening' : 'Start Voice Entry'}
+            </button>
+            {interimTranscript && (
+              <div style={{ padding: '10px', backgroundColor: '#f0f0f0', color: '#333' }}>
+                {interimTranscript}
+              </div>
+            )}
+          </div>
+        )}
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px', width: '100%', maxWidth: '600px', margin: '20px auto 0 auto' }}>
           <button
             style={{
@@ -119,7 +179,7 @@ const Journal = () => {
         }}
       >
         <button
-        style={{
+          style={{
             position: 'absolute',
             top: '10px',
             right: '10px',
@@ -131,13 +191,13 @@ const Journal = () => {
             height: '30px',
             textAlign: 'center',
             lineHeight: '30px',
-            fontSize: '20px', // Adjust font size to make the X larger
+            fontSize: '20px',
             cursor: 'pointer'
-        }}
-        onClick={() => setModalIsOpen(false)}
+          }}
+          onClick={() => setModalIsOpen(false)}
         >
-  &times;
-</button>
+          &times;
+        </button>
         <h2 style={{ textAlign: 'center', marginTop: '40px' }}>View A Different Entry</h2>
         <div>
           {entryDates.map((entryDate, index) => (

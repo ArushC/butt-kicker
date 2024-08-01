@@ -30,11 +30,11 @@ const Home = () => {
 
   const displayName = user.name || user.username;
 
-  const handleCheckIn = (smoked) => {
+  const handleCheckIn = (smoke_free) => {
     const endpoint = `/api/checkin/${id}`;
     const body = checkInForYesterday
-      ? { smoked_yesterday: smoked }
-      : { smoked_today: smoked };
+      ? { smoke_free_yesterday: smoke_free }
+      : { smoke_free_today: smoke_free };
 
     fetch(endpoint, {
       method: 'POST',

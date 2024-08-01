@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const knex = require('../knex'); // Update the path as necessary
+const knex = require('../knex');
 const { Server } = require('socket.io');
 const io = require('socket.io')(5001, {
   cors: {

@@ -14,8 +14,8 @@ const CheckInModal = ({ isOpen, onClose, onCheckIn, title }) => {
         <button style={styles.closeButton} onClick={onClose}>X</button>
         <h2 style={styles.title}>{title}</h2>
         <div style={styles.buttonContainer}>
-          <button style={styles.yesButton} onClick={() => handleCheckIn(false)}>Yes, I was smoke-free</button>
-          <button style={styles.noButton} onClick={() => handleCheckIn(true)}>No, I smoked</button>
+          <button style={styles.yesButton} onClick={() => handleCheckIn(true)}>Yes, I was smoke-free</button>
+          <button style={styles.noButton} onClick={() => handleCheckIn(false)}>No, I smoked</button>
         </div>
       </div>
     </div>

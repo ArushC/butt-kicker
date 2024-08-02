@@ -13,6 +13,7 @@ const Forum = () => {
   const [isTyping, setIsTyping] = useState(false);
   const typingTimeoutRef = useRef(null);
   const messagesEndRef = useRef(null);
+  const [interimTranscript, setInterimTranscript] = useState('');
 
   useEffect(() => {
     fetch(`/api/forum/${id}`)
@@ -66,9 +67,30 @@ const Forum = () => {
     }, 1000);
   };
 
+  const handleVoiceInput = () => {
+    const recognition = new window.webkitSpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    recognition.onresult = (event) => {
+      let interimTranscript = '';
+      let finalTranscript = '';
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+          finalTranscript += event.results[i][0].transcript;
+        } else {
+          interimTranscript += event.results[i][0].transcript;
+        }
+      }
+      setInterimTranscript(interimTranscript);
+      setMessage(prevMessage => prevMessage + finalTranscript);
+    };
+
+    recognition.start();
+  };
+
   return (
-    <div style={{ textAlign: 'center', padding: '20px', backgroundColor: '#d3f0ff', minHeight: '100vh' }}>
-      <h1 style={{ fontSize: '36px', marginBottom: '20px' }}>Forum</h1>
+    <div style={{ textAlign: 'center', padding: '20px', backgroundColor: '#d3f0ff' }}>
       <div style={{ backgroundColor: '#ffffe0', padding: '20px', borderRadius: '10px', width: '100%', maxWidth: '600px', margin: '0 auto' }}>
         <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
           {messages.map((msg, index) => (
@@ -89,13 +111,13 @@ const Forum = () => {
           />
           <span>Post Anonymously</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
-          <input
-            type="text"
+        <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px', position: 'relative', width: '100%' }}>
+          <textarea
             value={message}
             onChange={handleTyping}
             placeholder="Share something..."
-            style={{ flex: '1', padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }}
+            style={{ flex: '1', padding: '10px', borderRadius: '5px', border: '1px solid #ccc', height: '100px', resize: 'none' }}
+            rows="4"
           />
           <button
             onClick={handleSendMessage}
@@ -103,7 +125,33 @@ const Forum = () => {
           >
             Send
           </button>
+          <button
+            onClick={handleVoiceInput}
+            style={{
+              position: 'absolute',
+              right: '90px',
+              border: 'none',
+              background: 'none',
+              cursor: 'pointer',
+              height: '50px'
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              width="24px"
+              height="24px"
+            >
+              <path d="M12 2C10.35 2 9 3.35 9 5V11C9 12.65 10.35 14 12 14C13.65 14 15 12.65 15 11V5C15 3.35 13.65 2 12 2ZM5 11H7C7 13.76 9.24 16 12 16C14.76 16 17 13.76 17 11H19C19 14.26 16.87 17.1 13.75 17.82V21H10.25V17.82C7.13 17.1 5 14.26 5 11Z"/>
+            </svg>
+          </button>
         </div>
+        {interimTranscript && (
+          <div style={{ marginTop: '10px', fontSize: '14px', color: 'gray' }}>
+            {interimTranscript}
+          </div>
+        )}
       </div>
       <button
         style={{ marginTop: '20px', padding: '10px 20px', backgroundColor: '#4B0082', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}

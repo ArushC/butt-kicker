@@ -11,6 +11,7 @@ const Forum = () => {
   const [message, setMessage] = useState('');
   const [anonymous, setAnonymous] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [isListening, setIsListening] = useState(false);
   const typingTimeoutRef = useRef(null);
   const messagesEndRef = useRef(null);
   const [interimTranscript, setInterimTranscript] = useState('');
@@ -72,6 +73,14 @@ const Forum = () => {
     recognition.continuous = true;
     recognition.interimResults = true;
 
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
     recognition.onresult = (event) => {
       let interimTranscript = '';
       let finalTranscript = '';
@@ -83,14 +92,15 @@ const Forum = () => {
         }
       }
       setInterimTranscript(interimTranscript);
-      setMessage(prevMessage => prevMessage + finalTranscript);
+      setMessage(prevMessage => `${prevMessage.trim()} ${finalTranscript.trim()}`); // Add a single space between the previous contents and new contents
     };
 
     recognition.start();
   };
 
   return (
-    <div style={{ textAlign: 'center', padding: '20px', backgroundColor: '#d3f0ff' }}>
+    <div style={{ textAlign: 'center', padding: '20px', backgroundColor: '#d3f0ff', minHeight: '100vh' }}>
+      <h1 style={{ marginBottom: '20px', fontSize: '2em' }}>The Forum</h1>
       <div style={{ backgroundColor: '#ffffe0', padding: '20px', borderRadius: '10px', width: '100%', maxWidth: '600px', margin: '0 auto' }}>
         <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
           {messages.map((msg, index) => (
@@ -121,7 +131,7 @@ const Forum = () => {
           />
           <button
             onClick={handleSendMessage}
-            style={{ marginLeft: '10px', padding: '10px 20px', backgroundColor: '#4B0082', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
+            style={{ marginLeft: '10px', padding: '0 20px', backgroundColor: '#4B0082', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer', height: '100px' }}
           >
             Send
           </button>
@@ -139,7 +149,7 @@ const Forum = () => {
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
-              fill="currentColor"
+              fill={isListening ? 'red' : 'currentColor'}
               width="24px"
               height="24px"
             >

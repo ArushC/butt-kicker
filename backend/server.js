@@ -53,6 +53,18 @@ app.get('/api/update/:id', async (req, res) => {
   }
 });
 
+// Route to handle state update
+app.post('/api/updateState/:id', async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const result = await updateState(userId);
+    res.json(result); // Send the result back to the client
+  } catch (error) {
+    console.error('Error updating state:', error);
+    res.status(500).json({ error: 'Failed to update state' });
+  }
+});
+
 // Route to register a new user
 app.post('/api/register', async (req, res) => {
   const { username, password, name } = req.body;

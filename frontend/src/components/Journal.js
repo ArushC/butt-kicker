@@ -15,7 +15,7 @@ const Journal = () => {
   // Speech recognition setup
   const speechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const recognition = new speechRecognition();
-  recognition.continuous = true;
+  recognition.continuous = false;
   recognition.interimResults = true;
 
   recognition.onresult = event => {

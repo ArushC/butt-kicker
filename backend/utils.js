@@ -51,8 +51,10 @@ const updateState = async (id) => {
         }
     }
   
-    // Update the database with the updated fields
-    await knex('users').where({ id }).update(updatedFields);
+    // Update the database with the updated fields only if there are changes
+    if (Object.keys(updatedFields).length > 0) {
+        await knex('users').where({ id }).update(updatedFields);
+    }
   
     return { currentStreak, user };
   };

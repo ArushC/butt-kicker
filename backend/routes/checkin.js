@@ -31,7 +31,7 @@ router.post('/:id', async (req, res) => {
         if (user.smoke_free_today !== smoke_free_today) {
           updatedFields.smoke_free_today = smoke_free_today;
           currentStreak = (!smoke_free_today) ? 0 : 1;
-          if (!user.smoke_free_yesterday) {
+          if (smoke_free_today && user.smoke_free_yesterday) {
             currentStreak += user.saved_streak + 1;
           }
         }

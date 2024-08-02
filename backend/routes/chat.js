@@ -9,7 +9,7 @@ const io = require('socket.io')(5001, {
 });
 
 // Endpoint to get chat messages
-router.get('/forum/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
     const messages = await knex('chat_messages')
       .join('users', 'chat_messages.user_id', '=', 'users.id') // Adjust this line according to your actual schema
       .select('chat_messages.*', 'users.username') // Select fields from chat_messages and the username
@@ -19,7 +19,7 @@ router.get('/forum/:id', async (req, res) => {
   });
 
 // Endpoint to post a new chat message
-router.post('/forum/:id', async (req, res) => {
+router.post('/:id', async (req, res) => {
     const { user_id, anonymous, message } = req.body;
   
     try {

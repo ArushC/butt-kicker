@@ -20,25 +20,24 @@ router.get('/:id', async (req, res) => {
 
 // Endpoint to post a new chat message
 router.post('/:id', async (req, res) => {
-    const { user_id, anonymous, message } = req.body;
-  
-    try {
-      //Fetch the username based on user_id
-      const user = await knex('users').where({ id: user_id }).first();
-      const username = anonymous ? 'Anonymous' : user.username;
-  
-      // Insert the new message into the database
-      const [newMessage] = await knex('chat_messages')
-        .insert({ user_id, anonymous, message })
-        .returning('*');
-  
-      // Emit the new message to all connected clients
-      io.emit('new_message', newMessage);
-      res.status(201).json(newMessage);
-    } catch (err) {
-      console.error('Error posting message:', err);
-      res.status(500).json({ error: 'Failed to post message' });
-    }
-  });
+  const { user_id, anonymous, username, message } = req.body;
+
+  try {
+    // Insert the new message into the database
+    const [newMessage] = await knex('chat_messages')
+      .insert({ user_id, anonymous, message })
+      .returning('*');
+    
+    // Add the username to the newMessage object
+    newMessage.username = username;
+
+    // Emit the new message to all connected clients
+    io.emit('new_message', newMessage);
+    res.status(201).json(newMessage);
+  } catch (err) {
+    console.error('Error posting message:', err);
+    res.status(500).json({ error: 'Failed to post message' });
+  }
+});
 
 module.exports = router;

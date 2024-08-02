@@ -16,6 +16,22 @@ const Forum = () => {
   const messagesEndRef = useRef(null);
   const [interimTranscript, setInterimTranscript] = useState('');
 
+  const [username, setUsername] = useState('Unknown User');
+
+  useEffect(() => {
+    fetch(`/api/users/${id}`)
+      .then(response => {
+        if (response.status === 401) {
+          navigate('/login');
+          return; // Exit the promise chain
+        }
+        return response.json();
+      })
+      .then(data => setUsername(data.username))
+      .catch(() => navigate('/login'));
+  }, [id, navigate]);
+
+
   useEffect(() => {
     fetch(`/api/forum/${id}`)
       .then(response => response.json())
@@ -39,12 +55,19 @@ const Forum = () => {
 
   const handleSendMessage = () => {
     if (message.trim()) {
+      const messageData = {
+        user_id: id,
+        anonymous,
+        username: anonymous ? 'Anonymous' : username,
+        message
+      };
+
       fetch(`/api/forum/${id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ user_id: id, anonymous, message })
+        body: JSON.stringify(messageData)
       })
         .then(response => response.json())
         .then(() => {

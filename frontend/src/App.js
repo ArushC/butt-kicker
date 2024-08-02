@@ -17,7 +17,7 @@ const App = () => {
         if (response.ok) {
           return response.json();
         }
-        throw new Error('Not authenticated');
+        //throw new Error('Not authenticated');
       })
       .then((data) => {
         setIsAuthenticated(true);

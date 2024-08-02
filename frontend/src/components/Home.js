@@ -26,6 +26,17 @@ const Home = () => {
 
   useEffect(() => {
     fetchUserData();
+    fetch(`/api/updateState/${id}`, { method: 'POST' })
+      .then(response => {
+        if (response.ok) {
+          fetchUserData(); // Fetch updated user data after state update
+        } else {
+          console.error('State update failed');
+        }
+      })
+      .catch(error => {
+        console.error('State update failed', error);
+      });
   }, [id, navigate]);
 
   if (!user) {

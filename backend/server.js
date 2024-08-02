@@ -5,6 +5,7 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const { Server } = require('socket.io'); // Import socket.io
+const { updateState } = require('./utils'); // Import updateState function
 const app = express();
 const port = 7160;
 
@@ -35,7 +36,22 @@ app.use('/api/checkin', checkinRouter);
 
 // Chat routes
 const chatRoutes = require('./routes/chat'); // Create a chat.js file in the routes folder
-app.use('/api/', chatRoutes);
+app.use('/api/forum', chatRoutes);
+
+// Route to update the home page current streak state
+app.get('/api/update/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const { updatedFields, currentStreak } = await updateState(id);
+    await knex('users').where({ id }).update(updatedFields);
+
+    res.status(200).send({ message: 'State updated', current_streak: currentStreak });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: 'Server error' });
+  }
+});
 
 // Route to register a new user
 app.post('/api/register', async (req, res) => {

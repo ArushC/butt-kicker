@@ -1,9 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const SmokedPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [motivationMessage, setMotivationMessage] = useState('');
+  const [showMotivationPopup, setShowMotivationPopup] = useState(false);
+
+  const handleMotivationClick = async () => {
+    const response = await fetch(
+      'https://noggin.rea.gent/current-snipe-5643',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer rg_v1_vhh9gte52dfj2j73efxtswj4imf03bbsq9hp_ngk',
+        },
+        body: JSON.stringify({
+          "journal": "",
+        }),
+      }
+    ).then(response => response.text());
+
+    setMotivationMessage(response);
+    setShowMotivationPopup(true);
+  };
 
   return (
     <div style={{ textAlign: 'center', padding: '20px' }}>
@@ -36,10 +57,20 @@ const SmokedPage = () => {
       <div style={{ margin: '20px 0' }}>
         <button 
           style={buttonStyle}
+          onClick={handleMotivationClick}
         >
           Motivation
         </button>
       </div>
+
+      {showMotivationPopup && (
+        <div style={popupStyles.overlay}>
+          <div style={popupStyles.popup}>
+            <button style={popupStyles.closeButton} onClick={() => setShowMotivationPopup(false)}>X</button>
+            <p>{motivationMessage}</p>
+          </div>
+        </div>
+      )}
 
       <div style={{ margin: '20px 0', padding: '20px 0', borderTop: '1px solid black', borderBottom: '1px solid black' }}>
         <p style={{ fontSize: '20px', textDecoration: 'underline' }}>
@@ -66,6 +97,43 @@ const buttonStyle = {
   borderRadius: '5px',
   fontSize: '18px',
   cursor: 'pointer',
+};
+
+const popupStyles = {
+  overlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },
+  popup: {
+    backgroundColor: '#fff',
+    padding: '20px',
+    borderRadius: '10px',
+    width: '300px',
+    textAlign: 'center',
+    position: 'relative',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: '10px',
+    right: '10px',
+    backgroundColor: 'red',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '50%',
+    width: '30px',
+    height: '30px',
+    textAlign: 'center',
+    lineHeight: '30px',
+    cursor: 'pointer',
+  },
 };
 
 export default SmokedPage;

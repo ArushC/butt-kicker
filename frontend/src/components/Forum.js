@@ -31,7 +31,6 @@ const Forum = () => {
       .catch(() => navigate('/login'));
   }, [id, navigate]);
 
-
   useEffect(() => {
     fetch(`/api/forum/${id}`)
       .then(response => response.json())

@@ -11,14 +11,18 @@ const Journal = () => {
   const [entryDates, setEntryDates] = useState([]);
   const [isListening, setIsListening] = useState(false);
   const [interimTranscript, setInterimTranscript] = useState('');
+  let phraseTimeout;
 
   // Speech recognition setup
   const speechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const recognition = new speechRecognition();
-  recognition.continuous = false;
+  recognition.continuous = true;
   recognition.interimResults = true;
 
+  const end_of_phrase_silence_time = 2000; // 2000 milliseconds = 2 seconds
+
   recognition.onresult = event => {
+    clearTimeout(phraseTimeout); // Clear the previous timeout
     for (let i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
         setEntry(prev => prev + ' ' + event.results[i][0].transcript);
@@ -26,6 +30,10 @@ const Journal = () => {
         setInterimTranscript(event.results[i][0].transcript);
       }
     }
+    // Set a new timeout for end of phrase silence
+    phraseTimeout = setTimeout(() => {
+      stopListening();
+    }, end_of_phrase_silence_time);
   };
 
   recognition.onerror = event => {
@@ -35,16 +43,23 @@ const Journal = () => {
 
   recognition.onend = () => {
     setIsListening(false);
+    setInterimTranscript(''); // Clear interim results when recognition stops
+    clearTimeout(phraseTimeout); // Clear the timeout when recognition ends
   };
 
   const startListening = () => {
     setIsListening(true);
     recognition.start();
+    // Set a timeout for end of phrase silence if no sound is detected
+    phraseTimeout = setTimeout(() => {
+      stopListening();
+    }, end_of_phrase_silence_time);
   };
 
   const stopListening = () => {
     recognition.stop();
     setIsListening(false);
+    clearTimeout(phraseTimeout); // Clear the timeout when recognition stops
   };
 
   useEffect(() => {

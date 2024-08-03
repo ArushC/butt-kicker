@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import HomeButton from './HomeButton';
 import CheckInModal from './CheckInModal';
+import Profile from './Profile';
 
 const Home = () => {
   const { id } = useParams();
@@ -10,6 +11,12 @@ const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [checkInTitle, setCheckInTitle] = useState('');
   const [checkInForYesterday, setCheckInForYesterday] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+
+  const toggleProfile = () => {
+    setShowProfile(!showProfile);
+  };
+  
 
   const fetchUserData = () => {
     fetch(`/api/users/${id}`)
@@ -88,11 +95,19 @@ const Home = () => {
   ];
 
   return (
-    <div style={{ textAlign: 'center', padding: '20px' }}>
+    
+    <div style={{ position: 'relative', textAlign: 'center', padding: '20px' }}>
+      <button
+        onClick={toggleProfile} // Use the defined toggle function
+        style={{ position: 'absolute', top: '10px', right: '10px', padding: '5px 15px', backgroundColor: '#4B0082', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+        My Profile
+      </button>
+
       <div style={{ backgroundColor: '#d3f0ff', padding: '20px', borderRadius: '10px' }}>
         <h1>{displayName}'s Streak:</h1>
         <h2 style={{ color: '#ffb400', fontSize: '48px' }}>{user.current_streak} DAYS</h2>
       </div>
+
       <button
         style={{ margin: '20px', padding: '10px 20px', backgroundColor: '#4B0082', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
         onClick={() => {
@@ -103,6 +118,7 @@ const Home = () => {
       >
         Check In For Yesterday
       </button>
+
       <div>
         {buttons.map((btn, index) => (
           <HomeButton
@@ -113,12 +129,15 @@ const Home = () => {
           />
         ))}
       </div>
+
       <CheckInModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onCheckIn={handleCheckIn}
         title={checkInTitle}
       />
+
+      {showProfile && <Profile />}
     </div>
   );
 };

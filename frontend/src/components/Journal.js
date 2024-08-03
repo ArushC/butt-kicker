@@ -41,7 +41,7 @@ const Journal = () => {
       // Set a new timeout for end of phrase silence
       phraseTimeoutRef.current = setTimeout(() => {
         stopListening();
-      }, 3000); // 3000 milliseconds = 3 seconds
+      }, 5000); // 5000 milliseconds = 5 seconds
     };
 
     recog.onerror = event => {

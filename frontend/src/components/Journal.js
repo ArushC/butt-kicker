@@ -10,7 +10,7 @@ const Journal = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [entryDates, setEntryDates] = useState([]);
   const [isListening, setIsListening] = useState(false);
-  const [interimTranscript, setInterimTranscript] = useState('');
+  const [interimEntry, setInterimEntry] = useState('');
   const phraseTimeoutRef = useRef(null);
 
   // Define speech recognition setup as a memoized function to prevent re-creation on every render
@@ -25,17 +25,18 @@ const Journal = () => {
       clearTimeout(phraseTimeoutRef.current); // Clear the previous timeout
       let finalTranscript = '';
       for (let i = event.resultIndex; i < event.results.length; ++i) {
-          const transcript = event.results[i][0].transcript;
-          if (event.results[i].isFinal) {
-              // Ensure a space is added before the new transcript if there's already text
-              finalTranscript += transcript + ' ';
-          } else {
-              setInterimTranscript(transcript);
-          }
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          // Ensure a space is added before the new transcript if there's already text
+          finalTranscript += transcript + ' ';
+        } else {
+          // Update interim results
+          setInterimEntry(transcript);
+        }
       }
       if (finalTranscript) {
-          setEntry(prevEntry => prevEntry.length > 0 ? prevEntry + ' ' + finalTranscript.trim() : finalTranscript.trim());
-          setInterimTranscript('');
+        setEntry(prevEntry => prevEntry.length > 0 ? prevEntry + ' ' + finalTranscript.trim() : finalTranscript.trim());
+        setInterimEntry('');
       }
       // Set a new timeout for end of phrase silence
       phraseTimeoutRef.current = setTimeout(() => {
@@ -50,7 +51,6 @@ const Journal = () => {
 
     recog.onend = () => {
       setIsListening(false);
-      setInterimTranscript(''); // Clear interim results when recognition stops
       clearTimeout(phraseTimeoutRef.current); // Clear the timeout when recognition ends
     };
 
@@ -64,7 +64,7 @@ const Journal = () => {
     } else {
       recognition.stop();
     }
-    
+
     // Ensure the recognition is stopped when the component unmounts
     return () => {
       recognition.stop();
@@ -135,7 +135,7 @@ const Journal = () => {
             backgroundColor: 'transparent',
             borderBottom: '1px solid #ccc'
           }}
-          value={entry + (interimTranscript ? ' ' + interimTranscript : '')}
+          value={entry}
           onChange={e => setEntry(e.target.value)}
           onBlur={handleBlur}
           readOnly={dateParam && date !== new Date().toISOString().split('T')[0]}
@@ -156,9 +156,10 @@ const Journal = () => {
             >
               {isListening ? 'Stop Listening' : 'Start Voice Entry'}
             </button>
-            {interimTranscript && (
-              <div style={{ padding: '10px', backgroundColor: '#f0f0f0', color: '#333' }}>
-                {interimTranscript}
+            {isListening && (
+              <div style={{ marginTop: '10px', backgroundColor: '#f0f0f0', padding: '10px', borderRadius: '5px' }}>
+                <strong>Listening...</strong>
+                <p>{interimEntry}</p>
               </div>
             )}
           </div>

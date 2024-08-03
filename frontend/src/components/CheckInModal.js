@@ -1,11 +1,22 @@
 import React from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+
+
 
 const CheckInModal = ({ isOpen, onClose, onCheckIn, title }) => {
+  //if (!isOpen) return null;
+
+  const navigate = useNavigate(); 
+  const { id } = useParams();
+
   if (!isOpen) return null;
 
   const handleCheckIn = (smoked) => {
     onCheckIn(smoked);
     onClose();
+    if (!smoked) {
+      navigate(`/smoked/${id}`);
+    }
   };
 
   return (

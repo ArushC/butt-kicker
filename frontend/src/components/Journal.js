@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
 
@@ -11,56 +11,75 @@ const Journal = () => {
   const [entryDates, setEntryDates] = useState([]);
   const [isListening, setIsListening] = useState(false);
   const [interimTranscript, setInterimTranscript] = useState('');
-  let phraseTimeout;
+  const phraseTimeoutRef = useRef(null);
 
-  // Speech recognition setup
-  const speechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const recognition = new speechRecognition();
-  recognition.continuous = true;
-  recognition.interimResults = true;
+  // Define speech recognition setup as a memoized function to prevent re-creation on every render
+  const recognition = useMemo(() => {
+    const speechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recog = new speechRecognition();
+    recog.continuous = true;
+    recog.interimResults = true;
+    recog.lang = 'en-US';  // Specify the language as needed
 
-  const end_of_phrase_silence_time = 2000; // 2000 milliseconds = 2 seconds
-
-  recognition.onresult = event => {
-    clearTimeout(phraseTimeout); // Clear the previous timeout
-    for (let i = event.resultIndex; i < event.results.length; ++i) {
-      if (event.results[i].isFinal) {
-        setEntry(prev => prev + ' ' + event.results[i][0].transcript);
-      } else {
-        setInterimTranscript(event.results[i][0].transcript);
+    recog.onresult = event => {
+      clearTimeout(phraseTimeoutRef.current); // Clear the previous timeout
+      let finalTranscript = '';
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+              // Ensure a space is added before the new transcript if there's already text
+              finalTranscript += transcript + ' ';
+          } else {
+              setInterimTranscript(transcript);
+          }
       }
+      if (finalTranscript) {
+          setEntry(prevEntry => prevEntry.length > 0 ? prevEntry + ' ' + finalTranscript.trim() : finalTranscript.trim());
+          setInterimTranscript('');
+      }
+      // Set a new timeout for end of phrase silence
+      phraseTimeoutRef.current = setTimeout(() => {
+        stopListening();
+      }, 3000); // 3000 milliseconds = 3 seconds
+    };
+
+    recog.onerror = event => {
+      console.error('Speech recognition error:', event.error);
+      setIsListening(false);
+    };
+
+    recog.onend = () => {
+      setIsListening(false);
+      setInterimTranscript(''); // Clear interim results when recognition stops
+      clearTimeout(phraseTimeoutRef.current); // Clear the timeout when recognition ends
+    };
+
+    return recog;
+  }, []);
+
+  // Effect to start and stop recognition based on isListening
+  useEffect(() => {
+    if (isListening) {
+      recognition.start();
+    } else {
+      recognition.stop();
     }
-    // Set a new timeout for end of phrase silence
-    phraseTimeout = setTimeout(() => {
-      stopListening();
-    }, end_of_phrase_silence_time);
-  };
+    
+    // Ensure the recognition is stopped when the component unmounts
+    return () => {
+      recognition.stop();
+      clearTimeout(phraseTimeoutRef.current);
+    };
+  }, [isListening, recognition]);
 
-  recognition.onerror = event => {
-    console.error('Speech recognition error', event.error);
-    setIsListening(false);
-  };
-
-  recognition.onend = () => {
-    setIsListening(false);
-    setInterimTranscript(''); // Clear interim results when recognition stops
-    clearTimeout(phraseTimeout); // Clear the timeout when recognition ends
-  };
-
-  const startListening = () => {
+  const startListening = useCallback(() => {
     setIsListening(true);
-    recognition.start();
-    // Set a timeout for end of phrase silence if no sound is detected
-    phraseTimeout = setTimeout(() => {
-      stopListening();
-    }, end_of_phrase_silence_time);
-  };
+  }, []);
 
-  const stopListening = () => {
-    recognition.stop();
+  const stopListening = useCallback(() => {
     setIsListening(false);
-    clearTimeout(phraseTimeout); // Clear the timeout when recognition stops
-  };
+    clearTimeout(phraseTimeoutRef.current);
+  }, []);
 
   useEffect(() => {
     fetch(`/api/journal/${id}/${dateParam}`)
@@ -116,7 +135,7 @@ const Journal = () => {
             backgroundColor: 'transparent',
             borderBottom: '1px solid #ccc'
           }}
-          value={entry}
+          value={entry + (interimTranscript ? ' ' + interimTranscript : '')}
           onChange={e => setEntry(e.target.value)}
           onBlur={handleBlur}
           readOnly={dateParam && date !== new Date().toISOString().split('T')[0]}

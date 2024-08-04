@@ -11,7 +11,7 @@ const HomeButton = ({ text, backgroundColor, onClick }) => {
         padding: '10px 20px',
         margin: '10px 0',
         backgroundColor: backgroundColor,
-        color: '#4B0082', // Indigo color for text
+        color: '#243127', // Indigo color for text
         fontSize: '18px',
         border: 'none',
         borderRadius: '5px',

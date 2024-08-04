@@ -6,7 +6,7 @@ import CheckInModal from './CheckInModal';
 import Profile from './Profile';
 import IncreaseCurrentStreak from './IncreaseCurrentStreak'; // Import the new component
 
-const Home = () => {
+const Home = ({setIsAuthenticated}) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -154,7 +154,7 @@ const Home = () => {
         title={checkInTitle}
       />
 
-      {showProfile && <Profile />}
+      {showProfile && <Profile setIsAuthenticated={setIsAuthenticated}/>}
 
       {showStreakPopup && (
         <IncreaseCurrentStreak 

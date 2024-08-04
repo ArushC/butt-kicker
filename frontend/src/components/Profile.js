@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-const Profile = () => {
+const Profile = ({setIsAuthenticated}) => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
@@ -13,9 +13,25 @@ const Profile = () => {
             .catch(error => console.error('Failed to fetch user data:', error));
     }, [id]);
 
-    const handleLogout = () => {
-        // Assuming the logout logic is to navigate to a logout route that handles session clearing
-        navigate('/logout');
+    const handleLogout = async () => {
+        try {
+            const response = await fetch('/api/logout', {
+                method: 'GET',
+                credentials: 'include'  // Include credentials to ensure the session is destroyed
+            });
+    
+            if (response.ok) {
+                // Clear session storage
+                sessionStorage.clear();
+                // Optionally handle any additional post-logout logic here
+                setIsAuthenticated(false);
+                navigate('/login');
+            } else {
+                console.error('Logout failed');
+            }
+        } catch (error) {
+            console.error('An error occurred during logout:', error);
+        }
     };
 
     const handleChangePassword = () => {

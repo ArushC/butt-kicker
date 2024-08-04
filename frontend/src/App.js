@@ -19,7 +19,7 @@ const App = () => {
         if (response.ok) {
           return response.json();
         }
-        //throw new Error('Not authenticated');
+        throw new Error('Not authenticated');
       })
       .then((data) => {
         setIsAuthenticated(true);
@@ -45,7 +45,7 @@ const App = () => {
         />
         <Route 
           path="/home/:id" 
-          element={isAuthenticated ? <Home /> : <Navigate to="/login" />} 
+          element={isAuthenticated ? <Home setIsAuthenticated={setIsAuthenticated}/> : <Navigate to="/login" />} 
         />
         <Route 
           path="/savings/:id" 

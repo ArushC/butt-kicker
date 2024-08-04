@@ -1,124 +1,132 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import Modal from 'react-modal';
 
 const SmokedPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [motivationMessage, setMotivationMessage] = useState('');
   const [showMotivationPopup, setShowMotivationPopup] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // Fetch user data to get max_streak
+    fetch(`/api/users/${id}`)
+      .then(response => response.json())
+      .then(data => setUser(data))
+      .catch(error => console.error('Error fetching user data:', error));
+  }, [id]);
 
   const handleMotivationClick = async () => {
-    const response = await fetch(
-      'https://noggin.rea.gent/current-snipe-5643',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer rg_v1_vhh9gte52dfj2j73efxtswj4imf03bbsq9hp_ngk',
-        },
-        body: JSON.stringify({
-          "journal": "",
-        }),
-      }
-    ).then(response => response.text());
-
-    setMotivationMessage(response);
-    setShowMotivationPopup(true);
+    try {
+      const response = await fetch(
+        'https://noggin.rea.gent/current-snipe-5643',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer rg_v1_vhh9gte52dfj2j73efxtswj4imf03bbsq9hp_ngk',
+          },
+          body: JSON.stringify({ journal: '' }),
+        }
+      );
+      const message = await response.text();
+      setMotivationMessage(message);
+      setShowMotivationPopup(true);
+    } catch (error) {
+      console.error('Error fetching motivation message:', error);
+    }
   };
 
   return (
-    <div style={{ textAlign: 'center', padding: '20px' }}>
-      <div style={{ backgroundColor: '#d3f0ff', padding: '20px', borderRadius: '10px' }}>
-        <h1 style={{ display: 'none' }}>I Smoked Page</h1>
-        <p style={{ fontSize: '24px', margin: '20px 0' }}>
-          That’s ok. Keep on pushing forward and making progress. We believe in you.
-        </p>
-        <h2 style={{ textDecoration: 'underline', margin: '20px 0' }}>
-          Next Steps:
-        </h2>
-      </div>
+    <div style={styles.container}>
+      <h1 style={styles.title}>It's okay, keep pushing forward. We believe in you!</h1>
 
-      <div style={{ marginTop: '20px' }}>
-        <button 
-          style={buttonStyle} 
-          onClick={() => navigate(`/journal/${id}/today`)}
-        >
+      <div style={styles.nextSteps}>
+        <h3>Next Steps:</h3>
+        <button style={styles.button} onClick={() => navigate(`/journal/${id}/today`)}>
           Reflect and Renew
         </button>
-
-        <button 
-          style={{ ...buttonStyle, marginTop: '10px' }} 
-          onClick={() => navigate(`/forum/${id}`)}
-        >
+        <button style={styles.button} onClick={() => navigate(`/forum/${id}`)}>
           Talk to Someone
         </button>
-      </div>
-
-      <div style={{ margin: '20px 0' }}>
-        <button 
-          style={buttonStyle}
-          onClick={handleMotivationClick}
-        >
-          Motivation
+        <button style={styles.button} onClick={handleMotivationClick}>
+          Get Motivation
         </button>
       </div>
 
       {showMotivationPopup && (
-        <div style={popupStyles.overlay}>
-          <div style={popupStyles.popup}>
-            <button style={popupStyles.closeButton} onClick={() => setShowMotivationPopup(false)}>X</button>
-            <p>{motivationMessage}</p>
-          </div>
-        </div>
+        <Modal
+          isOpen={showMotivationPopup}
+          onRequestClose={() => setShowMotivationPopup(false)}
+          contentLabel="Motivation Message"
+          style={{
+            content: {
+              backgroundColor: '#d3f0ff',
+              padding: '20px',
+              borderRadius: '10px',
+              width: '80%',
+              maxWidth: '400px',
+              margin: '0 auto',
+              position: 'relative',
+              textAlign: 'center'
+            },
+            overlay: {
+              backgroundColor: 'rgba(0, 0, 0, 0.6)'
+            }
+          }}
+        >
+          <button style={styles.closeButton} onClick={() => setShowMotivationPopup(false)}>
+            &times;
+          </button>
+          <p>{motivationMessage}</p>
+        </Modal>
       )}
 
-      <div style={{ margin: '20px 0', padding: '20px 0', borderTop: '1px solid black', borderBottom: '1px solid black' }}>
-        <p style={{ fontSize: '20px', textDecoration: 'underline' }}>
-          Personal Record: 3 days
-        </p>
-        <button 
-          style={{ ...buttonStyle, marginTop: '10px' }} 
-          onClick={() => navigate(`/home/${id}`)}
-        >
-          Keep Going
-        </button>
-      </div>
+      {user && (
+        <div style={styles.personalRecord}>
+          <p>Personal Record: {user.max_streak} {user.max_streak === 1 ? 'day' : 'days'}</p>
+          <button style={styles.button} onClick={() => navigate(`/home/${id}`)}>
+            Keep Going
+          </button>
+        </div>
+      )}
     </div>
   );
 };
 
-const buttonStyle = {
-  display: 'block',
-  width: '200px',
-  padding: '10px 20px',
-  margin: '10px auto',
-  backgroundColor: '#F0E68C', // Matching Home.js button background color
-  border: '1px solid black',
-  borderRadius: '5px',
-  fontSize: '18px',
-  cursor: 'pointer',
-};
-
-const popupStyles = {
-  overlay: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1000,
+const styles = {
+  container: {
+    textAlign: 'center',
+    padding: '20px',
+    backgroundColor: '#d3f0ff'
   },
-  popup: {
-    backgroundColor: '#fff',
+  title: {
+    fontSize: '32px',
+    marginBottom: '20px',
+    color: '#4B0082'
+  },
+  nextSteps: {
+    backgroundColor: '#ffffe0',
     padding: '20px',
     borderRadius: '10px',
-    width: '300px',
-    textAlign: 'center',
-    position: 'relative',
+    width: '100%',
+    maxWidth: '600px',
+    margin: '0 auto',
+    marginBottom: '20px',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+  },
+  button: {
+    display: 'block',
+    width: '80%',
+    padding: '10px 20px',
+    margin: '10px auto',
+    backgroundColor: '#4B0082',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    fontSize: '18px',
+    cursor: 'pointer'
   },
   closeButton: {
     position: 'absolute',
@@ -132,8 +140,18 @@ const popupStyles = {
     height: '30px',
     textAlign: 'center',
     lineHeight: '30px',
-    cursor: 'pointer',
+    fontSize: '20px',
+    cursor: 'pointer'
   },
+  personalRecord: {
+    backgroundColor: '#ffffe0',
+    padding: '20px',
+    borderRadius: '10px',
+    width: '100%',
+    maxWidth: '600px',
+    margin: '20px auto',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+  }
 };
 
 export default SmokedPage;

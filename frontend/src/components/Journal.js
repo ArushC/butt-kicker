@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
 
-const Journal = () => {
+const Journal = ({fromHome}) => {
   const { id, dateParam } = useParams();
   const navigate = useNavigate();
   const [entry, setEntry] = useState('');
@@ -176,7 +176,7 @@ const Journal = () => {
               borderRadius: '5px',
               cursor: 'pointer'
             }}
-            onClick={() => navigate('/')}
+            onClick={() => fromHome ? navigate('/') : navigate(`/smoked/${id}`)}
           >
             Back
           </button>

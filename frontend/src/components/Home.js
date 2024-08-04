@@ -120,7 +120,9 @@ const Home = () => {
 
       <div style={{ backgroundColor: '#d3f0ff', padding: '20px', borderRadius: '10px' }}>
         <h1>{displayName}'s Streak:</h1>
-        <h2 style={{ color: '#ffb400', fontSize: '48px' }}>{user.current_streak} DAYS</h2>
+        <h2 style={{ color: '#ffb400', fontSize: '48px' }}>
+          {user.current_streak} {user.current_streak === 1 ? 'Day' : 'Days'}
+        </h2>
       </div>
 
       <button

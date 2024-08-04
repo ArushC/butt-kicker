@@ -13,12 +13,18 @@ const IncreaseCurrentStreak = ({ onClose, currentStreak }) => {
     return () => clearTimeout(timer);
   }, []);
 
-  // No need for a separate popup timer since the modal stays open until closed by the user
-
   const handleShare = () => {
-    // Logic for sharing the progress, e.g., opening a share dialog or copying to clipboard
-    // For demonstration, we'll just log to console
-    console.log(`Share progress: Smoke-free for ${currentStreak} days!`);
+    if (navigator.share) {
+      navigator.share({
+        title: 'My Smoke-Free Progress',
+        text: `I have been smoke-free for ${currentStreak} ${currentStreak === 1 ? 'Day' : 'Days'}!`,
+        url: window.location.href, // Sharing current page URL
+      })
+      .then(() => console.log('Share was successful.'))
+      .catch((error) => console.error('Share failed:', error));
+    } else {
+      console.log(`Share progress: Smoke-free for ${currentStreak} ${currentStreak === 1 ? 'Day' : 'Days'}!`);
+    }
   };
 
   return (
@@ -66,7 +72,7 @@ const IncreaseCurrentStreak = ({ onClose, currentStreak }) => {
           &times;
         </button>
         <h1 style={{ marginBottom: '20px' }}>
-          Congratulations! You have been smoke-free for {currentStreak} days!
+          Congratulations! You have been smoke-free for {currentStreak} {currentStreak === 1 ? 'Day' : 'Days'}!
         </h1>
         <button
           onClick={handleShare}

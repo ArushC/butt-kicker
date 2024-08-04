@@ -1,4 +1,3 @@
-// Home.js
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import HomeButton from './HomeButton';
@@ -6,7 +5,7 @@ import CheckInModal from './CheckInModal';
 import Profile from './Profile';
 import IncreaseCurrentStreak from './IncreaseCurrentStreak'; // Import the new component
 
-const Home = ({setIsAuthenticated}) => {
+const Home = ({ setIsAuthenticated }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -19,7 +18,7 @@ const Home = ({setIsAuthenticated}) => {
   const toggleProfile = () => {
     setShowProfile(!showProfile);
   };
-  
+
   const fetchUserData = () => {
     fetch(`/api/users/${id}`)
       .then(response => {
@@ -87,46 +86,46 @@ const Home = ({setIsAuthenticated}) => {
   const buttons = [
     {
       text: 'Daily Check In',
-      backgroundColor: '#F0E68C',
+      backgroundColor: '#6EC1E4',
       onClick: () => {
         setCheckInForYesterday(false);
         setCheckInTitle('Were you smoke-free today?');
         setIsModalOpen(true);
       },
     },
-    { text: 'View Savings', backgroundColor: '#F0E68C', onClick: () => navigate(`/savings/${id}`) },
-    { text: 'My Journal', backgroundColor: '#F0E68C', onClick: () => navigate(`/journal/${id}/today`) },
-    { text: 'Community', backgroundColor: '#F0E68C', onClick: () => navigate(`/forum/${id}`) },
-    { text: 'I Smoked', backgroundColor: '#F0E68C', onClick: () => navigate(`/smoked/${id}`) },
+    { text: 'View Savings', backgroundColor: '#6EC1E4', onClick: () => navigate(`/savings/${id}`) },
+    { text: 'My Journal', backgroundColor: '#6EC1E4', onClick: () => navigate(`/journal/${id}/today`) },
+    { text: 'Community', backgroundColor: '#6EC1E4', onClick: () => navigate(`/forum/${id}`) },
+    { text: 'I Smoked', backgroundColor: '#FF6F61', onClick: () => navigate(`/smoked/${id}`) },
   ];
 
   return (
-    <div style={{ position: 'relative', textAlign: 'center', padding: '20px' }}>
+    <div style={{ position: 'relative', textAlign: 'center', padding: '20px', fontFamily: 'Arial, sans-serif' }}>
       <button
         onClick={toggleProfile}
         style={{
           position: 'absolute',
           top: '10px',
           right: '10px',
-          padding: '5px 15px',
+          padding: '10px 20px',
           backgroundColor: '#4B0082',
           color: '#fff',
           border: 'none',
-          borderRadius: '5px',
+          borderRadius: '8px',
           cursor: 'pointer',
         }}>
         My Profile
       </button>
 
-      <div style={{ backgroundColor: '#d3f0ff', padding: '20px', borderRadius: '10px' }}>
-        <h1>{displayName}'s Streak:</h1>
-        <h2 style={{ color: '#ffb400', fontSize: '48px' }}>
+      <div style={{ backgroundColor: '#E3F2FD', padding: '20px', borderRadius: '10px' }}>
+        <h1 style={{ color: '#1E88E5' }}>{displayName}'s Streak:</h1>
+        <h2 style={{ color: '#FFB74D', fontSize: '48px' }}>
           {user.current_streak} {user.current_streak === 1 ? 'Day' : 'Days'}
         </h2>
       </div>
 
       <button
-        style={{ margin: '20px', padding: '10px 20px', backgroundColor: '#4B0082', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
+        style={{ margin: '20px', padding: '12px 24px', backgroundColor: '#4B0082', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
         onClick={() => {
           setCheckInForYesterday(true);
           setCheckInTitle('Were you smoke-free yesterday?');
@@ -154,7 +153,7 @@ const Home = ({setIsAuthenticated}) => {
         title={checkInTitle}
       />
 
-      {showProfile && <Profile setIsAuthenticated={setIsAuthenticated}/>}
+      {showProfile && <Profile setIsAuthenticated={setIsAuthenticated} />}
 
       {showStreakPopup && (
         <IncreaseCurrentStreak 

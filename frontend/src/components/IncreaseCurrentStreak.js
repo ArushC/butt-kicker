@@ -34,13 +34,10 @@ const IncreaseCurrentStreak = ({ onClose, currentStreak }) => {
   }, [currentStreak]);
 
   const handleShare = () => {
-    // Generate the shareable URL
     const shareText = `I have been smoke-free for ${currentStreak} ${currentStreak === 1 ? 'Day' : 'Days'}! I have been tracking my progress using an app called "Butt Kicker". See https://github.com/ArushC/butt-kicker.`;
 
-    // Example email sharing
     const mailtoLink = `mailto:?subject=My Smoke-Free Progress&body=${encodeURIComponent(shareText)}`;
 
-    // Check if Web Share API is available
     if (navigator.share) {
       if (screenshot) {
         navigator.share({
@@ -61,7 +58,6 @@ const IncreaseCurrentStreak = ({ onClose, currentStreak }) => {
         .catch((error) => console.error('Share failed:', error));
       }
     } else {
-      // Fallback to email
       window.location.href = mailtoLink;
     }
   };
@@ -121,10 +117,17 @@ const IncreaseCurrentStreak = ({ onClose, currentStreak }) => {
           &times;
         </button>
         <h1 style={{ marginBottom: '20px' }}>
-      Congratulations! You have been smoke-free for {currentStreak} {currentStreak === 1 ? 'Day' : 'Days'}!
-      <br />
-      {randomMessage}
-    </h1>
+          Congratulations! You have been smoke-free for {currentStreak} {currentStreak === 1 ? 'Day' : 'Days'}!
+        </h1>
+        <div style={{
+          backgroundColor: '#d3f0ff', // Consistent with the homepage
+          padding: '10px',
+          borderRadius: '5px',
+          boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.1)',
+          marginTop: '10px'
+        }}>
+          {randomMessage}
+        </div>
         <button
           onClick={handleShare}
           style={{

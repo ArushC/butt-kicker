@@ -1,9 +1,11 @@
 // IncreaseCurrentStreak.js
 import React, { useEffect, useState } from 'react';
+import html2canvas from 'html2canvas';
 import Confetti from 'react-confetti';
 
 const IncreaseCurrentStreak = ({ onClose, currentStreak }) => {
   const [showConfetti, setShowConfetti] = useState(true);
+  const [screenshot, setScreenshot] = useState(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -13,19 +15,59 @@ const IncreaseCurrentStreak = ({ onClose, currentStreak }) => {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const popupTimer = setTimeout(() => {
+      onClose();
+    }, 3000); // Popup closes after 3 seconds
+
+    return () => clearTimeout(popupTimer);
+  }, [onClose]);
+
   const handleShare = () => {
+    // Generate the shareable URL
+    const shareText = `I have been smoke-free for ${currentStreak} ${currentStreak === 1 ? 'Day' : 'Days'}! I have
+    been tracking my progress using an app called "Butt Kicker". See https://github.com/ArushC/butt-kicker.`;
+    
+    // Example email sharing
+    const mailtoLink = `mailto:?subject=My Smoke-Free Progress&body=${encodeURIComponent(shareText)}`;
+    const smsLink = `sms:?body=${encodeURIComponent(shareText)}`;
+
+    // Check if Web Share API is available
     if (navigator.share) {
-      navigator.share({
-        title: 'My Smoke-Free Progress',
-        text: `I have been smoke-free for ${currentStreak} ${currentStreak === 1 ? 'Day' : 'Days'}!`,
-        url: window.location.href, // Sharing current page URL
-      })
-      .then(() => console.log('Share was successful.'))
-      .catch((error) => console.error('Share failed:', error));
+      if (screenshot) {
+        navigator.share({
+          title: 'My Smoke-Free Progress',
+          text: shareText,
+          files: [new File([screenshot], 'screenshot.png', { type: 'image/png' })],
+          url: window.location.href,
+        })
+        .then(() => console.log('Share was successful.'))
+        .catch((error) => console.error('Share failed:', error));
+      } else {
+        navigator.share({
+          title: 'My Smoke-Free Progress',
+          text: shareText,
+          url: window.location.href,
+        })
+        .then(() => console.log('Share was successful.'))
+        .catch((error) => console.error('Share failed:', error));
+      }
     } else {
-      console.log(`Share progress: Smoke-free for ${currentStreak} ${currentStreak === 1 ? 'Day' : 'Days'}!`);
+      // Fallback to email or SMS
+      const shouldOpenMailto = window.confirm('Share via Email? Press "Cancel" to share via SMS.');
+      window.location.href = shouldOpenMailto ? mailtoLink : smsLink;
     }
   };
+
+  const captureScreenshot = () => {
+    html2canvas(document.body).then(canvas => {
+      setScreenshot(canvas.toDataURL('image/png'));
+    });
+  };
+
+  useEffect(() => {
+    captureScreenshot();
+  }, []);
 
   return (
     <div style={{

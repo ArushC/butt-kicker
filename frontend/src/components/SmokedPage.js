@@ -20,18 +20,21 @@ const SmokedPage = () => {
 
   const handleMotivationClick = async () => {
     try {
-      const response = await fetch(
-        'https://noggin.rea.gent/current-snipe-5643',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer rg_v1_vhh9gte52dfj2j73efxtswj4imf03bbsq9hp_ngk',
-          },
-          body: JSON.stringify({ journal: '' }),
-        }
-      );
-      const message = await response.text();
+      // Fetch the journal entries from your backend API
+      const response = await fetch(`/api/journal/${id}/formatted-journal-entries`);
+      const data = await response.json();
+
+      // Send the formatted journal to the motivation endpoint
+      const motivationResponse = await fetch('https://noggin.rea.gent/current-snipe-5643', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer rg_v1_vhh9gte52dfj2j73efxtswj4imf03bbsq9hp_ngk',
+        },
+        body: JSON.stringify({ journal: data.journal }),
+      });
+
+      const message = await motivationResponse.text();
       setMotivationMessage(message);
       setShowMotivationPopup(true);
     } catch (error) {
@@ -55,6 +58,7 @@ const SmokedPage = () => {
           Get Motivation
         </button>
       </div>
+      
 
       {showMotivationPopup && (
         <MotivationPopup

@@ -1,11 +1,11 @@
 // backend/routes/journal.js
 const express = require('express');
 const router = express.Router();
-const { getJournalEntry, saveJournalEntry, getJournalEntryDates } = require('../controllers/journalController');
+const { getJournalEntry, saveJournalEntry, getJournalEntryDates, getFormattedJournalEntries } = require('../controllers/journalController');
 
 //this route MUST come before get to /:id/:date, as routes are processed from top to bottom
 router.get('/:id/dates', getJournalEntryDates);
-
+router.get('/:id/formatted-journal-entries', getFormattedJournalEntries);
 router.get('/:id/today', getJournalEntry);
 router.post('/:id/today', saveJournalEntry);
 router.get('/:id/:date', getJournalEntry);

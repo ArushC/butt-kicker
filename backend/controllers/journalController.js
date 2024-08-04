@@ -1,5 +1,27 @@
 const knex = require('../knex'); // Adjust the path to where you export knex
 
+exports.getFormattedJournalEntries = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const entries = await knex('journal_entries')
+      .select('entry_date', 'entry')
+      .where('user_id', id)
+      .orderBy('entry_date', 'desc')
+      .limit(10);
+
+    // Format the entries
+    const formattedEntries = entries.map(entry => {
+      const date = new Date(entry.entry_date).toISOString().split('T')[0];
+      return `${date}:\n${entry.entry}`;
+    }).join('\n\n');
+
+    res.json({ journal: formattedEntries });
+  } catch (error) {
+    console.error('Error fetching journal entries:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 exports.getJournalEntry = async (req, res) => {
   const { id, date } = req.params;
   // Convert date to ISO string

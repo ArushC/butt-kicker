@@ -1,19 +1,24 @@
 // IncreaseCurrentStreak.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Confetti from 'react-confetti';
 
-const IncreaseCurrentStreak = ({ onClose }) => {
+const IncreaseCurrentStreak = ({ onClose, currentStreak }) => {
   const [showConfetti, setShowConfetti] = useState(true);
 
-  // Configure Confetti settings
-  const confettiConfig = {
-    width: window.innerWidth,
-    height: window.innerHeight,
-    recycle: false, // Confetti will not restart automatically
-    numberOfPieces: 100, // Adjust the number of pieces
-    gravity: 0.3, // Adjust gravity to control fall speed
-    initialVelocityY: 20, // Initial velocity
-    colors: ['#ff0000', '#00ff00', '#0000ff', '#ffff00'], // Color options for confetti
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowConfetti(false);
+    }, 1000); // Confetti lasts for 1 second
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // No need for a separate popup timer since the modal stays open until closed by the user
+
+  const handleShare = () => {
+    // Logic for sharing the progress, e.g., opening a share dialog or copying to clipboard
+    // For demonstration, we'll just log to console
+    console.log(`Share progress: Smoke-free for ${currentStreak} days!`);
   };
 
   return (
@@ -29,14 +34,16 @@ const IncreaseCurrentStreak = ({ onClose }) => {
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
       zIndex: 1000,
     }}>
-      {showConfetti && <Confetti {...confettiConfig} />}
+      {showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} />}
       <div style={{
-        position: 'relative',
         backgroundColor: '#ffffff',
         padding: '20px',
         borderRadius: '10px',
         textAlign: 'center',
         boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+        position: 'relative',
+        maxWidth: '400px',
+        width: '100%'
       }}>
         <button
           onClick={onClose}
@@ -44,20 +51,37 @@ const IncreaseCurrentStreak = ({ onClose }) => {
             position: 'absolute',
             top: '10px',
             right: '10px',
-            backgroundColor: '#ff0000',
-            color: '#ffffff',
+            backgroundColor: 'red',
+            color: '#fff',
             border: 'none',
             borderRadius: '50%',
             width: '30px',
             height: '30px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-          }}>
+            textAlign: 'center',
+            lineHeight: '30px',
+            fontSize: '20px',
+            cursor: 'pointer'
+          }}
+        >
           &times;
         </button>
-        <h1>Congratulations!</h1>
+        <h1 style={{ marginBottom: '20px' }}>
+          Congratulations! You have been smoke-free for {currentStreak} days!
+        </h1>
+        <button
+          onClick={handleShare}
+          style={{
+            padding: '10px 20px',
+            backgroundColor: '#4B0082',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            marginTop: '20px'
+          }}
+        >
+          Share Your Progress
+        </button>
       </div>
     </div>
   );

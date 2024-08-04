@@ -1,9 +1,10 @@
+// Home.js
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import HomeButton from './HomeButton';
 import CheckInModal from './CheckInModal';
 import Profile from './Profile';
-import IncreaseCurrentStreak from './IncreaseCurrentStreak';
+import IncreaseCurrentStreak from './IncreaseCurrentStreak'; // Import the new component
 
 const Home = () => {
   const { id } = useParams();
@@ -13,12 +14,12 @@ const Home = () => {
   const [checkInTitle, setCheckInTitle] = useState('');
   const [checkInForYesterday, setCheckInForYesterday] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-  const [showStreakModal, setShowStreakModal] = useState(false);
+  const [showStreakPopup, setShowStreakPopup] = useState(false); // State to control the popup
 
   const toggleProfile = () => {
     setShowProfile(!showProfile);
   };
-
+  
   const fetchUserData = () => {
     fetch(`/api/users/${id}`)
       .then(response => {
@@ -37,7 +38,7 @@ const Home = () => {
     fetch(`/api/updateState/${id}`, { method: 'POST' })
       .then(response => {
         if (response.ok) {
-          fetchUserData();
+          fetchUserData(); // Fetch updated user data after state update
         } else {
           console.error('State update failed');
         }
@@ -70,9 +71,9 @@ const Home = () => {
       .then(data => {
         if (data.success) {
           console.log('Check-in successful');
-          fetchUserData();
+          fetchUserData(); // Fetch updated user data after successful check-in
           if (data.streak_increased) {
-            setShowStreakModal(true);
+            setShowStreakPopup(true); // Show the congratulations modal
           }
         } else {
           console.error('Check-in failed');
@@ -153,8 +154,11 @@ const Home = () => {
 
       {showProfile && <Profile />}
 
-      {showStreakModal && (
-        <IncreaseCurrentStreak onClose={() => setShowStreakModal(false)} />
+      {showStreakPopup && (
+        <IncreaseCurrentStreak 
+          onClose={() => setShowStreakPopup(false)} 
+          currentStreak={user.current_streak} // Pass the current streak to the component
+        />
       )}
     </div>
   );

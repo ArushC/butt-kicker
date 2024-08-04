@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import MotivationPopup from './MotivationPopup'; // import the new component
 
 const SmokedPage = () => {
   const navigate = useNavigate();
@@ -56,14 +57,10 @@ const SmokedPage = () => {
       </div>
 
       {showMotivationPopup && (
-        <div style={styles.popupOverlay}>
-          <div style={styles.popup}>
-            <button style={styles.closeButton} onClick={() => setShowMotivationPopup(false)}>
-              &times;
-            </button>
-            <p>{motivationMessage}</p>
-          </div>
-        </div>
+        <MotivationPopup
+          message={motivationMessage}
+          onClose={() => setShowMotivationPopup(false)}
+        />
       )}
 
       {user && (
@@ -149,46 +146,6 @@ const styles = {
     fontSize: '18px',
     cursor: 'pointer',
     textAlign: 'center',
-  },
-  recordText: {
-    fontSize: '24px',
-    color: '#4B0082',
-    marginBottom: '20px',
-  },
-  popupOverlay: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1000,
-  },
-  popup: {
-    backgroundColor: '#fff',
-    padding: '20px',
-    borderRadius: '10px',
-    width: '300px',
-    textAlign: 'center',
-    position: 'relative',
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-  },
-  closeButton: {
-    position: 'absolute',
-    top: '10px',
-    right: '10px',
-    backgroundColor: 'red',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '50%',
-    width: '30px',
-    height: '30px',
-    textAlign: 'center',
-    lineHeight: '30px',
-    cursor: 'pointer',
   },
 };
 

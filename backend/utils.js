@@ -37,7 +37,7 @@ const updateState = async (id) => {
             smoke_free_yesterday: user.smoke_free_today,
             smoke_free_today: false,
             last_checkin_date: todayISO.toISOString().split('T')[0],
-            saved_streak: (!user.smoke_free_yesterday) ? 0 : user.saved_streak + 1
+            saved_streak: (!Boolean(user.smoke_free_yesterday)) ? 0 : user.saved_streak + 1
         }
         updatedFields.current_streak = (updatedFields.smoke_free_yesterday) ? 
         (updatedFields.saved_streak + 1) : 0;
@@ -47,7 +47,7 @@ const updateState = async (id) => {
             smoke_free_yesterday: false,
             smoke_free_today: false,
             last_checkin_date: todayISO.toISOString().split('T')[0],
-            saved_streak: (!user.smoke_free_today || !user.smoke_free_yesterday) ? 0 : user.saved_streak + 2
+            saved_streak: (!Boolean(user.smoke_free_today) || !Boolean(user.smoke_free_yesterday)) ? 0 : user.saved_streak + 2
         }
     }
   

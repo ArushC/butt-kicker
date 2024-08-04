@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import HomeButton from './HomeButton';
 import CheckInModal from './CheckInModal';
 import Profile from './Profile';
+import IncreaseCurrentStreak from './IncreaseCurrentStreak'; // Import the new component
 
 const Home = () => {
   const { id } = useParams();
@@ -12,6 +13,7 @@ const Home = () => {
   const [checkInTitle, setCheckInTitle] = useState('');
   const [checkInForYesterday, setCheckInForYesterday] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [showStreakPopup, setShowStreakPopup] = useState(false); // State to control the popup
 
   const toggleProfile = () => {
     setShowProfile(!showProfile);
@@ -65,10 +67,14 @@ const Home = () => {
       },
       body: JSON.stringify(body),
     })
-      .then(response => {
-        if (response.ok) {
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
           console.log('Check-in successful');
           fetchUserData(); // Fetch updated user data after successful check-in
+          if (data.streak_increased) {
+            setShowStreakPopup(true); // Show the congratulations popup
+          }
         } else {
           console.error('Check-in failed');
         }
@@ -95,11 +101,20 @@ const Home = () => {
   ];
 
   return (
-    
     <div style={{ position: 'relative', textAlign: 'center', padding: '20px' }}>
       <button
-        onClick={toggleProfile} // Use the defined toggle function
-        style={{ position: 'absolute', top: '10px', right: '10px', padding: '5px 15px', backgroundColor: '#4B0082', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+        onClick={toggleProfile}
+        style={{
+          position: 'absolute',
+          top: '10px',
+          right: '10px',
+          padding: '5px 15px',
+          backgroundColor: '#4B0082',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '5px',
+          cursor: 'pointer',
+        }}>
         My Profile
       </button>
 
@@ -138,6 +153,10 @@ const Home = () => {
       />
 
       {showProfile && <Profile />}
+
+      {showStreakPopup && (
+        <IncreaseCurrentStreak onClose={() => setShowStreakPopup(false)} />
+      )}
     </div>
   );
 };

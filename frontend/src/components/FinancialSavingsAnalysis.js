@@ -92,12 +92,12 @@ const FinancialSavingsAnalysis = () => {
   const interpretSavings = async () => {
     const amountSaved = (streak * averageCigarettes * 0.50).toFixed(2);
     const response = await fetch(
-      'https://noggin.rea.gent/aggressive-tyrannosaurus-2172',
+      'https://noggin.rea.gent/only-viper-1649',
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer rg_v1_ooknwbh9rwcd0ap99o7iq0p0eqf600md0f17_ngk',
+          Authorization: 'Bearer rg_v1_tjn7qu6ai78dphc8wl83aluxu08y58etlw50_ngk',
         },
         body: JSON.stringify({
           savings: amountSaved,

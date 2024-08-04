@@ -27,8 +27,8 @@ const SmokedPage = () => {
   };
 
   return (
-    <div style={{ textAlign: 'center', padding: '20px' }}>
-      <div style={{ backgroundColor: '#d3f0ff', padding: '20px', borderRadius: '10px' }}>
+    <div style={{ position: 'relative', textAlign: 'center', padding: '20px', backgroundColor: '#243127', color: '#fff', minHeight: '100vh', fontFamily: 'Futura, Arial, sans-serif' }}>
+      <div style={{ backgroundColor: '#fdefc0', padding: '20px', borderRadius: '10px', color: '#243127' }}>
         <h1 style={{ display: 'none' }}>I Smoked Page</h1>
         <p style={{ fontSize: '24px', margin: '20px 0' }}>
           That’s ok. Keep on pushing forward and making progress. We believe in you.
@@ -40,14 +40,14 @@ const SmokedPage = () => {
 
       <div style={{ marginTop: '20px' }}>
         <button 
-          style={buttonStyle} 
+          style={{ ...buttonStyle, backgroundColor: '#feb640', color: '#243127' }} 
           onClick={() => navigate(`/journal/${id}/today`)}
         >
           Reflect and Renew
         </button>
 
         <button 
-          style={{ ...buttonStyle, marginTop: '10px' }} 
+          style={{ ...buttonStyle, backgroundColor: '#fdefc0', color: '#243127', marginTop: '10px' }} 
           onClick={() => navigate(`/forum/${id}`)}
         >
           Talk to Someone
@@ -56,7 +56,7 @@ const SmokedPage = () => {
 
       <div style={{ margin: '20px 0' }}>
         <button 
-          style={buttonStyle}
+          style={{ ...buttonStyle, backgroundColor: '#a46379', color: '#fff' }}
           onClick={handleMotivationClick}
         >
           Motivation
@@ -72,12 +72,12 @@ const SmokedPage = () => {
         </div>
       )}
 
-      <div style={{ margin: '20px 0', padding: '20px 0', borderTop: '1px solid black', borderBottom: '1px solid black' }}>
+      <div style={{ margin: '20px 0', padding: '20px 0', borderTop: '1px solid #fff', borderBottom: '1px solid #fff' }}>
         <p style={{ fontSize: '20px', textDecoration: 'underline' }}>
           Personal Record: 3 days
         </p>
         <button 
-          style={{ ...buttonStyle, marginTop: '10px' }} 
+          style={{ ...buttonStyle, backgroundColor: '#ffdf7c', color: '#243127', marginTop: '10px' }} 
           onClick={() => navigate(`/home/${id}`)}
         >
           Keep Going
@@ -92,11 +92,11 @@ const buttonStyle = {
   width: '200px',
   padding: '10px 20px',
   margin: '10px auto',
-  backgroundColor: '#F0E68C', // Matching Home.js button background color
-  border: '1px solid black',
+  border: 'none',
   borderRadius: '5px',
   fontSize: '18px',
   cursor: 'pointer',
+  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
 };
 
 const popupStyles = {

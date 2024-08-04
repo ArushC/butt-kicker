@@ -15,7 +15,6 @@ const Forum = () => {
   const typingTimeoutRef = useRef(null);
   const messagesEndRef = useRef(null);
   const [interimTranscript, setInterimTranscript] = useState('');
-
   const [username, setUsername] = useState('Unknown User');
 
   useEffect(() => {
@@ -23,7 +22,7 @@ const Forum = () => {
       .then(response => {
         if (response.status === 401) {
           navigate('/login');
-          return; // Exit the promise chain
+          return;
         }
         return response.json();
       })
@@ -70,8 +69,8 @@ const Forum = () => {
       })
         .then(response => response.json())
         .then(() => {
-          setMessage(''); // Clear the input field without updating the messages state
-          socket.emit('message_sent'); // Notify the server that a message was sent
+          setMessage('');
+          socket.emit('message_sent');
         })
         .catch(err => console.error('Error posting message:', err));
     }
@@ -114,26 +113,26 @@ const Forum = () => {
         }
       }
       setInterimTranscript(interimTranscript);
-      setMessage(prevMessage => `${prevMessage.trim()} ${finalTranscript.trim()}`); // Add a single space between the previous contents and new contents
+      setMessage(prevMessage => `${prevMessage.trim()} ${finalTranscript.trim()}`);
     };
 
     recognition.start();
   };
 
   return (
-    <div style={{ textAlign: 'center', padding: '20px', backgroundColor: '#d3f0ff', minHeight: '100vh' }}>
-      <h1 style={{ marginBottom: '20px', fontSize: '2em' }}>The Forum</h1>
-      <div style={{ backgroundColor: '#ffffe0', padding: '20px', borderRadius: '10px', width: '100%', maxWidth: '600px', margin: '0 auto' }}>
+    <div style={{ textAlign: 'center', padding: '20px', backgroundColor: '#243127', minHeight: '100vh', fontFamily: 'Futura, Arial, sans-serif', color: '#fff' }}>
+      <h1 style={{ marginBottom: '20px', fontSize: '2em', color: '#feb640' }}>The Forum</h1>
+      <div style={{ backgroundColor: '#fdefc0', padding: '20px', borderRadius: '10px', width: '100%', maxWidth: '600px', margin: '0 auto', color: '#243127' }}>
         <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
           {messages.map((msg, index) => (
-            <div key={index} style={{ padding: '10px', margin: '10px 0', backgroundColor: 'white', borderRadius: '10px' }}>
+            <div key={index} style={{ padding: '10px', margin: '10px 0', backgroundColor: '#ffdf7c', borderRadius: '10px' }}>
               <p><strong>{msg.anonymous ? 'Anonymous' : msg.username}</strong></p>
               <p>{msg.message}</p>
             </div>
           ))}
           <div ref={messagesEndRef} />
         </div>
-        {isTyping && <div style={{ textAlign: 'right', fontSize: '12px' }}>...</div>}
+        {isTyping && <div style={{ textAlign: 'right', fontSize: '12px', color: '#a46379' }}>...</div>}
         <div style={{ display: 'flex', alignItems: 'center', marginTop: '20px' }}>
           <input
             type="checkbox"
@@ -148,12 +147,12 @@ const Forum = () => {
             value={message}
             onChange={handleTyping}
             placeholder="Share something..."
-            style={{ flex: '1', padding: '10px', borderRadius: '5px', border: '1px solid #ccc', height: '100px', resize: 'none' }}
+            style={{ flex: '1', padding: '10px', borderRadius: '5px', border: '1px solid #a46379', height: '100px', resize: 'none', backgroundColor: '#fff', color: '#243127' }}
             rows="4"
           />
           <button
             onClick={handleSendMessage}
-            style={{ marginLeft: '10px', padding: '0 20px', backgroundColor: '#4B0082', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer', height: '100px' }}
+            style={{ marginLeft: '10px', padding: '0 20px', backgroundColor: '#a46379', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer', height: '100px' }}
           >
             Send
           </button>
@@ -180,13 +179,13 @@ const Forum = () => {
           </button>
         </div>
         {interimTranscript && (
-          <div style={{ marginTop: '10px', fontSize: '14px', color: 'gray' }}>
+          <div style={{ marginTop: '10px', fontSize: '14px', color: '#a46379' }}>
             {interimTranscript}
           </div>
         )}
       </div>
       <button
-        style={{ marginTop: '20px', padding: '10px 20px', backgroundColor: '#4B0082', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
+        style={{ marginTop: '20px', padding: '10px 20px', backgroundColor: '#a46379', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
         onClick={() => navigate('/')}
       >
         Back

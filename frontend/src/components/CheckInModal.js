@@ -1,11 +1,7 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-
-
 const CheckInModal = ({ isOpen, onClose, onCheckIn, title }) => {
-  //if (!isOpen) return null;
-
   const navigate = useNavigate(); 
   const { id } = useParams();
 
@@ -80,26 +76,23 @@ const styles = {
     marginTop: '20px',
   },
   yesButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#8f5774',
     color: '#fff',
+    padding: '10px 20px',
     border: 'none',
-    padding: '15px 30px',
     borderRadius: '5px',
-    fontSize: '16px',
     cursor: 'pointer',
-    flex: '1',
-    margin: '0 10px',
+    flex: 1,
+    marginRight: '10px',
   },
   noButton: {
-    backgroundColor: 'orange',  // Changed color back to orange
+    backgroundColor: '#e0829d',
     color: '#fff',
+    padding: '10px 20px',
     border: 'none',
-    padding: '15px 30px',
     borderRadius: '5px',
-    fontSize: '16px',
     cursor: 'pointer',
-    flex: '1',
-    margin: '0 10px',
+    flex: 1,
   },
 };
 

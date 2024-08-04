@@ -1,3 +1,4 @@
+// Journal.js
 import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
@@ -119,8 +120,8 @@ const Journal = () => {
   };
 
   return (
-    <div style={{ textAlign: 'center', padding: '20px', backgroundColor: '#d3f0ff' }}>
-      <div style={{ backgroundColor: '#ffffe0', padding: '20px', borderRadius: '10px', width: '100%', maxWidth: '600px', margin: '0 auto' }}>
+    <div style={{ textAlign: 'center', padding: '20px', backgroundColor: '#243127', color: '#fff', fontFamily: 'Futura, Arial, sans-serif' }}>
+      <div style={{ backgroundColor: '#fdefc0', padding: '20px', borderRadius: '10px', width: '100%', maxWidth: '600px', margin: '0 auto', color: '#243127' }}>
         <h2>{date}</h2>
         <textarea
           style={{
@@ -145,12 +146,13 @@ const Journal = () => {
             <button
               style={{
                 padding: '10px 20px',
-                backgroundColor: isListening ? 'red' : '#4B0082',
-                color: '#fff',
+                backgroundColor: isListening ? '#ffdf7c' : '#8f5774',
+                color: '#243127',
                 border: 'none',
                 borderRadius: '5px',
                 cursor: 'pointer',
-                margin: '10px 0'
+                margin: '10px 0',
+                boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)'
               }}
               onClick={() => isListening ? stopListening() : startListening()}
             >
@@ -170,11 +172,12 @@ const Journal = () => {
               flex: '1',
               marginRight: '10px',
               padding: '10px 20px',
-              backgroundColor: '#4B0082',
-              color: '#fff',
+              backgroundColor: '#ffdf7c',
+              color: '#243127',
               border: 'none',
               borderRadius: '5px',
-              cursor: 'pointer'
+              cursor: 'pointer',
+              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)'
             }}
             onClick={() => navigate('/')}
           >
@@ -185,11 +188,12 @@ const Journal = () => {
               flex: '1',
               marginLeft: '10px',
               padding: '10px 20px',
-              backgroundColor: '#4B0082',
+              backgroundColor: '#8f5774',
               color: '#fff',
               border: 'none',
               borderRadius: '5px',
-              cursor: 'pointer'
+              cursor: 'pointer',
+              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)'
             }}
             onClick={() => setModalIsOpen(true)}
           >
@@ -203,13 +207,14 @@ const Journal = () => {
         contentLabel="View A Different Entry"
         style={{
           content: {
-            backgroundColor: '#d3f0ff',
+            backgroundColor: '#243127',
             padding: '20px',
             borderRadius: '10px',
             width: '80%',
             maxWidth: '400px',
             margin: '0 auto',
-            position: 'relative'
+            position: 'relative',
+            color: '#fff'
           }
         }}
       >
@@ -218,7 +223,7 @@ const Journal = () => {
             position: 'absolute',
             top: '10px',
             right: '10px',
-            backgroundColor: 'red',
+            backgroundColor: '#a46379',
             color: '#fff',
             border: 'none',
             borderRadius: '50%',
@@ -233,7 +238,7 @@ const Journal = () => {
         >
           &times;
         </button>
-        <h2 style={{ textAlign: 'center', marginTop: '40px' }}>View A Different Entry</h2>
+        <h2 style={{ textAlign: 'center', marginTop: '40px', color: '#fdefc0' }}>View A Different Entry</h2>
         <div>
           {entryDates.map((entryDate, index) => (
             <button
@@ -243,12 +248,13 @@ const Journal = () => {
                 width: '100%',
                 margin: '10px 0',
                 padding: '15px 0',
-                backgroundColor: '#4B0082',
+                backgroundColor: '#8f5774',
                 color: '#fff',
                 border: 'none',
                 borderRadius: '5px',
                 cursor: 'pointer',
-                fontSize: '16px'
+                fontSize: '16px',
+                boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)'
               }}
               onClick={() => handleDateClick(entryDate)}
             >

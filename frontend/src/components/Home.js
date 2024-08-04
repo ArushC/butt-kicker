@@ -19,7 +19,7 @@ const Home = () => {
   const toggleProfile = () => {
     setShowProfile(!showProfile);
   };
-  
+
   const fetchUserData = () => {
     fetch(`/api/users/${id}`)
       .then(response => {
@@ -87,21 +87,45 @@ const Home = () => {
   const buttons = [
     {
       text: 'Daily Check In',
-      backgroundColor: '#F0E68C',
+      backgroundColor: '#feb640',
       onClick: () => {
         setCheckInForYesterday(false);
         setCheckInTitle('Were you smoke-free today?');
         setIsModalOpen(true);
       },
     },
-    { text: 'View Savings', backgroundColor: '#F0E68C', onClick: () => navigate(`/savings/${id}`) },
-    { text: 'My Journal', backgroundColor: '#F0E68C', onClick: () => navigate(`/journal/${id}/today`) },
-    { text: 'Community', backgroundColor: '#F0E68C', onClick: () => navigate(`/forum/${id}`) },
-    { text: 'I Smoked', backgroundColor: '#F0E68C', onClick: () => navigate(`/smoked/${id}`) },
+    { text: 'View Savings', backgroundColor: '#a46379', onClick: () => navigate(`/savings/${id}`) },
+    { text: 'My Journal', backgroundColor: '#ffdf7c', onClick: () => navigate(`/journal/${id}/today`) },
+    { text: 'Community', backgroundColor: '#fdefc0', onClick: () => navigate(`/forum/${id}`) },
+    { text: 'I Smoked', backgroundColor: '#feb640', onClick: () => navigate(`/smoked/${id}`) },
   ];
 
   return (
-    <div style={{ position: 'relative', textAlign: 'center', padding: '20px' }}>
+    <div
+      style={{
+        position: 'relative',
+        textAlign: 'center',
+        padding: '20px',
+        backgroundColor: '#243127',
+        color: '#fff',
+        minHeight: '100vh',
+        fontFamily: 'Futura, Arial, sans-serif',
+      }}
+    >
+      {showProfile && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent overlay
+            backdropFilter: 'blur(5px)', // Apply blur to the background
+            zIndex: 999, // Make sure it's above other content
+          }}
+        />
+      )}
       <button
         onClick={toggleProfile}
         style={{
@@ -109,24 +133,26 @@ const Home = () => {
           top: '10px',
           right: '10px',
           padding: '5px 15px',
-          backgroundColor: '#4B0082',
+          backgroundColor: '#a46379',
           color: '#fff',
           border: 'none',
           borderRadius: '5px',
           cursor: 'pointer',
-        }}>
+          boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+        }}
+      >
         My Profile
       </button>
 
-      <div style={{ backgroundColor: '#d3f0ff', padding: '20px', borderRadius: '10px' }}>
+      <div style={{ backgroundColor: '#fdefc0', padding: '20px', borderRadius: '10px', color: '#243127' }}>
         <h1>{displayName}'s Streak:</h1>
-        <h2 style={{ color: '#ffb400', fontSize: '48px' }}>
+        <h2 style={{ color: '#a46379', fontSize: '48px' }}>
           {user.current_streak} {user.current_streak === 1 ? 'Day' : 'Days'}
         </h2>
       </div>
 
       <button
-        style={{ margin: '20px', padding: '10px 20px', backgroundColor: '#4B0082', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
+        style={{ margin: '20px', padding: '10px 20px', backgroundColor: '#ffdf7c', color: '#243127', border: 'none', borderRadius: '5px', cursor: 'pointer', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)' }}
         onClick={() => {
           setCheckInForYesterday(true);
           setCheckInTitle('Were you smoke-free yesterday?');
@@ -143,6 +169,7 @@ const Home = () => {
             text={btn.text}
             backgroundColor={btn.backgroundColor}
             onClick={btn.onClick}
+            style={{ color: btn.backgroundColor === '#243127' ? '#fff' : '#243127', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)' }}
           />
         ))}
       </div>
@@ -154,11 +181,11 @@ const Home = () => {
         title={checkInTitle}
       />
 
-      {showProfile && <Profile />}
+      {showProfile && <Profile onClose={toggleProfile} />}
 
       {showStreakPopup && (
-        <IncreaseCurrentStreak 
-          onClose={() => setShowStreakPopup(false)} 
+        <IncreaseCurrentStreak
+          onClose={() => setShowStreakPopup(false)}
           currentStreak={user.current_streak} // Pass the current streak to the component
         />
       )}

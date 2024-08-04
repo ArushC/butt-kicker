@@ -13,7 +13,7 @@ const FinancialSavingsAnalysis = () => {
   const [searchValue, setSearchValue] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
-  
+
   useEffect(() => {
     fetch(`/api/users/${id}`)
       .then(response => {
@@ -187,18 +187,21 @@ const customSelectStyles = {
     ...base,
     padding: '5px',
     borderRadius: '5px',
-    border: '1px solid #ccc',
-    width: '100%'
+    border: '1px solid #a46379',
+    width: '100%',
+    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+    backgroundColor: '#fdefc0',
+    color: '#243127'
+  }),
+  option: (base, { isFocused }) => ({
+    ...base,
+    backgroundColor: isFocused ? '#ffdf7c' : '#fdefc0',
+    color: '#243127'
+  }),
+  singleValue: (base) => ({
+    ...base,
+    color: '#243127'
   })
-};
-
-const button = {
-  padding: '10px',
-  backgroundColor: '#4B0082',
-  color: '#fff',
-  border: 'none',
-  borderRadius: '5px',
-  cursor: 'pointer'
 };
 
 const styles = {
@@ -207,16 +210,18 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     padding: '20px',
-    backgroundColor: '#d3f0ff',
+    backgroundColor: '#243127',
     borderRadius: '10px',
     maxWidth: '400px',
     margin: 'auto',
-    marginTop: '50px'
+    marginTop: '50px',
+    fontFamily: 'Futura, Arial, sans-serif',
+    color: '#fff'
   },
   title: {
     fontSize: '32px',
     marginBottom: '20px',
-    color: '#4B0082',
+    color: '#feb640',
     textAlign: 'center'
   },
   inputGroup: {
@@ -225,11 +230,14 @@ const styles = {
     textAlign: 'left'
   },
   input: {
-    width: '100%',
+    width: 'calc(100% - 22px)', // Adjusted width to fit better within the container
     padding: '10px',
     marginTop: '5px',
     borderRadius: '5px',
-    border: '1px solid #ccc'
+    border: '1px solid #a46379',
+    backgroundColor: '#fdefc0',
+    color: '#243127',
+    boxSizing: 'border-box'
   },
   cigaretteInput: {
     display: 'flex',
@@ -242,19 +250,27 @@ const styles = {
     padding: '10px',
     margin: '0 10px',
     borderRadius: '5px',
-    border: '1px solid #ccc'
+    border: '1px solid #a46379',
+    backgroundColor: '#fdefc0',
+    color: '#243127'
   },
   button: {
-    ...button,
-    width: '40px' // explicitly set width to 40px for button
+    padding: '10px',
+    backgroundColor: '#a46379',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+    width: '40px'
   },
   savingsMessage: {
     marginTop: '20px',
     padding: '20px',
-    backgroundColor: '#fff3cd',
+    backgroundColor: '#ffdf7c',
     borderRadius: '10px',
     textAlign: 'center',
-    color: '#856404'
+    color: '#243127'
   },
   buttonGroup: {
     display: 'flex',
@@ -264,25 +280,24 @@ const styles = {
   },
   navigationButton: {
     padding: '10px 20px',
-    backgroundColor: '#ffa500',
-    color: '#fff',
+    backgroundColor: '#feb640',
+    color: '#243127',
     border: 'none',
     borderRadius: '5px',
     cursor: 'pointer',
-    display: 'flex', // ensure flex display for consistency
-    alignItems: 'center',
-    justifyContent: 'center'
+    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+    transition: 'background-color 0.3s',
+    textAlign: 'center'
   },
   disabledButton: {
-    ...button,
-    backgroundColor: '#A9A9A9', // A different color to indicate disabled state
-    cursor: 'not-allowed',
-    opacity: 0.5, // To give a visual cue that the button is disabled
-    width: 'auto', // ensure width is consistent with navigationButton
     padding: '10px 20px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
+    backgroundColor: '#ddd',
+    color: '#888',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'not-allowed',
+    boxShadow: 'none',
+    textAlign: 'center'
   },
   modalOverlay: {
     position: 'fixed',
@@ -290,61 +305,58 @@ const styles = {
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
     display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   modal: {
     backgroundColor: '#fff',
     padding: '20px',
     borderRadius: '10px',
-    maxWidth: '500px',
-    width: '100%',
-    position: 'relative'
+    width: '80%',
+    maxWidth: '600px',
+    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)'
   },
   closeButton: {
-    position: 'absolute',
-    top: '10px',
-    right: '10px',
-    backgroundColor: 'red',
+    backgroundColor: '#a46379',
     color: '#fff',
     border: 'none',
-    borderRadius: '50%',
-    width: '30px',
-    height: '30px',
-    textAlign: 'center',
-    lineHeight: '30px',
-    cursor: 'pointer'
+    borderRadius: '5px',
+    padding: '10px',
+    cursor: 'pointer',
+    float: 'right'
   },
   modalTitle: {
     fontSize: '24px',
-    marginBottom: '20px',
-    color: '#4B0082'
+    marginBottom: '15px',
+    color: '#243127'
   },
   suggestionsList: {
-    maxHeight: '300px',
-    overflowY: 'auto'
+    marginTop: '10px'
   },
   suggestionItem: {
-    marginBottom: '15px',
+    marginBottom: '20px',
     padding: '10px',
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#fdefc0',
     borderRadius: '5px',
-    border: '1px solid #ddd'
+    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)'
   },
   suggestionTitle: {
     fontSize: '18px',
-    marginBottom: '5px',
-    color: '#4B0082'
+    margin: '0',
+    color: '#243127'
   },
   suggestionDescription: {
-    marginBottom: '5px',
-    color: '#555'
+    fontSize: '16px',
+    color: '#243127'
   },
   suggestionCost: {
-    color: '#555'
+    fontSize: '16px',
+    fontWeight: 'bold',
+    color: '#feb640'
   }
 };
+
 
 export default FinancialSavingsAnalysis;

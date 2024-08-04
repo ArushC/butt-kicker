@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import HomeButton from './HomeButton';
 import CheckInModal from './CheckInModal';
 import Profile from './Profile';
-import IncreaseCurrentStreak from './IncreaseCurrentStreak'; // Import the new component
+import IncreaseCurrentStreak from './IncreaseCurrentStreak';
 
 const Home = () => {
   const { id } = useParams();
@@ -13,12 +13,11 @@ const Home = () => {
   const [checkInTitle, setCheckInTitle] = useState('');
   const [checkInForYesterday, setCheckInForYesterday] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-  const [showStreakPopup, setShowStreakPopup] = useState(false); // State to control the popup
+  const [showStreakModal, setShowStreakModal] = useState(false);
 
   const toggleProfile = () => {
     setShowProfile(!showProfile);
   };
-  
 
   const fetchUserData = () => {
     fetch(`/api/users/${id}`)
@@ -38,7 +37,7 @@ const Home = () => {
     fetch(`/api/updateState/${id}`, { method: 'POST' })
       .then(response => {
         if (response.ok) {
-          fetchUserData(); // Fetch updated user data after state update
+          fetchUserData();
         } else {
           console.error('State update failed');
         }
@@ -71,9 +70,9 @@ const Home = () => {
       .then(data => {
         if (data.success) {
           console.log('Check-in successful');
-          fetchUserData(); // Fetch updated user data after successful check-in
+          fetchUserData();
           if (data.streak_increased) {
-            setShowStreakPopup(true); // Show the congratulations popup
+            setShowStreakModal(true);
           }
         } else {
           console.error('Check-in failed');
@@ -154,8 +153,8 @@ const Home = () => {
 
       {showProfile && <Profile />}
 
-      {showStreakPopup && (
-        <IncreaseCurrentStreak onClose={() => setShowStreakPopup(false)} />
+      {showStreakModal && (
+        <IncreaseCurrentStreak onClose={() => setShowStreakModal(false)} />
       )}
     </div>
   );

@@ -43,12 +43,13 @@ const Profile = ({ setIsAuthenticated, onClose }) => {
             position: 'fixed', 
             top: 0, 
             left: 0, 
-            right: 0, 
-            bottom: 0, 
+            width: '100%', 
+            height: '100%', 
             backgroundColor: 'rgba(0, 0, 0, 0.5)', 
             display: 'flex', 
             justifyContent: 'center', 
-            alignItems: 'center' 
+            alignItems: 'center', 
+            zIndex: 1000 
         }}>
             <div style={{ 
                 backgroundColor: '#d3f0ff', 
@@ -56,7 +57,8 @@ const Profile = ({ setIsAuthenticated, onClose }) => {
                 borderRadius: '10px', 
                 width: '300px', 
                 position: 'relative', 
-                textAlign: 'center' 
+                textAlign: 'center',
+                boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)'
             }}>
                 <button 
                     onClick={onClose} 
@@ -64,13 +66,18 @@ const Profile = ({ setIsAuthenticated, onClose }) => {
                         position: 'absolute',
                         top: '10px',
                         right: '10px',
-                        backgroundColor: 'transparent',
+                        backgroundColor: 'red',
+                        color: '#fff',
                         border: 'none',
-                        color: 'red',
-                        fontSize: '18px',
+                        borderRadius: '50%',
+                        width: '30px',
+                        height: '30px',
+                        textAlign: 'center',
+                        lineHeight: '30px',
+                        fontSize: '20px',
                         cursor: 'pointer'
                     }}>
-                    ✖
+                    &times;
                 </button>
                 <h1>Profile</h1>
                 <p><strong>Name:</strong> {user.name}</p>

@@ -1,4 +1,3 @@
-// IncreaseCurrentStreak.js
 import React, { useEffect, useState } from 'react';
 import html2canvas from 'html2canvas';
 import Confetti from 'react-confetti';
@@ -6,31 +5,40 @@ import Confetti from 'react-confetti';
 const IncreaseCurrentStreak = ({ onClose, currentStreak }) => {
   const [showConfetti, setShowConfetti] = useState(true);
   const [screenshot, setScreenshot] = useState(null);
+  const [randomMessage, setRandomMessage] = useState('');
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowConfetti(false);
-    }, 1000); // Confetti lasts for 1 second
+    }, 3000); // Confetti lasts for 3 seconds
 
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    const popupTimer = setTimeout(() => {
-      onClose();
-    }, 3000); // Popup closes after 3 seconds
+    const fetchRandomMessage = async () => {
+      try {
+        const response = await fetch(`/api/random-message/${currentStreak}`);
+        if (response.ok) {
+          const data = await response.json();
+          setRandomMessage(data.message);
+        } else {
+          console.error('Error fetching random message:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error fetching random message:', error);
+      }
+    };
 
-    return () => clearTimeout(popupTimer);
-  }, [onClose]);
+    fetchRandomMessage();
+  }, [currentStreak]);
 
   const handleShare = () => {
     // Generate the shareable URL
-    const shareText = `I have been smoke-free for ${currentStreak} ${currentStreak === 1 ? 'Day' : 'Days'}! I have
-    been tracking my progress using an app called "Butt Kicker". See https://github.com/ArushC/butt-kicker.`;
-    
+    const shareText = `I have been smoke-free for ${currentStreak} ${currentStreak === 1 ? 'Day' : 'Days'}! I have been tracking my progress using an app called "Butt Kicker". See https://github.com/ArushC/butt-kicker.`;
+
     // Example email sharing
     const mailtoLink = `mailto:?subject=My Smoke-Free Progress&body=${encodeURIComponent(shareText)}`;
-    const smsLink = `sms:?body=${encodeURIComponent(shareText)}`;
 
     // Check if Web Share API is available
     if (navigator.share) {
@@ -53,9 +61,8 @@ const IncreaseCurrentStreak = ({ onClose, currentStreak }) => {
         .catch((error) => console.error('Share failed:', error));
       }
     } else {
-      // Fallback to email or SMS
-      const shouldOpenMailto = window.confirm('Share via Email? Press "Cancel" to share via SMS.');
-      window.location.href = shouldOpenMailto ? mailtoLink : smsLink;
+      // Fallback to email
+      window.location.href = mailtoLink;
     }
   };
 
@@ -82,7 +89,7 @@ const IncreaseCurrentStreak = ({ onClose, currentStreak }) => {
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
       zIndex: 1000,
     }}>
-      {showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} />}
+      {showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} gravity={5} />}
       <div style={{
         backgroundColor: '#ffffff',
         padding: '20px',
@@ -114,8 +121,10 @@ const IncreaseCurrentStreak = ({ onClose, currentStreak }) => {
           &times;
         </button>
         <h1 style={{ marginBottom: '20px' }}>
-          Congratulations! You have been smoke-free for {currentStreak} {currentStreak === 1 ? 'Day' : 'Days'}!
-        </h1>
+      Congratulations! You have been smoke-free for {currentStreak} {currentStreak === 1 ? 'Day' : 'Days'}!
+      <br />
+      {randomMessage}
+    </h1>
         <button
           onClick={handleShare}
           style={{

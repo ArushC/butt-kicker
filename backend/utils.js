@@ -57,6 +57,6 @@ const updateState = async (id) => {
     }
   
     return { currentStreak, user };
-  };
+};
 
 module.exports = { updateState };

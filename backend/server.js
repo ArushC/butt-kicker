@@ -65,6 +65,34 @@ app.post('/api/updateState/:id', async (req, res) => {
   }
 });
 
+app.get('/api/random-message/:streak', async (req, res) => {
+  const { streak } = req.params;
+  const streakNumber = parseInt(streak, 10);
+
+  try {
+    let messages;
+
+    if (streakNumber <= 50) {
+      messages = await knex('positive_reinforcement_messages')
+        .where('streak_number', streakNumber);
+    } else {
+      messages = await knex('positive_reinforcement_messages')
+        .where('streak_number', -1);
+    }
+
+    if (messages.length === 0) {
+      return res.status(404).json({ message: 'No messages found.' });
+    }
+
+    const randomIndex = Math.floor(Math.random() * messages.length);
+    const randomMessage = messages[randomIndex];
+
+    res.json({ message: randomMessage.message });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching message.' });
+  }
+});
+
 // Route to register a new user
 app.post('/api/register', async (req, res) => {
   const { username, password, name } = req.body;

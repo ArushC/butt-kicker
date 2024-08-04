@@ -1,4 +1,3 @@
-// Home.js
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import HomeButton from './HomeButton';
@@ -101,7 +100,7 @@ const Home = ({setIsAuthenticated}) => {
   ];
 
   return (
-    <div style={{ position: 'relative', textAlign: 'center', padding: '20px' }}>
+    <div style={{ position: 'relative', textAlign: 'center', padding: '20px', backgroundColor: '#243127' }}>
       <button
         onClick={toggleProfile}
         style={{
@@ -109,7 +108,7 @@ const Home = ({setIsAuthenticated}) => {
           top: '10px',
           right: '10px',
           padding: '5px 15px',
-          backgroundColor: '#4B0082',
+          backgroundColor: '#a46379', // Updated color
           color: '#fff',
           border: 'none',
           borderRadius: '5px',
@@ -118,15 +117,15 @@ const Home = ({setIsAuthenticated}) => {
         My Profile
       </button>
 
-      <div style={{ backgroundColor: '#d3f0ff', padding: '20px', borderRadius: '10px' }}>
-        <h1>{displayName}'s Streak:</h1>
-        <h2 style={{ color: '#ffb400', fontSize: '48px' }}>
+      <div style={{ backgroundColor: '#ffdf7c', padding: '20px', borderRadius: '10px' }}> {/* Updated background color */}
+        <h1 style={{ color: '#243127' }}>{displayName}'s Streak:</h1> {/* Updated text color */}
+        <h2 style={{ color: '#d96d00', fontSize: '48px' }}> {/* Updated streak number color */}
           {user.current_streak} {user.current_streak === 1 ? 'Day' : 'Days'}
         </h2>
       </div>
 
       <button
-        style={{ margin: '20px', padding: '10px 20px', backgroundColor: '#4B0082', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
+        style={{ margin: '20px', padding: '10px 20px', backgroundColor: '#a46379', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
         onClick={() => {
           setCheckInForYesterday(true);
           setCheckInTitle('Were you smoke-free yesterday?');

@@ -48,7 +48,7 @@ const Home = ({ setIsAuthenticated }) => {
   }, [id, navigate]);
 
   if (!user) {
-    return <div style={{ color: '#EEF3F9' }}>Loading...</div>; // Light text for loading state
+    return <div style={{ color: '#BDD9CD' }}>Loading...</div>; // Light text for loading state
   }
 
   const displayName = user.name || user.username;
@@ -86,30 +86,30 @@ const Home = ({ setIsAuthenticated }) => {
   const buttons = [
     {
       text: 'Daily Check In',
-      backgroundColor: '#537692',
+      backgroundColor: '#386994',
       onClick: () => {
         setCheckInForYesterday(false);
         setCheckInTitle('Were you smoke-free today?');
         setIsModalOpen(true);
       },
     },
-    { text: 'View Savings', backgroundColor: '#537692', onClick: () => navigate(`/savings/${id}`) },
-    { text: 'My Journal', backgroundColor: '#537692', onClick: () => navigate(`/journal/${id}/today`) },
-    { text: 'Community', backgroundColor: '#537692', onClick: () => navigate(`/forum/${id}`) },
+    { text: 'View Savings', backgroundColor: '#386994', onClick: () => navigate(`/savings/${id}`) },
+    { text: 'My Journal', backgroundColor: '#386994', onClick: () => navigate(`/journal/${id}/today`) },
+    { text: 'Community', backgroundColor: '#386994', onClick: () => navigate(`/forum/${id}`) },
     { text: 'I Smoked', backgroundColor: '#B43F2A', onClick: () => navigate(`/smoked/${id}`) }, // Dark red for "I Smoked"
   ];
 
   return (
-    <div style={{ position: 'relative', textAlign: 'center', padding: '20px', backgroundColor: '#001b2e', color: '#EEF3F9', fontFamily: 'Arial, sans-serif' }}>
+    <div style={{ position: 'relative', textAlign: 'center', padding: '20px', backgroundColor: '#001b2e', color: '#BDD9CD', fontFamily: 'Arial, sans-serif' }}>
       <button
         onClick={toggleProfile}
         style={{
           position: 'absolute',
           top: '10px',
           right: '10px',
-          padding: '10px 20px',
-          backgroundColor: '#1d3f58',
-          color: '#EEF3F9',
+          padding: '12px 20px',
+          backgroundColor: '#386994', // Match with "Daily Check In" button
+          color: '#BDD9CD',
           border: 'none',
           borderRadius: '8px',
           cursor: 'pointer',
@@ -118,14 +118,14 @@ const Home = ({ setIsAuthenticated }) => {
       </button>
 
       <div style={{ backgroundColor: '#1d3f58', padding: '20px', borderRadius: '10px' }}>
-        <h1 style={{ color: '#b3cde4' }}>{displayName}'s Streak:</h1>
-        <h2 style={{ color: '#eef3f9', fontSize: '48px' }}>
+        <h1 style={{ color: '#537692' }}>{displayName}'s Streak:</h1>
+        <h2 style={{ color: '#bdd9cd', fontSize: '48px' }}>
           {user.current_streak} {user.current_streak === 1 ? 'Day' : 'Days'}
         </h2>
       </div>
 
       <button
-        style={{ margin: '20px', padding: '12px 24px', backgroundColor: '#1d3f58', color: '#EEF3F9', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
+        style={{ margin: '20px', padding: '12px 24px', backgroundColor: '#386994', color: '#BDD9CD', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
         onClick={() => {
           setCheckInForYesterday(true);
           setCheckInTitle('Were you smoke-free yesterday?');

@@ -87,17 +87,17 @@ const Home = ({setIsAuthenticated}) => {
   const buttons = [
     {
       text: 'Daily Check In',
-      backgroundColor: '#F0E68C',
+      backgroundColor: '#fdefc0',
       onClick: () => {
         setCheckInForYesterday(false);
         setCheckInTitle('Were you smoke-free today?');
         setIsModalOpen(true);
       },
     },
-    { text: 'View Savings', backgroundColor: '#F0E68C', onClick: () => navigate(`/savings/${id}`) },
-    { text: 'My Journal', backgroundColor: '#F0E68C', onClick: () => navigate(`/journal/${id}/today`) },
-    { text: 'Community', backgroundColor: '#F0E68C', onClick: () => navigate(`/forum/${id}`) },
-    { text: 'I Smoked', backgroundColor: '#F0E68C', onClick: () => navigate(`/smoked/${id}`) },
+    { text: 'View Savings', backgroundColor: '#fdefc0', onClick: () => navigate(`/savings/${id}`) },
+    { text: 'My Journal', backgroundColor: '#fdefc0', onClick: () => navigate(`/journal/${id}/today`) },
+    { text: 'Community', backgroundColor: '#fdefc0', onClick: () => navigate(`/forum/${id}`) },
+    { text: 'I Smoked', backgroundColor: '#fdefc0', onClick: () => navigate(`/smoked/${id}`) },
   ];
 
   return (

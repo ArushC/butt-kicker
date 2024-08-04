@@ -1,4 +1,3 @@
-// Home.js
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import HomeButton from './HomeButton';
@@ -6,7 +5,7 @@ import CheckInModal from './CheckInModal';
 import Profile from './Profile';
 import IncreaseCurrentStreak from './IncreaseCurrentStreak'; // Import the new component
 
-const Home = ({setIsAuthenticated}) => {
+const Home = ({ setIsAuthenticated }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -19,7 +18,7 @@ const Home = ({setIsAuthenticated}) => {
   const toggleProfile = () => {
     setShowProfile(!showProfile);
   };
-  
+
   const fetchUserData = () => {
     fetch(`/api/users/${id}`)
       .then(response => {
@@ -49,7 +48,7 @@ const Home = ({setIsAuthenticated}) => {
   }, [id, navigate]);
 
   if (!user) {
-    return <div>Loading...</div>;
+    return <div style={{ color: '#EEF3F9' }}>Loading...</div>; // Light text for loading state
   }
 
   const displayName = user.name || user.username;
@@ -87,46 +86,46 @@ const Home = ({setIsAuthenticated}) => {
   const buttons = [
     {
       text: 'Daily Check In',
-      backgroundColor: '#F0E68C',
+      backgroundColor: '#537692',
       onClick: () => {
         setCheckInForYesterday(false);
         setCheckInTitle('Were you smoke-free today?');
         setIsModalOpen(true);
       },
     },
-    { text: 'View Savings', backgroundColor: '#F0E68C', onClick: () => navigate(`/savings/${id}`) },
-    { text: 'My Journal', backgroundColor: '#F0E68C', onClick: () => navigate(`/journal/${id}/today`) },
-    { text: 'Community', backgroundColor: '#F0E68C', onClick: () => navigate(`/forum/${id}`) },
-    { text: 'I Smoked', backgroundColor: '#F0E68C', onClick: () => navigate(`/smoked/${id}`) },
+    { text: 'View Savings', backgroundColor: '#537692', onClick: () => navigate(`/savings/${id}`) },
+    { text: 'My Journal', backgroundColor: '#537692', onClick: () => navigate(`/journal/${id}/today`) },
+    { text: 'Community', backgroundColor: '#537692', onClick: () => navigate(`/forum/${id}`) },
+    { text: 'I Smoked', backgroundColor: '#B43F2A', onClick: () => navigate(`/smoked/${id}`) }, // Dark red for "I Smoked"
   ];
 
   return (
-    <div style={{ position: 'relative', textAlign: 'center', padding: '20px' }}>
+    <div style={{ position: 'relative', textAlign: 'center', padding: '20px', backgroundColor: '#001b2e', color: '#EEF3F9', fontFamily: 'Arial, sans-serif' }}>
       <button
         onClick={toggleProfile}
         style={{
           position: 'absolute',
           top: '10px',
           right: '10px',
-          padding: '5px 15px',
-          backgroundColor: '#4B0082',
-          color: '#fff',
+          padding: '10px 20px',
+          backgroundColor: '#1d3f58',
+          color: '#EEF3F9',
           border: 'none',
-          borderRadius: '5px',
+          borderRadius: '8px',
           cursor: 'pointer',
         }}>
         My Profile
       </button>
 
-      <div style={{ backgroundColor: '#d3f0ff', padding: '20px', borderRadius: '10px' }}>
-        <h1>{displayName}'s Streak:</h1>
-        <h2 style={{ color: '#ffb400', fontSize: '48px' }}>
+      <div style={{ backgroundColor: '#1d3f58', padding: '20px', borderRadius: '10px' }}>
+        <h1 style={{ color: '#b3cde4' }}>{displayName}'s Streak:</h1>
+        <h2 style={{ color: '#eef3f9', fontSize: '48px' }}>
           {user.current_streak} {user.current_streak === 1 ? 'Day' : 'Days'}
         </h2>
       </div>
 
       <button
-        style={{ margin: '20px', padding: '10px 20px', backgroundColor: '#4B0082', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
+        style={{ margin: '20px', padding: '12px 24px', backgroundColor: '#1d3f58', color: '#EEF3F9', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
         onClick={() => {
           setCheckInForYesterday(true);
           setCheckInTitle('Were you smoke-free yesterday?');
@@ -154,7 +153,7 @@ const Home = ({setIsAuthenticated}) => {
         title={checkInTitle}
       />
 
-      {showProfile && <Profile setIsAuthenticated={setIsAuthenticated}/>}
+      {showProfile && <Profile setIsAuthenticated={setIsAuthenticated} />}
 
       {showStreakPopup && (
         <IncreaseCurrentStreak 

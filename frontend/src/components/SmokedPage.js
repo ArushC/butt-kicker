@@ -7,6 +7,7 @@ const SmokedPage = () => {
   const [motivationMessage, setMotivationMessage] = useState('');
   const [showMotivationPopup, setShowMotivationPopup] = useState(false);
   const [user, setUser] = useState(null);
+  const notFromHome = true;
 
   useEffect(() => {
     // Fetch user data to get max_streak
@@ -39,14 +40,14 @@ const SmokedPage = () => {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>It's okay, keep pushing forward. We believe in you!</h1>
+      <h1 style={styles.title}>That's okay. Keep pushing forward and making progress. We believe in you!</h1>
       
       <div style={styles.section}>
         <h3 style={styles.sectionHeader}>Next Steps:</h3>
-        <button style={styles.button} onClick={() => navigate(`/journal/${id}/today`)}>
+        <button style={styles.button} onClick={() => navigate(`/journal/${id}/today`, { state: { notFromHome } })}>
           Reflect and Renew
         </button>
-        <button style={styles.orangeButton} onClick={() => navigate(`/forum/${id}`)}>
+        <button style={styles.orangeButton} onClick={() => navigate(`/forum/${id}`, { state: { notFromHome } })}>
           Talk to Someone
         </button>
         <button style={styles.greenButton} onClick={handleMotivationClick}>

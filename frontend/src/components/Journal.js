@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import Modal from 'react-modal';
 
-const Journal = ({fromHome}) => {
+const Journal = () => {
+  const location = useLocation();
+  const notFromHome = location.state?.notFromHome;
   const { id, dateParam } = useParams();
   const navigate = useNavigate();
   const [entry, setEntry] = useState('');
@@ -176,7 +178,7 @@ const Journal = ({fromHome}) => {
               borderRadius: '5px',
               cursor: 'pointer'
             }}
-            onClick={() => fromHome ? navigate('/') : navigate(`/smoked/${id}`)}
+            onClick={() => notFromHome ? navigate(`/smoked/${id}`) : navigate('/')}
           >
             Back
           </button>

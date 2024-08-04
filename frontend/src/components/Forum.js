@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import io from 'socket.io-client';
 
 const socket = io('http://localhost:5001');
 
 const Forum = () => {
+  const location = useLocation();
+  const notFromHome = location.state?.notFromHome;
   const { id } = useParams();
   const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
@@ -187,7 +189,7 @@ const Forum = () => {
       </div>
       <button
         style={{ marginTop: '20px', padding: '10px 20px', backgroundColor: '#4B0082', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
-        onClick={() => navigate('/')}
+        onClick={() => notFromHome ? navigate(`/smoked/${id}`) : navigate('/')}
       >
         Back
       </button>

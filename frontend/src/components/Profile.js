@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-const Profile = ({setIsAuthenticated}) => {
+const Profile = ({ setIsAuthenticated, onClose }) => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
@@ -19,7 +19,7 @@ const Profile = ({setIsAuthenticated}) => {
                 method: 'GET',
                 credentials: 'include'  // Include credentials to ensure the session is destroyed
             });
-    
+
             if (response.ok) {
                 // Clear session storage
                 sessionStorage.clear();
@@ -34,27 +34,66 @@ const Profile = ({setIsAuthenticated}) => {
         }
     };
 
-    const handleChangePassword = () => {
-        // Navigate to a change password page or handle inline
-        navigate(`/change-password/${id}`);
-    };
-
     if (!user) {
         return <div>Loading...</div>;
     }
 
     return (
-        <div style={{ textAlign: 'center', padding: '20px', position: 'absolute', top: '20px', right: '20px', backgroundColor: '#d3f0ff', borderRadius: '10px', width: '300px' }}>
-            <h1>Profile</h1>
-            <p><strong>Name:</strong> {user.name}</p>
-            <p><strong>Username:</strong> {user.username}</p>
-            <p><strong>Current Streak:</strong> {user.current_streak} days</p>
-            <p><strong>Maximum Streak:</strong> {user.max_streak} days</p>
-            <p><strong>Location:</strong> {user.location}</p>
-            <button onClick={handleChangePassword} style={{ margin: '10px', padding: '5px 10px', backgroundColor: '#4B0082', color: '#fff', border: 'none', borderRadius: '5px' }}>Change Password</button>
-            <button onClick={handleLogout} style={{ margin: '10px', padding: '5px 10px', backgroundColor: 'red', color: '#fff', border: 'none', borderRadius: '5px' }}>Logout</button>
+        <div style={modalStyle}>
+            <div style={modalContentStyle}>
+                <button onClick={onClose} style={closeButtonStyle}>X</button>
+                <h1>Profile</h1>
+                <p><strong>Name:</strong> {user.name}</p>
+                <p><strong>Username:</strong> {user.username}</p>
+                <p><strong>Current Streak:</strong> {user.current_streak} days</p>
+                <p><strong>Maximum Streak:</strong> {user.max_streak} days</p>
+                <p><strong>Location:</strong> {user.location}</p>
+                <button onClick={handleLogout} style={logoutButtonStyle}>Logout</button>
+            </div>
         </div>
     );
+};
+
+const modalStyle = {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1000,
+};
+
+const modalContentStyle = {
+    backgroundColor: '#d3f0ff', // Match the background color with the home page
+    padding: '20px',
+    borderRadius: '10px',
+    width: '300px',
+    position: 'relative',
+    textAlign: 'center',
+};
+
+const closeButtonStyle = {
+    position: 'absolute',
+    top: '10px',
+    right: '10px',
+    backgroundColor: 'transparent',
+    border: 'none',
+    color: 'red',
+    fontSize: '20px',
+    cursor: 'pointer',
+};
+
+const logoutButtonStyle = {
+    margin: '10px',
+    padding: '5px 10px',
+    backgroundColor: '#4B0082', // Match the color of the "checkin for yesterday" button
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
 };
 
 export default Profile;

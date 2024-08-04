@@ -1,12 +1,11 @@
-// Home.js
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import HomeButton from './HomeButton';
 import CheckInModal from './CheckInModal';
 import Profile from './Profile';
-import IncreaseCurrentStreak from './IncreaseCurrentStreak'; // Import the new component
+import IncreaseCurrentStreak from './IncreaseCurrentStreak';
 
-const Home = ({setIsAuthenticated}) => {
+const Home = ({ setIsAuthenticated }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -14,12 +13,12 @@ const Home = ({setIsAuthenticated}) => {
   const [checkInTitle, setCheckInTitle] = useState('');
   const [checkInForYesterday, setCheckInForYesterday] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-  const [showStreakPopup, setShowStreakPopup] = useState(false); // State to control the popup
+  const [showStreakPopup, setShowStreakPopup] = useState(false);
 
   const toggleProfile = () => {
     setShowProfile(!showProfile);
   };
-  
+
   const fetchUserData = () => {
     fetch(`/api/users/${id}`)
       .then(response => {
@@ -38,7 +37,7 @@ const Home = ({setIsAuthenticated}) => {
     fetch(`/api/updateState/${id}`, { method: 'POST' })
       .then(response => {
         if (response.ok) {
-          fetchUserData(); // Fetch updated user data after state update
+          fetchUserData();
         } else {
           console.error('State update failed');
         }
@@ -71,9 +70,9 @@ const Home = ({setIsAuthenticated}) => {
       .then(data => {
         if (data.success) {
           console.log('Check-in successful');
-          fetchUserData(); // Fetch updated user data after successful check-in
+          fetchUserData();
           if (data.streak_increased) {
-            setShowStreakPopup(true); // Show the congratulations modal
+            setShowStreakPopup(true);
           }
         } else {
           console.error('Check-in failed');
@@ -154,12 +153,12 @@ const Home = ({setIsAuthenticated}) => {
         title={checkInTitle}
       />
 
-      {showProfile && <Profile setIsAuthenticated={setIsAuthenticated}/>}
+      {showProfile && <Profile setIsAuthenticated={setIsAuthenticated} onClose={toggleProfile} />}
 
       {showStreakPopup && (
         <IncreaseCurrentStreak 
           onClose={() => setShowStreakPopup(false)} 
-          currentStreak={user.current_streak} // Pass the current streak to the component
+          currentStreak={user.current_streak}
         />
       )}
     </div>

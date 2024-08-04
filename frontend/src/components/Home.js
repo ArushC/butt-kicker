@@ -101,27 +101,26 @@ const Home = ({ setIsAuthenticated }) => {
 
   return (
     <div style={{ position: 'relative', textAlign: 'center', padding: '20px' }}>
-      <button
-        onClick={toggleProfile}
-        style={{
-          position: 'absolute',
-          top: '10px',
-          right: '10px',
-          padding: '5px 15px',
-          backgroundColor: '#4B0082',
-          color: '#fff',
-          border: 'none',
-          borderRadius: '5px',
-          cursor: 'pointer',
-        }}>
-        My Profile
-      </button>
-
-      <div style={{ backgroundColor: '#d3f0ff', padding: '20px', borderRadius: '10px' }}>
+      <div style={{ backgroundColor: '#d3f0ff', padding: '20px', borderRadius: '10px', position: 'relative' }}>
         <h1>{displayName}'s Streak:</h1>
         <h2 style={{ color: '#ffb400', fontSize: '48px' }}>
           {user.current_streak} {user.current_streak === 1 ? 'Day' : 'Days'}
         </h2>
+        <button
+          onClick={toggleProfile}
+          style={{
+            position: 'absolute',
+            top: '10px',
+            right: '10px',
+            padding: '5px 15px',
+            backgroundColor: '#4B0082',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer',
+          }}>
+          My Profile
+        </button>
       </div>
 
       <button

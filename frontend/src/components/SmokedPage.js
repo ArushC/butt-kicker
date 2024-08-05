@@ -11,6 +11,29 @@ const SmokedPage = () => {
   const notFromHome = true;
 
   useEffect(() => {
+    const body = { smoke_free_today: false };
+    //Reset the user's streak to 0 by checking in as not smoke-free for today
+    fetch(`/api/checkin/${id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          console.log('Check-in successful');
+        } else {
+          console.error('Check-in failed');
+        }
+      })
+      .catch(error => {
+        console.error('Check-in failed', error);
+      });
+  }, [id]);
+
+  useEffect(() => {
     // Fetch user data to get max_streak
     fetch(`/api/users/${id}`)
       .then(response => response.json())

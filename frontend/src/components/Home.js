@@ -101,9 +101,9 @@ const Home = ({ setIsAuthenticated }) => {
 
   return (
     <div style={{ position: 'relative', textAlign: 'center', padding: '20px' }}>
-      <div style={{ backgroundColor: '#d3f0ff', padding: '20px', borderRadius: '10px', position: 'relative' }}>
+      <div style={{ backgroundColor: '#d3f0ff', padding: '20px', borderRadius: '10px', position: 'relative', boxSizing: 'border-box' }}>
         <h1>{displayName}'s Streak:</h1>
-        <h2 style={{ color: '#ffb400', fontSize: '48px' }}>
+        <h2 style={{ color: '#3B873E', fontSize: '48px' }}> 
           {user.current_streak} {user.current_streak === 1 ? 'Day' : 'Days'}
         </h2>
         <button
@@ -118,6 +118,7 @@ const Home = ({ setIsAuthenticated }) => {
             border: 'none',
             borderRadius: '5px',
             cursor: 'pointer',
+            boxSizing: 'border-box'
           }}>
           My Profile
         </button>

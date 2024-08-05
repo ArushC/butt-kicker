@@ -80,7 +80,7 @@ const styles = {
     marginTop: '20px',
   },
   yesButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#3B873E',
     color: '#fff',
     border: 'none',
     padding: '15px 30px',

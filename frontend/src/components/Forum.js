@@ -125,7 +125,7 @@ const Forum = () => {
   return (
     <div style={{ textAlign: 'center', padding: '20px', backgroundColor: '#d3f0ff', minHeight: '100vh' }}>
       <h1 style={{ marginBottom: '20px', fontSize: '2em' }}>The Forum</h1>
-      <div style={{ backgroundColor: '#ffffe0', padding: '20px', borderRadius: '10px', width: '100%', maxWidth: '600px', margin: '0 auto' }}>
+      <div style={{ backgroundColor: '#ffffe0', padding: '20px', borderRadius: '10px', width: '100%', maxWidth: '600px', margin: '0 auto', boxSizing: 'border-box' }}>
         <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
           {messages.map((msg, index) => (
             <div key={index} style={{ padding: '10px', margin: '10px 0', backgroundColor: 'white', borderRadius: '10px' }}>

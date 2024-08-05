@@ -225,11 +225,12 @@ const styles = {
     textAlign: 'left'
   },
   input: {
-    width: '100%',
+    width: '100%', // Ensures the streak input takes the full width of its container
     padding: '10px',
     marginTop: '5px',
     borderRadius: '5px',
-    border: '1px solid #ccc'
+    border: '1px solid #ccc',
+    boxSizing: 'border-box' // Ensures padding is included in the element's width
   },
   cigaretteInput: {
     display: 'flex',
@@ -296,13 +297,14 @@ const styles = {
     alignItems: 'center'
   },
   modal: {
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffe0', // Changed from '#fff' to '#ffffe0'
     padding: '20px',
     borderRadius: '10px',
     maxWidth: '500px',
     width: '100%',
     position: 'relative'
   },
+  
   closeButton: {
     position: 'absolute',
     top: '10px',

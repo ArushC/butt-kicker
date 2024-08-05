@@ -122,7 +122,7 @@ const Journal = () => {
 
   return (
     <div style={{ textAlign: 'center', padding: '20px', backgroundColor: '#d3f0ff' }}>
-      <div style={{ backgroundColor: '#ffffe0', padding: '20px', borderRadius: '10px', width: '100%', maxWidth: '600px', margin: '0 auto' }}>
+      <div style={{ backgroundColor: '#ffffe0', padding: '20px', borderRadius: '10px', width: '100%', maxWidth: '600px', margin: '0 auto', boxSizing: 'border-box' }}>
         <h2>{date}</h2>
         <textarea
           style={{
@@ -135,7 +135,8 @@ const Journal = () => {
             outline: 'none',
             resize: 'none',
             backgroundColor: 'transparent',
-            borderBottom: '1px solid #ccc'
+            borderBottom: '1px solid #ccc',
+            boxSizing: 'border-box'
           }}
           value={entry}
           onChange={e => setEntry(e.target.value)}

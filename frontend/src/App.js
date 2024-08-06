@@ -8,13 +8,13 @@ import Journal from './components/Journal';
 import FinancialSavingsAnalysis from './components/FinancialSavingsAnalysis';
 import Forum from './components/Forum';
 import SmokedPage from './components/SmokedPage'; // Import SmokedPage component
-
+import { API_BASE_URL } from './config';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    fetch('/api/user')
+    fetch(`${API_BASE_URL}/api/user`)
       .then(response => {
         if (response.ok) {
           return response.json();

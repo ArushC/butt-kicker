@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Select from 'react-select';
+import { API_BASE_URL } from '../config';
 
 const FinancialSavingsAnalysis = () => {
   const { id } = useParams();
@@ -15,7 +16,9 @@ const FinancialSavingsAnalysis = () => {
   const [suggestions, setSuggestions] = useState([]);
   
   useEffect(() => {
-    fetch(`/api/users/${id}`)
+    fetch(`${API_BASE_URL}/api/users/${id}`, {
+      credentials: 'include'
+    })
       .then(response => {
         if (response.status === 401) {
           navigate('/login');
@@ -31,7 +34,11 @@ const FinancialSavingsAnalysis = () => {
       })
       .catch(() => navigate('/login'));
 
-    fetch('/api/cities')
+    fetch(`${API_BASE_URL}/api/cities`,
+      {
+        credentials: 'include'
+      }
+    )
       .then(response => response.json())
       .then(data => {
         const cityOptions = data.map(city => ({ value: city, label: city }));
@@ -56,7 +63,8 @@ const FinancialSavingsAnalysis = () => {
   const handleCityChange = selectedOption => {
     setLocation(selectedOption);
     // Update the location in the database
-    fetch(`/api/users/${id}/location`, {
+    fetch(`${API_BASE_URL}/api/users/${id}/location`, {
+      credentials: 'include',
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'

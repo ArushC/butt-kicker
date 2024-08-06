@@ -1,6 +1,7 @@
 // src/components/Login.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { API_BASE_URL } from '../config';
 
 const Login = ({ setIsAuthenticated }) => {
   const [username, setUsername] = useState('');
@@ -21,7 +22,8 @@ const Login = ({ setIsAuthenticated }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch('/api/login', {
+    fetch(`${API_BASE_URL}/api/login`, {
+      credentials: 'include',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

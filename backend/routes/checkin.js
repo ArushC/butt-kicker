@@ -23,7 +23,7 @@ router.post('/:id', async (req, res) => {
         //later on the same day they later report they did not smoke yesterday, it will increase to 1
         //if (Boolean(user.smoke_free_yesterday) !== smoke_free_yesterday) {
           updatedFields.smoke_free_yesterday = smoke_free_yesterday;
-          currentStreak = (!smoke_free_yesterday) ? 0 : user.saved_streak + 1 + (user.smoke_free_today ? 1 : 0);
+          currentStreak = (!smoke_free_yesterday) ? 0 : user.saved_streak + 1 + (Boolean(user.smoke_free_today) ? 1 : 0);
         //}
       }
   

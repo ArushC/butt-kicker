@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import io from 'socket.io-client';
+import { API_BASE_URL } from '../config';
 
 const socket = io('http://localhost:5001');
 
@@ -21,7 +22,9 @@ const Forum = () => {
   const [username, setUsername] = useState('Unknown User');
 
   useEffect(() => {
-    fetch(`/api/users/${id}`)
+    fetch(`${API_BASE_URL}/api/users/${id}`, {
+      credentials: 'include'
+    })
       .then(response => {
         if (response.status === 401) {
           navigate('/login');
@@ -34,7 +37,9 @@ const Forum = () => {
   }, [id, navigate]);
 
   useEffect(() => {
-    fetch(`/api/forum/${id}`)
+    fetch(`${API_BASE_URL}/api/forum/${id}`, {
+      credentials: 'include'
+    })
       .then(response => response.json())
       .then(data => setMessages(data))
       .catch(err => console.error('Error fetching messages:', err));
@@ -63,12 +68,13 @@ const Forum = () => {
         message
       };
 
-      fetch(`/api/forum/${id}`, {
+      fetch(`${API_BASE_URL}/api/forum/${id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(messageData)
+        body: JSON.stringify(messageData),
+        credentials: 'include'
       })
         .then(response => response.json())
         .then(() => {

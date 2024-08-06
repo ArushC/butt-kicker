@@ -51,6 +51,9 @@ exports.seed = async function(knex) {
 
   // JSON data for positive reinforcement messages
   const positiveReinforcementMessages = {
+    "0": [
+      "Placeholder. This message will prevent some console errors."
+    ],
     "1": [
       "You’ve started your journey with a bang! 💥 The universe just noticed!",
       "One step forward, keep it up! 👣 Your footprints are making history!",

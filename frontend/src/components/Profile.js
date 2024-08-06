@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../config';
 
 const Profile = ({ setIsAuthenticated, onClose }) => {
     const { id } = useParams();
@@ -7,7 +8,9 @@ const Profile = ({ setIsAuthenticated, onClose }) => {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        fetch(`/api/users/${id}`)
+        fetch(`${API_BASE_URL}/api/users/${id}`,
+            {credentials: 'include'}
+        )
             .then(response => response.json())
             .then(data => setUser(data))
             .catch(error => console.error('Failed to fetch user data:', error));
@@ -15,7 +18,7 @@ const Profile = ({ setIsAuthenticated, onClose }) => {
 
     const handleLogout = async () => {
         try {
-            const response = await fetch('/api/logout', {
+            const response = await fetch(`${API_BASE_URL}/api/logout`, {
                 method: 'GET',
                 credentials: 'include'  // Include credentials to ensure the session is destroyed
             });

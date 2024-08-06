@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 import { API_BASE_URL } from '../config';
 
-
 const FinancialSavingsAnalysis = () => {
   const { id } = useParams();
   const navigate = useNavigate();

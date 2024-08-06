@@ -7,7 +7,7 @@ const crypto = require('crypto');
 const { Server } = require('socket.io'); // Import socket.io
 const { updateState } = require('./utils'); // Import updateState function
 const app = express();
-const port = 7160;
+const PORT = process.env.PORT || 7160;
 
 // Generate session secret
 const session_secret = crypto.randomBytes(64).toString('hex');
@@ -217,6 +217,6 @@ io.on('connection', (socket) => {
 });
 
 // Start the server
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });

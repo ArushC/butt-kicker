@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import MotivationPopup from './MotivationPopup'; // import the new component
+import { API_BASE_URL } from '../config';
 
 const SmokedPage = () => {
   const navigate = useNavigate();
@@ -13,7 +14,8 @@ const SmokedPage = () => {
   useEffect(() => {
     const body = { smoke_free_today: false };
     //Reset the user's streak to 0 by checking in as not smoke-free for today
-    fetch(`/api/checkin/${id}`, {
+    fetch(`${API_BASE_URL}/api/checkin/${id}`, {
+      credentials: 'include',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -35,7 +37,9 @@ const SmokedPage = () => {
 
   useEffect(() => {
     // Fetch user data to get max_streak
-    fetch(`/api/users/${id}`)
+    fetch(`${API_BASE_URL}/api/users/${id}`,
+      {credentials: 'include'}
+    )
       .then(response => response.json())
       .then(data => setUser(data))
       .catch(error => console.error('Error fetching user data:', error));
@@ -44,7 +48,9 @@ const SmokedPage = () => {
   const handleMotivationClick = async () => {
     try {
       // Fetch the journal entries from your backend API
-      const response = await fetch(`/api/journal/${id}/formatted-journal-entries`);
+      const response = await fetch(`${API_BASE_URL}/api/journal/${id}/formatted-journal-entries`,
+        {credentials: 'include'}
+      );
       const data = await response.json();
 
       // Send the formatted journal to the motivation endpoint

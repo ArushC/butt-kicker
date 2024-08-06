@@ -14,7 +14,7 @@ const session_secret = crypto.randomBytes(64).toString('hex');
 
 // Middleware setup
 app.use(cors({
-  origin: ['http://localhost:3000'], // Add other allowed origins here
+  origin: [process.env.PRODUCTION_ORIGIN, process.env.LOCAL_ORIGIN || 'http://localhost:3000'], // Add other allowed origins here
   methods: ['POST', 'GET', 'PUT', 'DELETE'], // Add the methods you want to allow
   credentials: true // Allow credentials if you're using cookies for authentication
 }));
@@ -87,7 +87,7 @@ app.get('/api/random-message/:streak', async (req, res) => {
     const randomIndex = Math.floor(Math.random() * messages.length);
     const randomMessage = messages[randomIndex];
 
-    res.json({ message: randomMessage.message });
+    res.status(200).json({ message: randomMessage.message });
   } catch (error) {
     res.status(500).json({ message: 'Error fetching message.' });
   }

@@ -23,7 +23,7 @@ app.use(session({
   secret: session_secret,
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false } // Set to true in production with HTTPS
+  cookie: { secure: process.env.NODE_ENV === 'production' } // Set to true in production with HTTPS
 }));
 
 // Import and use journal routes

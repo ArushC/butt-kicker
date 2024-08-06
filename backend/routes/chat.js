@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const knex = require('../knex');
 const { Server } = require('socket.io');
-const io = require('socket.io')(5001, {
+const io = require('socket.io')(process.env.REACT_APP_SOCKET_PORT || 5001, {
   cors: {
     origin: "*"
   }

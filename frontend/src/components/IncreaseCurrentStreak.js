@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import html2canvas from 'html2canvas';
 import Confetti from 'react-confetti';
+import { API_BASE_URL } from '../config';
 
 const IncreaseCurrentStreak = ({ onClose, currentStreak }) => {
   const [showConfetti, setShowConfetti] = useState(true);
@@ -18,7 +19,9 @@ const IncreaseCurrentStreak = ({ onClose, currentStreak }) => {
   useEffect(() => {
     const fetchRandomMessage = async () => {
       try {
-        const response = await fetch(`/api/random-message/${currentStreak}`);
+        const response = await fetch(`${API_BASE_URL}/api/random-message/${currentStreak}`,
+          {credentials: 'include'}
+        );
         if (response.ok) {
           const data = await response.json();
           setRandomMessage(data.message);

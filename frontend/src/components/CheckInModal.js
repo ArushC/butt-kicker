@@ -4,7 +4,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 
 const CheckInModal = ({ isOpen, onClose, onCheckIn, title }) => {
-  //if (!isOpen) return null;
 
   const navigate = useNavigate(); 
   const { id } = useParams();
@@ -91,7 +90,7 @@ const styles = {
     margin: '0 10px',
   },
   noButton: {
-    backgroundColor: 'orange',  // Changed color back to orange
+    backgroundColor: 'orange',
     color: '#fff',
     border: 'none',
     padding: '15px 30px',

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 import { API_BASE_URL } from '../config';
 
+
 const FinancialSavingsAnalysis = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -16,9 +17,9 @@ const FinancialSavingsAnalysis = () => {
   const [suggestions, setSuggestions] = useState([]);
   
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/users/${id}`, {
-      credentials: 'include'
-    })
+    fetch(`${API_BASE_URL}/api/users/${id}`,
+      {credentials: 'include'}
+    )
       .then(response => {
         if (response.status === 401) {
           navigate('/login');
@@ -35,9 +36,7 @@ const FinancialSavingsAnalysis = () => {
       .catch(() => navigate('/login'));
 
     fetch(`${API_BASE_URL}/api/cities`,
-      {
-        credentials: 'include'
-      }
+      {credentials: 'include'}
     )
       .then(response => response.json())
       .then(data => {
@@ -233,11 +232,12 @@ const styles = {
     textAlign: 'left'
   },
   input: {
-    width: '100%',
+    width: '100%', // Ensures the streak input takes the full width of its container
     padding: '10px',
     marginTop: '5px',
     borderRadius: '5px',
-    border: '1px solid #ccc'
+    border: '1px solid #ccc',
+    boxSizing: 'border-box' // Ensures padding is included in the element's width
   },
   cigaretteInput: {
     display: 'flex',
@@ -304,13 +304,14 @@ const styles = {
     alignItems: 'center'
   },
   modal: {
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffe0', // Changed from '#fff' to '#ffffe0'
     padding: '20px',
     borderRadius: '10px',
     maxWidth: '500px',
     width: '100%',
     position: 'relative'
   },
+  
   closeButton: {
     position: 'absolute',
     top: '10px',

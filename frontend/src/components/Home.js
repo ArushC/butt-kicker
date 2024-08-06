@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import HomeButton from './HomeButton';
 import CheckInModal from './CheckInModal';
 import Profile from './Profile';
 import IncreaseCurrentStreak from './IncreaseCurrentStreak';
+import { API_BASE_URL } from '../config';
 
 const Home = ({ setIsAuthenticated }) => {
   const { id } = useParams();
@@ -19,8 +20,10 @@ const Home = ({ setIsAuthenticated }) => {
     setShowProfile(!showProfile);
   };
 
-  const fetchUserData = () => {
-    fetch(`/api/users/${id}`)
+  const fetchUserData = useCallback(() => {
+    fetch(`${API_BASE_URL}/api/users/${id}`, {
+      credentials: 'include'
+    })
       .then(response => {
         if (response.status === 401) {
           navigate('/login');
@@ -30,11 +33,11 @@ const Home = ({ setIsAuthenticated }) => {
       })
       .then(data => setUser(data))
       .catch(() => navigate('/login'));
-  };
+  }, [id, navigate]);
 
   useEffect(() => {
     fetchUserData();
-    fetch(`/api/updateState/${id}`, { method: 'POST' })
+    fetch(`${API_BASE_URL}/api/updateState/${id}`, { method: 'POST', credentials: 'include' })
       .then(response => {
         if (response.ok) {
           fetchUserData();
@@ -45,7 +48,7 @@ const Home = ({ setIsAuthenticated }) => {
       .catch(error => {
         console.error('State update failed', error);
       });
-  }, [id, navigate]);
+  }, [fetchUserData, id]);
 
   if (!user) {
     return <div>Loading...</div>;
@@ -54,7 +57,7 @@ const Home = ({ setIsAuthenticated }) => {
   const displayName = user.name || user.username;
 
   const handleCheckIn = (smoke_free) => {
-    const endpoint = `/api/checkin/${id}`;
+    const endpoint = `${API_BASE_URL}/api/checkin/${id}`;
     const body = checkInForYesterday
       ? { smoke_free_yesterday: smoke_free }
       : { smoke_free_today: smoke_free };
@@ -65,6 +68,7 @@ const Home = ({ setIsAuthenticated }) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
+      credentials: 'include'
     })
       .then(response => response.json())
       .then(data => {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import Modal from 'react-modal';
+import { API_BASE_URL } from '../config';
 
 const Journal = () => {
   const location = useLocation();
@@ -84,7 +85,7 @@ const Journal = () => {
   }, []);
 
   useEffect(() => {
-    fetch(`/api/journal/${id}/${dateParam}`)
+    fetch(`${API_BASE_URL}/api/journal/${id}/${dateParam}`)
       .then(response => response.json())
       .then(data => {
         if (data.entry) {
@@ -95,7 +96,7 @@ const Journal = () => {
   }, [id, dateParam]);
 
   useEffect(() => {
-    fetch(`/api/journal/${id}/dates`)
+    fetch(`${API_BASE_URL}/api/journal/${id}/dates`)
       .then(response => response.json())
       .then(data => {
         setEntryDates(data);
@@ -105,7 +106,7 @@ const Journal = () => {
 
   const handleBlur = () => {
     if (entry.trim() && date === new Date().toISOString().split('T')[0]) {
-      fetch(`/api/journal/${id}/today`, {
+      fetch(`${API_BASE_URL}/api/journal/${id}/today`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

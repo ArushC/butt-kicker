@@ -86,7 +86,7 @@ const Home = ({ setIsAuthenticated }) => {
   const buttons = [
     {
       text: 'Daily Check In',
-      textColor: '#4B0082',
+      textColor: 'black' ,//'#4B0082',
       backgroundColor: '#ffffe0',
       onClick: () => {
         setCheckInForYesterday(false);
@@ -94,9 +94,9 @@ const Home = ({ setIsAuthenticated }) => {
         setIsModalOpen(true);
       },
     },
-    { text: 'View Savings', textColor: 'pink', backgroundColor: '#ffffe0', onClick: () => navigate(`/savings/${id}`) },
-    { text: 'My Journal', textColor: '#4B0082', backgroundColor: '#ffffe0', onClick: () => navigate(`/journal/${id}/today`) },
-    { text: 'Community', textColor: '#4B0082', backgroundColor: '#ffffe0', onClick: () => navigate(`/forum/${id}`) },
+    { text: 'View Savings', textColor: 'black', backgroundColor: '#ffffe0', onClick: () => navigate(`/savings/${id}`) },
+    { text: 'My Journal', textColor: 'black', backgroundColor: '#ffffe0', onClick: () => navigate(`/journal/${id}/today`) },
+    { text: 'Community', textColor: 'black', backgroundColor: '#ffffe0', onClick: () => navigate(`/forum/${id}`) },
     { text: 'I Smoked', textColor: 'white', backgroundColor: 'orange', onClick: () => navigate(`/smoked/${id}`) },
   ];
 
@@ -142,6 +142,7 @@ const Home = ({ setIsAuthenticated }) => {
             key={index}
             text={btn.text}
             backgroundColor={btn.backgroundColor}
+            textColor={btn.textColor}
             onClick={btn.onClick}
           />
         ))}

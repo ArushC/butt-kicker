@@ -88,7 +88,7 @@ const styles = {
     padding: '20px',
     backgroundColor: '#d3f0ff',
     borderRadius: '10px',
-    maxWidth: '400px',
+    maxWidth: '500px',
     margin: 'auto',
     marginTop: '50px'
   },

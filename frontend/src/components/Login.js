@@ -85,12 +85,12 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    justifyContent: 'center',
     padding: '20px',
     backgroundColor: '#d3f0ff',
     borderRadius: '10px',
-    maxWidth: '400px',
-    margin: 'auto',
-    marginTop: '50px'
+    maxWidth: '500px',
+    margin: '50px auto 0 auto'
   },
   title: {
     fontSize: '32px',

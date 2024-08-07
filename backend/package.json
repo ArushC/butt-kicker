@@ -6,7 +6,7 @@
     "start": "node server.js",
     "migrate": "npx knex migrate:latest",
     "seed": "npx knex seed:run",
-    "build": "npm run migrate && npm run seed && npm start"
+    "build": "NODE_ENV=production npm run migrate && npm run seed && npm start"
   },
   "keywords": [],
   "author": "",

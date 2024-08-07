@@ -1,18 +1,28 @@
 const express = require('express');
-const knex = require('./knex');
+const knex = require('./knex'); // Adjust the path to your Knex configuration
 const session = require('express-session');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
-const { createServer } = require('http'); // Import createServer
+const { createServer } = require('http');
 const { Server } = require('socket.io');
 const { updateState } = require('./utils');
+
+// Import and configure connect-session-knex
+const KnexSessionStore = require('connect-session-knex')(session);
+
 const app = express();
 const PORT = process.env.PORT || 7160;
 const SOCKET_PORT = process.env.SOCKET_PORT || PORT; // Use the same port
 
 // Generate session secret
 const random_session_secret = crypto.randomBytes(64).toString('hex');
+
+// Setup session store with Knex
+const store = new KnexSessionStore({
+  knex: knex,
+  tablename: 'sessions', // optional. Defaults to 'sessions'
+});
 
 // Middleware setup
 app.use(cors({
@@ -25,7 +35,10 @@ app.use(session({
   secret: process.env.SESSION_SECRET || random_session_secret,
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: process.env.NODE_ENV === 'production' }
+  store: store, // Add the session store here
+  cookie: {
+    secure: process.env.NODE_ENV === 'production', // use secure cookies in production
+  }
 }));
 
 // Import and use journal routes

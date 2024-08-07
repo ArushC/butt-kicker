@@ -3,7 +3,8 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import io from 'socket.io-client';
 import { API_BASE_URL } from '../config';
 
-const socket = io(process.env.REACT_APP_SOCKET_URL || 'http://localhost:5001');
+// Connect to the WebSocket server using the environment variable
+const socket = io(process.env.REACT_APP_SOCKET_URL || 'http://localhost:7160');
 
 const Forum = () => {
   const location = useLocation();

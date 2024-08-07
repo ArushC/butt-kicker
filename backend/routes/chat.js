@@ -1,37 +1,34 @@
 const express = require('express');
 const router = express.Router();
 const knex = require('../knex');
-const { Server } = require('socket.io');
-const io = require('socket.io')(process.env.REACT_APP_SOCKET_PORT || 5001, {
-  cors: {
-    origin: "*"
-  }
-});
 
 // Endpoint to get chat messages
 router.get('/:id', async (req, res) => {
+  try {
     const messages = await knex('chat_messages')
-      .join('users', 'chat_messages.user_id', '=', 'users.id') // Adjust this line according to your actual schema
-      .select('chat_messages.*', 'users.username') // Select fields from chat_messages and the username
+      .join('users', 'chat_messages.user_id', '=', 'users.id')
+      .select('chat_messages.*', 'users.username')
       .orderBy('timestamp', 'asc')
       .limit(100);
     res.json(messages);
-  });
+  } catch (err) {
+    console.error('Error fetching messages:', err);
+    res.status(500).json({ error: 'Failed to fetch messages' });
+  }
+});
 
 // Endpoint to post a new chat message
 router.post('/:id', async (req, res) => {
   const { user_id, anonymous, username, message } = req.body;
+  const io = req.app.get('io'); // Get io instance from the app
 
   try {
-    // Insert the new message into the database
     const [newMessage] = await knex('chat_messages')
       .insert({ user_id, anonymous, message })
       .returning('*');
     
-    // Add the username to the newMessage object
     newMessage.username = username;
 
-    // Emit the new message to all connected clients
     io.emit('new_message', newMessage);
     res.status(201).json(newMessage);
   } catch (err) {

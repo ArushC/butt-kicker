@@ -1,29 +1,31 @@
 const express = require('express');
-const knex = require('./knex'); // Import knex instance
+const knex = require('./knex');
 const session = require('express-session');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
-const { Server } = require('socket.io'); // Import socket.io
-const { updateState } = require('./utils'); // Import updateState function
+const { createServer } = require('http'); // Import createServer
+const { Server } = require('socket.io');
+const { updateState } = require('./utils');
 const app = express();
 const PORT = process.env.PORT || 7160;
+const SOCKET_PORT = process.env.SOCKET_PORT || PORT; // Use the same port
 
 // Generate session secret
 const session_secret = crypto.randomBytes(64).toString('hex');
 
 // Middleware setup
 app.use(cors({
-  origin: [process.env.PRODUCTION_ORIGIN, process.env.LOCAL_ORIGIN || 'http://localhost:3000'], // Add other allowed origins here
-  methods: ['POST', 'GET', 'PUT', 'DELETE'], // Add the methods you want to allow
-  credentials: true // Allow credentials if you're using cookies for authentication
+  origin: [process.env.PRODUCTION_ORIGIN, process.env.LOCAL_ORIGIN || 'http://localhost:3000'],
+  methods: ['POST', 'GET', 'PUT', 'DELETE'],
+  credentials: true
 }));
-app.use(express.json()); // Parse JSON bodies
+app.use(express.json());
 app.use(session({
   secret: session_secret,
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: process.env.NODE_ENV === 'production' } // Set to true in production with HTTPS
+  cookie: { secure: process.env.NODE_ENV === 'production' }
 }));
 
 // Import and use journal routes
@@ -200,10 +202,13 @@ app.put('/api/users/:id/location', async (req, res) => {
   }
 });
 
-// Set up WebSocket server for real-time chat
-const io = new Server(5002, {
+// Create HTTP server and bind it to the app
+const httpServer = createServer(app);
+
+// Set up WebSocket server
+const io = new Server(httpServer, {
   cors: {
-    origin: "*", // Allow all origins for WebSocket connections
+    origin: process.env.PRODUCTION_ORIGIN || 'http://localhost:3000',
   },
 });
 
@@ -216,7 +221,10 @@ io.on('connection', (socket) => {
   });
 });
 
+// Make io instance available in chat routes
+app.set('io', io);
+
 // Start the server
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

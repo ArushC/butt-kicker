@@ -149,13 +149,13 @@ app.get('/api/logout', (req, res) => {
 });
 
 // Middleware to check authentication
-const checkAuth = (req, res, next) => {
-  console.log("Session before checkAuth: ", req.session);
-  if (!req.session.userId) {
-    return res.status(401).send('Not authenticated');
-  }
-  next();
-};
+//const checkAuth = (req, res, next) => {
+//  console.log("Session before checkAuth: ", req.session);
+//  if (!req.session.userId) {
+//    return res.status(401).send('Not authenticated');
+//  }
+//  next();
+//};
 
 // Route to get current user
 app.get('/api/user', (req, res) => {
@@ -168,7 +168,7 @@ app.get('/api/user', (req, res) => {
 });
 
 // Route to get user by ID
-app.get('/api/users/:id', checkAuth, async (req, res) => {
+app.get('/api/users/:id', /*checkAuth,*/ async (req, res) => {
   const { id } = req.params;
   try {
     const user = await knex('users').where({ id }).first();

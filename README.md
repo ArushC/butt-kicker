@@ -1,6 +1,6 @@
 # Butt Kicker
 
-Note: the deployment is NOT working—there is an authentication bug that still needs to be resolved.
+Note: authentication checks have temporarily been bypassed in the application to enable the deployment to work. See [https://butt-kicker-frontend.vercel.app/](https://butt-kicker-frontend.vercel.app/).
 
 ## Description
 

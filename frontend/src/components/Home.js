@@ -86,24 +86,24 @@ const Home = ({ setIsAuthenticated }) => {
   const buttons = [
     {
       text: 'Daily Check In',
-      backgroundColor: '#F0E68C',
+      backgroundColor: '#ffffe0',
       onClick: () => {
         setCheckInForYesterday(false);
         setCheckInTitle('Were you smoke-free today?');
         setIsModalOpen(true);
       },
     },
-    { text: 'View Savings', backgroundColor: '#F0E68C', onClick: () => navigate(`/savings/${id}`) },
-    { text: 'My Journal', backgroundColor: '#F0E68C', onClick: () => navigate(`/journal/${id}/today`) },
-    { text: 'Community', backgroundColor: '#F0E68C', onClick: () => navigate(`/forum/${id}`) },
-    { text: 'I Smoked', backgroundColor: '#F0E68C', onClick: () => navigate(`/smoked/${id}`) },
+    { text: 'View Savings', backgroundColor: '#ffffe0', onClick: () => navigate(`/savings/${id}`) },
+    { text: 'My Journal', backgroundColor: '#ffffe0', onClick: () => navigate(`/journal/${id}/today`) },
+    { text: 'Community', backgroundColor: '#ffffe0', onClick: () => navigate(`/forum/${id}`) },
+    { text: 'I Smoked', backgroundColor: 'orange', onClick: () => navigate(`/smoked/${id}`) },
   ];
 
   return (
-    <div style={{ position: 'relative', textAlign: 'center', padding: '20px' }}>
+    <div style={{ position: 'relative', textAlign: 'center', padding: '20px', backgroundColor: '#d3f0ff', minHeight: '100vh' }}>
       <div style={{ backgroundColor: '#d3f0ff', padding: '20px', borderRadius: '10px', position: 'relative', boxSizing: 'border-box' }}>
         <h1>{displayName}'s Streak:</h1>
-        <h2 style={{ color: '#3B873E', fontSize: '48px' }}> 
+        <h2 style={{ color: '#3B873E', fontSize: '48px', marginBottom: '10px' }}> 
           {user.current_streak} {user.current_streak === 1 ? 'Day' : 'Days'}
         </h2>
         <button
@@ -125,7 +125,7 @@ const Home = ({ setIsAuthenticated }) => {
       </div>
 
       <button
-        style={{ margin: '20px', padding: '10px 20px', backgroundColor: '#4B0082', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
+        style={{ margin: '10px 0 20px', padding: '10px 20px', backgroundColor: '#4B0082', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
         onClick={() => {
           setCheckInForYesterday(true);
           setCheckInTitle('Were you smoke-free yesterday?');

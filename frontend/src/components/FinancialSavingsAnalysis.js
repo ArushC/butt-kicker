@@ -211,67 +211,71 @@ const button = {
 
 const styles = {
   container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: '20px',
     backgroundColor: '#d3f0ff',
+    padding: '30px', // Increased padding
     borderRadius: '10px',
-    maxWidth: '400px',
-    margin: 'auto',
-    marginTop: '50px'
+    width: '100%',
+    height: '100vh',
+    margin: '0',
+    position: 'relative',
+    boxSizing: 'border-box'
   },
   title: {
     fontSize: '32px',
-    marginBottom: '20px',
+    marginBottom: '30px', // Increased margin
     color: '#4B0082',
     textAlign: 'center'
   },
   inputGroup: {
-    marginBottom: '20px',
-    width: '100%',
-    textAlign: 'left'
+    marginBottom: '30px', // Increased margin
+    width: '50%', // Reduced width
+    textAlign: 'left',
+    margin: '0 auto' // Center the input group
   },
   input: {
     width: '100%',
-    padding: '10px',
-    marginTop: '5px',
+    padding: '15px', // Increased padding
+    marginTop: '10px', // Increased margin
     borderRadius: '5px',
     border: '1px solid #ccc'
   },
   cigaretteInput: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
+    marginBottom: '20px' // Added spacing
   },
   cigaretteCount: {
-    width: '50px',
+    width: '25px', // Reduced width
     textAlign: 'center',
     padding: '10px',
-    margin: '0 10px',
+    margin: '0 15px', // Increased margin
     borderRadius: '5px',
     border: '1px solid #ccc'
   },
   button: {
     ...button,
-    width: '40px' // explicitly set width to 40px for button
+    width: '20px' // Reduced width for button
   },
   savingsMessage: {
-    marginTop: '20px',
+    marginTop: '30px', // Increased margin
     padding: '20px',
-    backgroundColor: '#fff3cd',
+    backgroundColor: '#ffffe0',  // Updated color
     borderRadius: '10px',
     textAlign: 'center',
-    color: '#856404'
+    color: '#856404',
+    width: '50%', // Reduced width
+    margin: '0 auto' // Center the savings message
   },
   buttonGroup: {
     display: 'flex',
-    justifyContent: 'space-between',
-    width: '100%',
-    marginTop: '20px'
+    justifyContent: 'space-around', // Space between buttons
+    width: '50%', // Reduced width
+    marginTop: '30px', // Increased margin
+    margin: '0 auto' // Center the button group
   },
   navigationButton: {
-    padding: '10px 20px',
+    padding: '15px 25px', // Increased padding
     backgroundColor: '#ffa500',
     color: '#fff',
     border: 'none',
@@ -279,7 +283,8 @@ const styles = {
     cursor: 'pointer',
     display: 'flex', // ensure flex display for consistency
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    margin: '0 10px' // Added margin
   },
   disabledButton: {
     ...button,
@@ -287,10 +292,11 @@ const styles = {
     cursor: 'not-allowed',
     opacity: 0.5, // To give a visual cue that the button is disabled
     width: 'auto', // ensure width is consistent with navigationButton
-    padding: '10px 20px',
+    padding: '15px 25px', // Increased padding
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    margin: '0 10px' // Added margin
   },
   modalOverlay: {
     position: 'fixed',
@@ -305,7 +311,7 @@ const styles = {
   },
   modal: {
     backgroundColor: '#fff',
-    padding: '20px',
+    padding: '30px', // Increased padding
     borderRadius: '10px',
     maxWidth: '500px',
     width: '100%',
@@ -327,7 +333,7 @@ const styles = {
   },
   modalTitle: {
     fontSize: '24px',
-    marginBottom: '20px',
+    marginBottom: '30px', // Increased margin
     color: '#4B0082'
   },
   suggestionsList: {
@@ -335,19 +341,19 @@ const styles = {
     overflowY: 'auto'
   },
   suggestionItem: {
-    marginBottom: '15px',
-    padding: '10px',
+    marginBottom: '20px', // Increased margin
+    padding: '15px', // Increased padding
     backgroundColor: '#f9f9f9',
     borderRadius: '5px',
     border: '1px solid #ddd'
   },
   suggestionTitle: {
     fontSize: '18px',
-    marginBottom: '5px',
+    marginBottom: '10px', // Increased margin
     color: '#4B0082'
   },
   suggestionDescription: {
-    marginBottom: '5px',
+    marginBottom: '10px', // Increased margin
     color: '#555'
   },
   suggestionCost: {

@@ -1,5 +1,7 @@
 # Butt Kicker
 
+Note: the deployment is NOT working—there is an authentication bug that still needs to be resolved.
+
 ## Description
 
 A high-fidelity prototype of an application to help users quit smoking.

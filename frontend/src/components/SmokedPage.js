@@ -72,43 +72,51 @@ const SmokedPage = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>That's okay. Keep pushing forward and making progress. We believe in you!</h1>
-      
-      <div style={styles.section}>
-        <h3 style={styles.sectionHeader}>Next Steps:</h3>
-        <button style={styles.button} onClick={() => navigate(`/journal/${id}/today`, { state: { notFromHome } })}>
-          Reflect and Renew
-        </button>
-        <button style={styles.orangeButton} onClick={() => navigate(`/forum/${id}`, { state: { notFromHome } })}>
-          Talk to Someone
-        </button>
-        <button style={styles.greenButton} onClick={handleMotivationClick}>
-          Get Motivation
-        </button>
-      </div>
-      
-
-      {showMotivationPopup && (
-        <MotivationPopup
-          message={motivationMessage}
-          onClose={() => setShowMotivationPopup(false)}
-        />
-      )}
-
-      {user && (
+    <div style={styles.pageContainer}>
+      <div style={styles.container}>
+        <h1 style={styles.title}>That's okay. Keep pushing forward and making progress. We believe in you!</h1>
+        
         <div style={styles.section}>
-          <h3 style={styles.sectionHeader}>Personal Record: {user.max_streak} {user.max_streak === 1 ? 'day' : 'days'} </h3>
-          <button style={styles.button} onClick={() => navigate(`/home/${id}`)}>
-            Keep Going
+          <h3 style={styles.sectionHeader}>Next Steps:</h3>
+          <button style={styles.button} onClick={() => navigate(`/journal/${id}/today`, { state: { notFromHome } })}>
+            Reflect and Renew
+          </button>
+          <button style={styles.orangeButton} onClick={() => navigate(`/forum/${id}`, { state: { notFromHome } })}>
+            Talk to Someone
+          </button>
+          <button style={styles.greenButton} onClick={handleMotivationClick}>
+            Get Motivation
           </button>
         </div>
-      )}
+
+        {showMotivationPopup && (
+          <MotivationPopup
+            message={motivationMessage}
+            onClose={() => setShowMotivationPopup(false)}
+          />
+        )}
+
+        {user && (
+          <div style={styles.section}>
+            <h3 style={styles.sectionHeader}>Personal Record: {user.max_streak} {user.max_streak === 1 ? 'day' : 'days'} </h3>
+            <button style={styles.button} onClick={() => navigate(`/home/${id}`)}>
+              Keep Going
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
 
 const styles = {
+  pageContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: '100vh',
+    backgroundColor: '#d3f0ff', // blue background
+  },
   container: {
     display: 'flex',
     flexDirection: 'column',
@@ -172,7 +180,7 @@ const styles = {
     width: '80%',
     padding: '15px 30px', // increased padding for vertical size
     margin: '10px auto',
-    backgroundColor: '#4CAF50', // green color
+    backgroundColor: '#3B873E', // green color
     color: '#fff',
     border: 'none',
     borderRadius: '5px',

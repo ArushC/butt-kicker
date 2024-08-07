@@ -64,7 +64,7 @@ const styles = {
   message: {
     fontSize: '20px',
     fontWeight: '500',
-    color: '#4CAF50', // Green for positive reinforcement
+    color: '#3B873E', // Green for positive reinforcement
     marginBottom: '20px',
     padding: '0 20px',
   },

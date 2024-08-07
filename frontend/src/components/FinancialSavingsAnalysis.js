@@ -116,11 +116,11 @@ const FinancialSavingsAnalysis = () => {
       ) : (
         <>
           <div style={styles.inputGroup}>
-            <label>Streak:</label>
+            <label style={styles.label}>Streak:</label>
             <input type="text" value={streak} readOnly style={styles.input} />
           </div>
           <div style={styles.inputGroup}>
-            <label>Location:</label>
+            <label style={styles.label}>Location:</label>
             <Select
               value={location}
               onChange={handleCityChange}
@@ -132,7 +132,7 @@ const FinancialSavingsAnalysis = () => {
             />
           </div>
           <div style={styles.inputGroup}>
-            <label>Average Cigarettes Smoked Each Day:</label>
+            <label style={styles.label}>Average Cigarettes Smoked Each Day:</label>
             <div style={styles.cigaretteInput}>
               <button onClick={handleDecrement} style={styles.button}>-</button>
               <input type="text" value={averageCigarettes} readOnly style={styles.cigaretteCount} />
@@ -140,8 +140,8 @@ const FinancialSavingsAnalysis = () => {
             </div>
           </div>
           <div style={styles.savingsMessage}>
-            By not smoking for <span>{streak}</span> days in <span>{location.label}</span>, you avoided smoking <span>{streak * averageCigarettes}</span> cigarettes and saved <span>${(streak * averageCigarettes * 0.50).toFixed(2)}</span>.
-          </div>
+  By not smoking for <span>{streak}</span> {streak === 1 ? 'day' : 'days'} in <span>{location.label}</span>, you avoided smoking <span>{streak * averageCigarettes}</span> {streak * averageCigarettes === 1 ? 'cigarette' : 'cigarettes'} and saved <span>${(streak * averageCigarettes * 0.50).toFixed(2)}</span>.
+        </div>
           <div style={styles.buttonGroup}>
             <button onClick={() => navigate('/')} style={styles.navigationButton}>Back</button>
             <button 
@@ -199,6 +199,7 @@ const styles = {
   // Include spinner styles here
   spinner: {
     display: 'flex',
+    maxWidth: '500px',
     justifyContent: 'center',
     alignItems: 'center',
     height: '100vh', // Full screen height
@@ -218,7 +219,7 @@ const styles = {
     padding: '20px',
     backgroundColor: '#d3f0ff',
     borderRadius: '10px',
-    maxWidth: '400px',
+    maxWidth: '500px',
     margin: 'auto',
     marginTop: '50px'
   },
@@ -313,7 +314,10 @@ const styles = {
     width: '100%',
     position: 'relative'
   },
-  
+  label: {
+    display: 'block',
+    marginBottom: '5px', // add this to increase space between label and the element below
+  },  
   closeButton: {
     position: 'absolute',
     top: '10px',

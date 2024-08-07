@@ -121,7 +121,7 @@ const Journal = () => {
   };
 
   return (
-    <div style={{ textAlign: 'center', padding: '20px', backgroundColor: '#d3f0ff' }}>
+    <div style={{ textAlign: 'center', padding: '20px', backgroundColor: '#d3f0ff', minHeight: '100vh' }}>
       <div style={{ backgroundColor: '#ffffe0', padding: '20px', borderRadius: '10px', width: '100%', maxWidth: '600px', margin: '0 auto', boxSizing: 'border-box' }}>
         <h2>{date}</h2>
         <textarea

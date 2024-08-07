@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 7160;
 const SOCKET_PORT = process.env.SOCKET_PORT || PORT; // Use the same port
 
 // Generate session secret
-const session_secret = crypto.randomBytes(64).toString('hex');
+const random_session_secret = crypto.randomBytes(64).toString('hex');
 
 // Middleware setup
 app.use(cors({
@@ -22,9 +22,9 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(session({
-  secret: session_secret,
+  secret: process.env.SESSION_SECRET || random_session_secret,
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: { secure: process.env.NODE_ENV === 'production' }
 }));
 

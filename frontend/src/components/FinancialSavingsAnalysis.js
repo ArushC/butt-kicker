@@ -14,11 +14,12 @@ const FinancialSavingsAnalysis = () => {
   const [searchValue, setSearchValue] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
-  
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/users/${id}`, {
-      credentials: 'include'
-    })
+    fetch(`${API_BASE_URL}/api/users/${id}`,
+      {credentials: 'include'}
+    )
       .then(response => {
         if (response.status === 401) {
           navigate('/login');
@@ -34,20 +35,14 @@ const FinancialSavingsAnalysis = () => {
       })
       .catch(() => navigate('/login'));
 
-    fetch(`${API_BASE_URL}/api/cities`,
-      {
-        credentials: 'include'
-      }
-    )
+    fetch(`${API_BASE_URL}/api/cities`, { credentials: 'include' })
       .then(response => response.json())
       .then(data => {
         const cityOptions = data.map(city => ({ value: city, label: city }));
         setCities(cityOptions);
         setFilteredCities([]);
       })
-      .catch(error => {
-        console.error('Error fetching cities:', error);
-      });
+      .catch(error => console.error('Error fetching cities:', error));
   }, [id, navigate]);
 
   const isInterpretSavingsDisabled = location === '' || averageCigarettes * streak === 0;
@@ -62,13 +57,10 @@ const FinancialSavingsAnalysis = () => {
 
   const handleCityChange = selectedOption => {
     setLocation(selectedOption);
-    // Update the location in the database
     fetch(`${API_BASE_URL}/api/users/${id}/location`, {
       credentials: 'include',
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ location: selectedOption.value })
     })
     .then(response => {
@@ -76,21 +68,12 @@ const FinancialSavingsAnalysis = () => {
         throw new Error('Failed to update location');
       }
     })
-    .catch(error => {
-      console.error('Error updating location:', error);
-    });
+    .catch(error => console.error('Error updating location:', error));
   };
 
-  const handleInputChange = (inputValue) => {
+  const handleInputChange = inputValue => {
     setSearchValue(inputValue);
-    if (inputValue) {
-      const filtered = cities.filter(city =>
-        city.label.toLowerCase().includes(inputValue.toLowerCase())
-      );
-      setFilteredCities(filtered);
-    } else {
-      setFilteredCities([]);
-    }
+    setFilteredCities(cities.filter(city => city.label.toLowerCase().includes(inputValue.toLowerCase())));
   };
 
   const handleMenuOpen = () => {
@@ -98,97 +81,100 @@ const FinancialSavingsAnalysis = () => {
   };
 
   const interpretSavings = async () => {
+    setIsLoading(true);
     const amountSaved = (streak * averageCigarettes * 0.50).toFixed(2);
-    const response = await fetch(
-      'https://noggin.rea.gent/only-viper-1649',
-      {
+    try {
+      const response = await fetch('https://noggin.rea.gent/only-viper-1649', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Bearer rg_v1_tjn7qu6ai78dphc8wl83aluxu08y58etlw50_ngk',
         },
-        body: JSON.stringify({
-          savings: amountSaved,
-          location: location.value,
-        }),
-      }
-    ).then(response => response.text());
-    console.log(response);
-    const data = JSON.parse(response);
-    setSuggestions(data);
-    setModalOpen(true);
+        body: JSON.stringify({ savings: amountSaved, location: location.value }),
+      });
+      const data = await response.text();
+      setSuggestions(JSON.parse(data));
+      setModalOpen(true);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  const Spinner = () => (
+    <div style={styles.spinner}>
+      <div style={styles.spinnerInner}></div>
+    </div>
+  );
 
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Financial Savings Analysis</h1>
-      <div style={styles.inputGroup}>
-        <label>Streak:</label>
-        <input
-          type="text"
-          value={streak}
-          readOnly
-          style={styles.input}
-        />
-      </div>
-      <div style={styles.inputGroup}>
-        <label>Location:</label>
-        <Select
-          value={location}
-          onChange={handleCityChange}
-          onInputChange={handleInputChange}
-          inputValue={searchValue}
-          onMenuOpen={handleMenuOpen}
-          options={filteredCities}
-          styles={customSelectStyles}
-        />
-      </div>
-      <div style={styles.inputGroup}>
-        <label>Average Cigarettes Smoked Each Day:</label>
-        <div style={styles.cigaretteInput}>
-          <button onClick={handleDecrement} style={styles.button}>-</button>
-          <input
-            type="text"
-            value={averageCigarettes}
-            readOnly
-            style={styles.cigaretteCount}
-          />
-          <button onClick={handleIncrement} style={styles.button}>+</button>
-        </div>
-      </div>
-      <div style={styles.savingsMessage}>
-        By not smoking for <span>{streak}</span> days in <span>{location.label}</span>, you avoided smoking <span>{streak * averageCigarettes}</span> cigarettes and saved <span>${(streak * averageCigarettes * 0.50).toFixed(2)}</span>.
-      </div>
-      <div style={styles.buttonGroup}>
-        <button onClick={() => navigate('/')} style={styles.navigationButton}>Back</button>
-        <button 
-          onClick={interpretSavings} 
-          style={isInterpretSavingsDisabled ? styles.disabledButton : styles.navigationButton} 
-          disabled={isInterpretSavingsDisabled}
-        >
-          Interpret My Savings
-        </button>
-      </div>
-      {modalOpen && (
-        <div style={styles.modalOverlay}>
-          <div style={styles.modal}>
-            <button style={styles.closeButton} onClick={() => setModalOpen(false)}>X</button>
-            <h2 style={styles.modalTitle}>Here are suggestions for things to do with ${((streak * averageCigarettes * 0.50).toFixed(2))} in {location.label}:</h2>
-            <div style={styles.suggestionsList}>
-              {Object.keys(suggestions).map(key => (
-                <div key={key} style={styles.suggestionItem}>
-                  <h3 style={styles.suggestionTitle}>{suggestions[key].suggestion}</h3>
-                  <p style={styles.suggestionDescription}>{suggestions[key].description}</p>
-                  <p style={styles.suggestionCost}>Cost: {suggestions[key].cost}</p>
-                </div>
-              ))}
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <>
+          <div style={styles.inputGroup}>
+            <label style={styles.label}>Streak:</label>
+            <input type="text" value={streak} readOnly style={styles.input} />
+          </div>
+          <div style={styles.inputGroup}>
+            <label style={styles.label}>Location:</label>
+            <Select
+              value={location}
+              onChange={handleCityChange}
+              onInputChange={handleInputChange}
+              inputValue={searchValue}
+              onMenuOpen={handleMenuOpen}
+              options={filteredCities}
+              styles={customSelectStyles}
+            />
+          </div>
+          <div style={styles.inputGroup}>
+            <label style={styles.label}>Average Cigarettes Smoked Each Day:</label>
+            <div style={styles.cigaretteInput}>
+              <button onClick={handleDecrement} style={styles.button}>-</button>
+              <input type="text" value={averageCigarettes} readOnly style={styles.cigaretteCount} />
+              <button onClick={handleIncrement} style={styles.button}>+</button>
             </div>
           </div>
+          <div style={styles.savingsMessage}>
+  By not smoking for <span>{streak}</span> {streak === 1 ? 'day' : 'days'} in <span>{location.label}</span>, you avoided smoking <span>{streak * averageCigarettes}</span> {streak * averageCigarettes === 1 ? 'cigarette' : 'cigarettes'} and saved <span>${(streak * averageCigarettes * 0.50).toFixed(2)}</span>.
         </div>
+          <div style={styles.buttonGroup}>
+            <button onClick={() => navigate('/')} style={styles.navigationButton}>Back</button>
+            <button 
+              onClick={interpretSavings} 
+              style={isInterpretSavingsDisabled ? styles.disabledButton : styles.navigationButton} 
+              disabled={isInterpretSavingsDisabled}
+            >
+              Interpret My Savings
+            </button>
+          </div>
+          {modalOpen && (
+            <div style={styles.modalOverlay}>
+              <div style={styles.modal}>
+                <button style={styles.closeButton} onClick={() => setModalOpen(false)}>X</button>
+                <h2 style={styles.modalTitle}>Here are suggestions for things to do with ${((streak * averageCigarettes * 0.50).toFixed(2))} in {location.label}:</h2>
+                <div style={styles.suggestionsList}>
+                  {Object.keys(suggestions).map(key => (
+                    <div key={key} style={styles.suggestionItem}>
+                      <h3 style={styles.suggestionTitle}>{suggestions[key].suggestion}</h3>
+                      <p style={styles.suggestionDescription}>{suggestions[key].description}</p>
+                      <p style={styles.suggestionCost}>Cost: {suggestions[key].cost}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
 };
+
 
 const customSelectStyles = {
   control: (base) => ({
@@ -210,72 +196,85 @@ const button = {
 };
 
 const styles = {
+  // Include spinner styles here
+  spinner: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    maxWidth: '500px',
+    height: '100vh', // Full screen height
+  },
+  spinnerInner: {
+    width: '40px',
+    height: '40px',
+    border: '4px solid #f3f3f3',
+    borderTop: '4px solid #3498db',
+    borderRadius: '50%',
+    animation: 'spin 2s linear infinite'
+  },
   container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '20px',
     backgroundColor: '#d3f0ff',
-    padding: '30px', // Increased padding
     borderRadius: '10px',
-    width: '100%',
-    height: '100vh',
-    margin: '0',
-    position: 'relative',
-    boxSizing: 'border-box'
+    maxWidth: '500px',
+    margin: 'auto',
+    marginTop: '50px'
   },
   title: {
     fontSize: '32px',
-    marginBottom: '30px', // Increased margin
+    marginBottom: '20px',
     color: '#4B0082',
     textAlign: 'center'
   },
   inputGroup: {
-    marginBottom: '30px', // Increased margin
-    width: '50%', // Reduced width
-    textAlign: 'left',
-    margin: '0 auto' // Center the input group
+    marginBottom: '20px',
+    width: '100%',
+    textAlign: 'left'
   },
   input: {
-    width: '100%',
-    padding: '15px', // Increased padding
-    marginTop: '10px', // Increased margin
+    width: '100%', // Ensures the streak input takes the full width of its container
+    padding: '10px',
+    marginTop: '5px',
     borderRadius: '5px',
-    border: '1px solid #ccc'
+    border: '1px solid #ccc',
+    boxSizing: 'border-box' // Ensures padding is included in the element's width
   },
   cigaretteInput: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    marginBottom: '20px' // Added spacing
+    justifyContent: 'flex-start'
   },
   cigaretteCount: {
-    width: '25px', // Reduced width
+    width: '50px',
     textAlign: 'center',
     padding: '10px',
-    margin: '0 15px', // Increased margin
+    margin: '0 10px',
     borderRadius: '5px',
     border: '1px solid #ccc'
   },
   button: {
     ...button,
-    width: '20px' // Reduced width for button
+    width: '40px' // explicitly set width to 40px for button
   },
   savingsMessage: {
-    marginTop: '30px', // Increased margin
+    marginTop: '20px',
     padding: '20px',
-    backgroundColor: '#ffffe0',  // Updated color
+    backgroundColor: '#fff3cd',
     borderRadius: '10px',
     textAlign: 'center',
-    color: '#856404',
-    width: '50%', // Reduced width
-    margin: '0 auto' // Center the savings message
+    color: '#856404'
   },
   buttonGroup: {
     display: 'flex',
-    justifyContent: 'space-around', // Space between buttons
-    width: '50%', // Reduced width
-    marginTop: '30px', // Increased margin
-    margin: '0 auto' // Center the button group
+    justifyContent: 'space-between',
+    width: '100%',
+    marginTop: '20px'
   },
   navigationButton: {
-    padding: '15px 25px', // Increased padding
+    padding: '10px 20px',
     backgroundColor: '#ffa500',
     color: '#fff',
     border: 'none',
@@ -283,8 +282,7 @@ const styles = {
     cursor: 'pointer',
     display: 'flex', // ensure flex display for consistency
     alignItems: 'center',
-    justifyContent: 'center',
-    margin: '0 10px' // Added margin
+    justifyContent: 'center'
   },
   disabledButton: {
     ...button,
@@ -292,11 +290,10 @@ const styles = {
     cursor: 'not-allowed',
     opacity: 0.5, // To give a visual cue that the button is disabled
     width: 'auto', // ensure width is consistent with navigationButton
-    padding: '15px 25px', // Increased padding
+    padding: '10px 20px',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
-    margin: '0 10px' // Added margin
+    justifyContent: 'center'
   },
   modalOverlay: {
     position: 'fixed',
@@ -310,13 +307,18 @@ const styles = {
     alignItems: 'center'
   },
   modal: {
-    backgroundColor: '#fff',
-    padding: '30px', // Increased padding
+    backgroundColor: '#ffffe0', // Changed from '#fff' to '#ffffe0'
+    padding: '20px',
     borderRadius: '10px',
     maxWidth: '500px',
     width: '100%',
     position: 'relative'
   },
+  label: {
+    display: 'block',
+    marginBottom: '5px', // add this to increase space between label and the element below
+  },
+  
   closeButton: {
     position: 'absolute',
     top: '10px',
@@ -333,7 +335,7 @@ const styles = {
   },
   modalTitle: {
     fontSize: '24px',
-    marginBottom: '30px', // Increased margin
+    marginBottom: '20px',
     color: '#4B0082'
   },
   suggestionsList: {
@@ -341,19 +343,19 @@ const styles = {
     overflowY: 'auto'
   },
   suggestionItem: {
-    marginBottom: '20px', // Increased margin
-    padding: '15px', // Increased padding
+    marginBottom: '15px',
+    padding: '10px',
     backgroundColor: '#f9f9f9',
     borderRadius: '5px',
     border: '1px solid #ddd'
   },
   suggestionTitle: {
     fontSize: '18px',
-    marginBottom: '10px', // Increased margin
+    marginBottom: '5px',
     color: '#4B0082'
   },
   suggestionDescription: {
-    marginBottom: '10px', // Increased margin
+    marginBottom: '5px',
     color: '#555'
   },
   suggestionCost: {

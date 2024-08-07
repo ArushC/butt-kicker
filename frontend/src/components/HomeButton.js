@@ -1,7 +1,7 @@
 // src/components/HomeButton.js
 import React from 'react';
 
-const HomeButton = ({ text, backgroundColor, onClick }) => {
+const HomeButton = ({ text, backgroundColor, onClick, textColor }) => {
   return (
     <button
       onClick={onClick}
@@ -11,7 +11,7 @@ const HomeButton = ({ text, backgroundColor, onClick }) => {
         padding: '15px 30px',
         margin: '10px 0',
         backgroundColor: backgroundColor,
-        color: '#4B0082', // Indigo color for text
+        color: textColor, // text color
         fontSize: '18px',
         border: 'none',
         borderRadius: '5px',

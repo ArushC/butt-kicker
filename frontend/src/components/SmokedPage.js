@@ -180,7 +180,7 @@ const styles = {
     width: '80%',
     padding: '15px 30px', // increased padding for vertical size
     margin: '10px auto',
-    backgroundColor: '#4CAF50', // green color
+    backgroundColor: '#3B873E', // green color
     color: '#fff',
     border: 'none',
     borderRadius: '5px',

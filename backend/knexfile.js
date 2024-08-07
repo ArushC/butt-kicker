@@ -1,3 +1,5 @@
+require('dotenv').config(); // Load environment variables
+
 module.exports = {
   development: {
     client: 'sqlite3',
@@ -15,7 +17,7 @@ module.exports = {
   production: {
     client: 'sqlite3',
     connection: {
-      filename: './prod.sqlite3' // Use a different file for production
+      filename: process.env.PRODUCTION_DB || './prod.sqlite3' // Use an environment variable or default to a file
     },
     useNullAsDefault: true,
     migrations: {

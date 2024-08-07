@@ -37,7 +37,8 @@ const Home = ({ setIsAuthenticated }) => {
 
   useEffect(() => {
     fetchUserData();
-    fetch(`${API_BASE_URL}/api/updateState/${id}`, { method: 'POST' })
+    fetch(`${API_BASE_URL}/api/updateState/${id}`, { 
+      credentials: 'include', method: 'POST' })
       .then(response => {
         if (response.ok) {
           fetchUserData();

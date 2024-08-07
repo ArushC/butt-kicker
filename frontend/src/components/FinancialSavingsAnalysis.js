@@ -14,7 +14,8 @@ const FinancialSavingsAnalysis = () => {
   const [searchValue, setSearchValue] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
-  
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/users/${id}`, {
       credentials: 'include'
@@ -34,20 +35,14 @@ const FinancialSavingsAnalysis = () => {
       })
       .catch(() => navigate('/login'));
 
-    fetch(`${API_BASE_URL}/api/cities`,
-      {
-        credentials: 'include'
-      }
-    )
+    fetch(`${API_BASE_URL}/api/cities`, { credentials: 'include' })
       .then(response => response.json())
       .then(data => {
         const cityOptions = data.map(city => ({ value: city, label: city }));
         setCities(cityOptions);
         setFilteredCities([]);
       })
-      .catch(error => {
-        console.error('Error fetching cities:', error);
-      });
+      .catch(error => console.error('Error fetching cities:', error));
   }, [id, navigate]);
 
   const isInterpretSavingsDisabled = location === '' || averageCigarettes * streak === 0;
@@ -62,13 +57,10 @@ const FinancialSavingsAnalysis = () => {
 
   const handleCityChange = selectedOption => {
     setLocation(selectedOption);
-    // Update the location in the database
     fetch(`${API_BASE_URL}/api/users/${id}/location`, {
       credentials: 'include',
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ location: selectedOption.value })
     })
     .then(response => {
@@ -76,21 +68,12 @@ const FinancialSavingsAnalysis = () => {
         throw new Error('Failed to update location');
       }
     })
-    .catch(error => {
-      console.error('Error updating location:', error);
-    });
+    .catch(error => console.error('Error updating location:', error));
   };
 
-  const handleInputChange = (inputValue) => {
+  const handleInputChange = inputValue => {
     setSearchValue(inputValue);
-    if (inputValue) {
-      const filtered = cities.filter(city =>
-        city.label.toLowerCase().includes(inputValue.toLowerCase())
-      );
-      setFilteredCities(filtered);
-    } else {
-      setFilteredCities([]);
-    }
+    setFilteredCities(cities.filter(city => city.label.toLowerCase().includes(inputValue.toLowerCase())));
   };
 
   const handleMenuOpen = () => {
@@ -98,97 +81,100 @@ const FinancialSavingsAnalysis = () => {
   };
 
   const interpretSavings = async () => {
+    setIsLoading(true);
     const amountSaved = (streak * averageCigarettes * 0.50).toFixed(2);
-    const response = await fetch(
-      'https://noggin.rea.gent/only-viper-1649',
-      {
+    try {
+      const response = await fetch('https://noggin.rea.gent/only-viper-1649', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Bearer rg_v1_tjn7qu6ai78dphc8wl83aluxu08y58etlw50_ngk',
         },
-        body: JSON.stringify({
-          savings: amountSaved,
-          location: location.value,
-        }),
-      }
-    ).then(response => response.text());
-    console.log(response);
-    const data = JSON.parse(response);
-    setSuggestions(data);
-    setModalOpen(true);
+        body: JSON.stringify({ savings: amountSaved, location: location.value }),
+      });
+      const data = await response.text();
+      setSuggestions(JSON.parse(data));
+      setModalOpen(true);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  const Spinner = () => (
+    <div style={styles.spinner}>
+      <div style={styles.spinnerInner}></div>
+    </div>
+  );
 
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Financial Savings Analysis</h1>
-      <div style={styles.inputGroup}>
-        <label>Streak:</label>
-        <input
-          type="text"
-          value={streak}
-          readOnly
-          style={styles.input}
-        />
-      </div>
-      <div style={styles.inputGroup}>
-        <label>Location:</label>
-        <Select
-          value={location}
-          onChange={handleCityChange}
-          onInputChange={handleInputChange}
-          inputValue={searchValue}
-          onMenuOpen={handleMenuOpen}
-          options={filteredCities}
-          styles={customSelectStyles}
-        />
-      </div>
-      <div style={styles.inputGroup}>
-        <label>Average Cigarettes Smoked Each Day:</label>
-        <div style={styles.cigaretteInput}>
-          <button onClick={handleDecrement} style={styles.button}>-</button>
-          <input
-            type="text"
-            value={averageCigarettes}
-            readOnly
-            style={styles.cigaretteCount}
-          />
-          <button onClick={handleIncrement} style={styles.button}>+</button>
-        </div>
-      </div>
-      <div style={styles.savingsMessage}>
-        By not smoking for <span>{streak}</span> days in <span>{location.label}</span>, you avoided smoking <span>{streak * averageCigarettes}</span> cigarettes and saved <span>${(streak * averageCigarettes * 0.50).toFixed(2)}</span>.
-      </div>
-      <div style={styles.buttonGroup}>
-        <button onClick={() => navigate('/')} style={styles.navigationButton}>Back</button>
-        <button 
-          onClick={interpretSavings} 
-          style={isInterpretSavingsDisabled ? styles.disabledButton : styles.navigationButton} 
-          disabled={isInterpretSavingsDisabled}
-        >
-          Interpret My Savings
-        </button>
-      </div>
-      {modalOpen && (
-        <div style={styles.modalOverlay}>
-          <div style={styles.modal}>
-            <button style={styles.closeButton} onClick={() => setModalOpen(false)}>X</button>
-            <h2 style={styles.modalTitle}>Here are suggestions for things to do with ${((streak * averageCigarettes * 0.50).toFixed(2))} in {location.label}:</h2>
-            <div style={styles.suggestionsList}>
-              {Object.keys(suggestions).map(key => (
-                <div key={key} style={styles.suggestionItem}>
-                  <h3 style={styles.suggestionTitle}>{suggestions[key].suggestion}</h3>
-                  <p style={styles.suggestionDescription}>{suggestions[key].description}</p>
-                  <p style={styles.suggestionCost}>Cost: {suggestions[key].cost}</p>
-                </div>
-              ))}
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <>
+          <div style={styles.inputGroup}>
+            <label>Streak:</label>
+            <input type="text" value={streak} readOnly style={styles.input} />
+          </div>
+          <div style={styles.inputGroup}>
+            <label>Location:</label>
+            <Select
+              value={location}
+              onChange={handleCityChange}
+              onInputChange={handleInputChange}
+              inputValue={searchValue}
+              onMenuOpen={handleMenuOpen}
+              options={filteredCities}
+              styles={customSelectStyles}
+            />
+          </div>
+          <div style={styles.inputGroup}>
+            <label>Average Cigarettes Smoked Each Day:</label>
+            <div style={styles.cigaretteInput}>
+              <button onClick={handleDecrement} style={styles.button}>-</button>
+              <input type="text" value={averageCigarettes} readOnly style={styles.cigaretteCount} />
+              <button onClick={handleIncrement} style={styles.button}>+</button>
             </div>
           </div>
-        </div>
+          <div style={styles.savingsMessage}>
+            By not smoking for <span>{streak}</span> days in <span>{location.label}</span>, you avoided smoking <span>{streak * averageCigarettes}</span> cigarettes and saved <span>${(streak * averageCigarettes * 0.50).toFixed(2)}</span>.
+          </div>
+          <div style={styles.buttonGroup}>
+            <button onClick={() => navigate('/')} style={styles.navigationButton}>Back</button>
+            <button 
+              onClick={interpretSavings} 
+              style={isInterpretSavingsDisabled ? styles.disabledButton : styles.navigationButton} 
+              disabled={isInterpretSavingsDisabled}
+            >
+              Interpret My Savings
+            </button>
+          </div>
+          {modalOpen && (
+            <div style={styles.modalOverlay}>
+              <div style={styles.modal}>
+                <button style={styles.closeButton} onClick={() => setModalOpen(false)}>X</button>
+                <h2 style={styles.modalTitle}>Here are suggestions for things to do with ${((streak * averageCigarettes * 0.50).toFixed(2))} in {location.label}:</h2>
+                <div style={styles.suggestionsList}>
+                  {Object.keys(suggestions).map(key => (
+                    <div key={key} style={styles.suggestionItem}>
+                      <h3 style={styles.suggestionTitle}>{suggestions[key].suggestion}</h3>
+                      <p style={styles.suggestionDescription}>{suggestions[key].description}</p>
+                      <p style={styles.suggestionCost}>Cost: {suggestions[key].cost}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
 };
+
 
 const customSelectStyles = {
   control: (base) => ({
@@ -210,6 +196,21 @@ const button = {
 };
 
 const styles = {
+  // Include spinner styles here
+  spinner: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100vh', // Full screen height
+  },
+  spinnerInner: {
+    width: '40px',
+    height: '40px',
+    border: '4px solid #f3f3f3',
+    borderTop: '4px solid #3498db',
+    borderRadius: '50%',
+    animation: 'spin 2s linear infinite'
+  },
   container: {
     display: 'flex',
     flexDirection: 'column',

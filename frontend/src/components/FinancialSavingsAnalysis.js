@@ -199,9 +199,9 @@ const styles = {
   // Include spinner styles here
   spinner: {
     display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
     maxWidth: '500px',
+    justifyContent: 'center',
+    alignItems: 'center',
     height: '100vh', // Full screen height
   },
   spinnerInner: {
@@ -317,8 +317,7 @@ const styles = {
   label: {
     display: 'block',
     marginBottom: '5px', // add this to increase space between label and the element below
-  },
-  
+  },  
   closeButton: {
     position: 'absolute',
     top: '10px',

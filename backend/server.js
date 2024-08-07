@@ -117,6 +117,8 @@ app.post('/api/login', async (req, res) => {
       req.session.userId = user.id;
       req.session.username = user.username;
       req.session.name = user.name;
+      console.log("Successfully set login fields");
+      console.log("The session cookie after login: ", req.session);
       res.status(200).json({ userId: user.id });
     } else {
       res.status(401).send('Invalid username or password');

@@ -1,6 +1,6 @@
 # Butt Kicker
 
-Note: authentication checks have temporarily been bypassed in the application to enable the deployment to work. See [https://butt-kicker-frontend.vercel.app/](https://butt-kicker-frontend.vercel.app/).
+Note: The deployment is currently DOWN due to an authentication issue with cookies on the production environment. [https://butt-kicker-frontend.vercel.app/](https://butt-kicker-frontend.vercel.app/).
 
 ## Description
 

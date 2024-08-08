@@ -31,14 +31,17 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
+app.set('trust proxy', 1); //ensures secure cookies are sent back and forth 
 app.use(session({
   secret: process.env.SESSION_SECRET || random_session_secret,
   resave: false,
   saveUninitialized: false,
   store: store, // Add the session store here
   cookie: {
-    secure: process.env.NODE_ENV === 'production', // use secure cookies in production
-  }
+    sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax', // must be 'none' to enable cross-site delivery
+    httpOnly: true,
+    maxAge: 365 * 24 * 60 * 60 * 1000 //persistent cookies: 1 year
+  } 
 }));
 
 // Import and use journal routes

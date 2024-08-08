@@ -1,6 +1,6 @@
 # Butt Kicker
 
-The deployment for this application can be viewed here: [https://butt-kicker-frontend.vercel.app/](https://butt-kicker-frontend.vercel.app/).
+The deployment for this application can be viewed here: [https://butt-kicker.vercel.app/](https://butt-kicker.vercel.app/).
 
 ## Description
 

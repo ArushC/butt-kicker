@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import Modal from 'react-modal';
 import { API_BASE_URL } from '../config';
+import { useAuthWithId } from '../useAuth';
 
 const Journal = () => {
   const location = useLocation();
@@ -15,6 +16,8 @@ const Journal = () => {
   const [isListening, setIsListening] = useState(false);
   const [interimEntry, setInterimEntry] = useState('');
   const phraseTimeoutRef = useRef(null);
+
+  useAuthWithId(id);
 
   // Define speech recognition setup as a memoized function to prevent re-creation on every render
   const recognition = useMemo(() => {

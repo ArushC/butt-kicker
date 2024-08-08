@@ -1,5 +1,5 @@
 // src/App.js
-import React, { useState, useEffect } from 'react';
+import React /*, { useState, useEffect }*/ from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
@@ -8,55 +8,43 @@ import Journal from './components/Journal';
 import FinancialSavingsAnalysis from './components/FinancialSavingsAnalysis';
 import Forum from './components/Forum';
 import SmokedPage from './components/SmokedPage'; // Import SmokedPage component
-import { API_BASE_URL } from './config';
+//import { API_BASE_URL } from './config';
+//import {useAuth} from './useAuth';
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/api/user`)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error('Not authenticated');
-      })
-      .then((data) => {
-        setIsAuthenticated(true);
-        sessionStorage.setItem('userId', data.userId);
-      })
-      .catch(() => setIsAuthenticated(false));
-  }, []);
+  //useAuth();
 
   return (
     <Router>
       <Routes>
         <Route 
           path="/login" 
-          element={isAuthenticated ? <Navigate to={`/home/${sessionStorage.getItem('userId')}`} /> : <Login setIsAuthenticated={setIsAuthenticated} />} 
+          element={<Login />} 
         />
         <Route 
           path="/register" 
-          element={isAuthenticated ? <Navigate to={`/home/${sessionStorage.getItem('userId')}`} /> : <Register />} 
+          element={<Register />} 
         />
-        <Route 
-          path="/" 
-          element={isAuthenticated ? <Navigate to={`/home/${sessionStorage.getItem('userId')}`} /> : <Navigate to="/login" />} 
-        />
+        <Route
+        path="/"
+        element={sessionStorage.getItem('userId') ? <Navigate to={`/home/${sessionStorage.getItem('userId')}`} /> 
+        : <Navigate to="/login" />
+  }
+/>
         <Route 
           path="/home/:id" 
-          element={isAuthenticated ? <Home setIsAuthenticated={setIsAuthenticated}/> : <Navigate to="/login" />} 
+          element={ <Home />}
         />
         <Route 
           path="/savings/:id" 
-          element={isAuthenticated ? <FinancialSavingsAnalysis /> : <Navigate to="/login" />} 
+          element={<FinancialSavingsAnalysis />}
         />
         <Route 
           path="/smoked/:id" 
-          element={isAuthenticated ? <SmokedPage /> : <Navigate to="/login" />} 
+          element={<SmokedPage /> } 
         />
-        <Route path="/journal/:id/:dateParam" element={isAuthenticated ? <Journal /> : <Navigate to="/login" />} />
-        <Route path="/forum/:id" element={isAuthenticated ? <Forum /> : <Navigate to="/login" />} />
+        <Route path="/journal/:id/:dateParam" element={<Journal />} />
+        <Route path="/forum/:id" element={<Forum /> } />
       </Routes>
     </Router>
   );

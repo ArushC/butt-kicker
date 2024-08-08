@@ -131,7 +131,7 @@ app.post('/api/login', async (req, res) => {
       req.session.username = user.username;
       req.session.name = user.name;
       console.log("Successfully set login fields");
-      console.log("The session cookie after login: ", req.session);
+      console.log("The backend session cookie after login: ", req.session);
       res.status(200).json({ userId: user.id });
     } else {
       res.status(401).send('Invalid username or password');
@@ -163,7 +163,8 @@ app.get('/api/user', (req, res) => {
   if (req.session.userId) {
     res.status(200).json({ userId: req.session.userId });
   } else {
-    res.status(401).send('Not authenticated');
+    // Send an empty JSON object for unauthenticated requests
+    res.status(200).json({});
   }
 });
 

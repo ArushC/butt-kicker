@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import io from 'socket.io-client';
 import { API_BASE_URL } from '../config';
+import { useAuthWithId } from '../useAuth';
 
 // Connect to the WebSocket server using the environment variable
 const socket = io(process.env.REACT_APP_SOCKET_URL || 'http://localhost:7160');
@@ -19,9 +20,11 @@ const Forum = () => {
   const typingTimeoutRef = useRef(null);
   const messagesEndRef = useRef(null);
   const [interimTranscript, setInterimTranscript] = useState('');
-
   const [username, setUsername] = useState('Unknown User');
+  
+  useAuthWithId(id);
 
+  //Set the user's forum username
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/users/${id}`, {
       credentials: 'include'

@@ -5,8 +5,9 @@ import CheckInModal from './CheckInModal';
 import Profile from './Profile';
 import IncreaseCurrentStreak from './IncreaseCurrentStreak';
 import { API_BASE_URL } from '../config';
+import { useAuthWithId } from '../useAuth';
 
-const Home = ({ setIsAuthenticated }) => {
+const Home = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -15,6 +16,8 @@ const Home = ({ setIsAuthenticated }) => {
   const [checkInForYesterday, setCheckInForYesterday] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [showStreakPopup, setShowStreakPopup] = useState(false);
+
+  useAuthWithId(id);
 
   const toggleProfile = () => {
     setShowProfile(!showProfile);
@@ -36,13 +39,11 @@ const Home = ({ setIsAuthenticated }) => {
   };
 
   useEffect(() => {
-    fetchUserData();
     fetch(`${API_BASE_URL}/api/updateState/${id}`, { 
       credentials: 'include', method: 'POST' })
       .then(response => {
-        if (response.ok) {
-          fetchUserData();
-        } else {
+        fetchUserData();
+        if (!response.ok) {
           console.error('State update failed');
         }
       })
@@ -160,7 +161,7 @@ const Home = ({ setIsAuthenticated }) => {
         title={checkInTitle}
       />
 
-      {showProfile && <Profile setIsAuthenticated={setIsAuthenticated} onClose={toggleProfile} />}
+      {showProfile && <Profile onClose={toggleProfile} />}
 
       {showStreakPopup && (
         <IncreaseCurrentStreak 

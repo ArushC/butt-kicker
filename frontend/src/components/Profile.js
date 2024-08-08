@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../config';
 
-const Profile = ({ setIsAuthenticated, onClose }) => {
+const Profile = ({onClose }) => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
@@ -25,9 +25,9 @@ const Profile = ({ setIsAuthenticated, onClose }) => {
 
             if (response.ok) {
                 // Clear session storage
-                sessionStorage.clear();
+                //sessionStorage.clear();
                 // Optionally handle any additional post-logout logic here
-                setIsAuthenticated(false);
+                //setIsAuthenticated(false);
                 navigate('/login');
             } else {
                 console.error('Logout failed');

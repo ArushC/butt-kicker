@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import MotivationPopup from './MotivationPopup'; // import the new component
 import { API_BASE_URL } from '../config';
+import { useAuthWithId } from '../useAuth';
 
 const SmokedPage = () => {
   const navigate = useNavigate();
@@ -10,6 +11,8 @@ const SmokedPage = () => {
   const [showMotivationPopup, setShowMotivationPopup] = useState(false);
   const [user, setUser] = useState(null);
   const notFromHome = true;
+
+  useAuthWithId(id);
 
   useEffect(() => {
     const body = { smoke_free_today: false };

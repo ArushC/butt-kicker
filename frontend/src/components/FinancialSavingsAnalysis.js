@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 import { API_BASE_URL } from '../config';
+import { useAuthWithId } from '../useAuth';
 
 const FinancialSavingsAnalysis = () => {
   const { id } = useParams();
@@ -15,6 +16,8 @@ const FinancialSavingsAnalysis = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  useAuthWithId(id);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/users/${id}`,

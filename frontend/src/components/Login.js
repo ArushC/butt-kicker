@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { API_BASE_URL } from '../config';
 
-const Login = ({ setIsAuthenticated }) => {
+const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -37,8 +37,8 @@ const Login = ({ setIsAuthenticated }) => {
       throw new Error('Login failed: invalid username or password');
     })
     .then(data => {
-      sessionStorage.setItem('userId', data.userId);
-      setIsAuthenticated(true);
+      //sessionStorage.setItem('userId', data.userId);
+      //setIsAuthenticated(true);
       navigate(`/home/${data.userId}`);
     })
     .catch(error => {

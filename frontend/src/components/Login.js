@@ -37,8 +37,6 @@ const Login = () => {
       throw new Error('Login failed: invalid username or password');
     })
     .then(data => {
-      //sessionStorage.setItem('userId', data.userId);
-      //setIsAuthenticated(true);
       navigate(`/home/${data.userId}`);
     })
     .catch(error => {

@@ -20,14 +20,11 @@ const Profile = ({onClose }) => {
         try {
             const response = await fetch(`${API_BASE_URL}/api/logout`, {
                 method: 'GET',
-                credentials: 'include'  // Include credentials to ensure the session is destroyed
+                credentials: 'include'  //include credentials to ensure the session gets destroyed
             });
 
             if (response.ok) {
-                // Clear session storage
-                //sessionStorage.clear();
-                // Optionally handle any additional post-logout logic here
-                //setIsAuthenticated(false);
+                //indicates that the user's session was successfully destroyed
                 navigate('/login');
             } else {
                 console.error('Logout failed');

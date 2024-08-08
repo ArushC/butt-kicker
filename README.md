@@ -1,6 +1,6 @@
 # Butt Kicker
 
-Note: The deployment is currently DOWN due to an authentication issue with cookies on the production environment. [https://butt-kicker-frontend.vercel.app/](https://butt-kicker-frontend.vercel.app/).
+The deployment for this application can be viewed here: [https://butt-kicker-frontend.vercel.app/](https://butt-kicker-frontend.vercel.app/).
 
 ## Description
 

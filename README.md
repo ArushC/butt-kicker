@@ -4,7 +4,7 @@ The deployment for this application can be viewed here: [https://butt-kicker.ver
 
 ## Description
 
-A high-fidelity prototype of an application to help users quit smoking.
+A high-fidelity prototype of an application to help users quit smoking, brought to you by the Builder Bros (Arush, Ad, and Andy).
 
 ## Prerequisites
 

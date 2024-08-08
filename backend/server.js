@@ -38,6 +38,7 @@ app.use(session({
   saveUninitialized: false,
   store: store, // Add the session store here
   cookie: {
+    secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax', // must be 'none' to enable cross-site delivery
     httpOnly: true,
     maxAge: 365 * 24 * 60 * 60 * 1000 //persistent cookies: 1 year

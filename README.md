@@ -8,7 +8,9 @@ A high-fidelity prototype of an application to help users quit smoking, brought 
 
 ## Important Note Regarding Browser Compatibility
 
-The voice features are fully supported on Chrome, but may not work on other browsers like Safari and Firefox.
+If you're unable to log in despite entering valid credentials, your browser may be blocking third-party cookies which are necessary for authentication. This issue occurs because the backend is deployed on Render while the frontend is hosted on Vercel, resulting in different domain names. To resolve this, you can enable cross-site tracking in your browser settings, or use a different browser that allows third-party cookies.
+
+For the best experience, we recommend using Chrome. The voice input features may not be fully supported on browsers like Safari and Firefox.
 
 ## Prerequisites for Local Setup
 

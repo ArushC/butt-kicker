@@ -146,7 +146,7 @@ const FinancialSavingsAnalysis = () => {
   By not smoking for <span>{streak}</span> {streak === 1 ? 'day' : 'days'} in <span>{location.label}</span>, you avoided smoking <span>{streak * averageCigarettes}</span> {streak * averageCigarettes === 1 ? 'cigarette' : 'cigarettes'} and saved <span>${(streak * averageCigarettes * 0.50).toFixed(2)}</span>.
         </div>
           <div style={styles.buttonGroup}>
-            <button onClick={() => navigate('/')} style={styles.navigationButton}>Back</button>
+            <button onClick={() => navigate(`/home/${id}`)} style={styles.navigationButton}>Back</button>
             <button 
               onClick={interpretSavings} 
               style={isInterpretSavingsDisabled ? styles.disabledButton : styles.navigationButton} 

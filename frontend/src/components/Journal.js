@@ -183,7 +183,7 @@ const Journal = () => {
               borderRadius: '5px',
               cursor: 'pointer'
             }}
-            onClick={() => notFromHome ? navigate(`/smoked/${id}`) : navigate('/')}
+            onClick={() => notFromHome ? navigate(`/smoked/${id}`) : navigate(`/home/${id}`)}
           >
             Back
           </button>

@@ -199,7 +199,7 @@ const Forum = () => {
       </div>
       <button
         style={{ marginTop: '20px', padding: '10px 20px', backgroundColor: '#4B0082', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
-        onClick={() => notFromHome ? navigate(`/smoked/${id}`) : navigate('/')}
+        onClick={() => notFromHome ? navigate(`/smoked/${id}`) : navigate(`/home/${id}`)}
       >
         Back
       </button>

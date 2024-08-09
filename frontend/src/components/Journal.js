@@ -115,7 +115,7 @@ const Journal = () => {
   }, [id]);
 
   const handleBlur = () => {
-    if (entry.trim() && date === new Date().toISOString().split('T')[0]) {
+    if (date === new Date().toISOString().split('T')[0]) {
       fetch(`${API_BASE_URL}/api/journal/${id}/today`, {
         method: 'POST',
         headers: {

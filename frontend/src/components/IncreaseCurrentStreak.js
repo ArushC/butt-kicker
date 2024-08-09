@@ -37,7 +37,7 @@ const IncreaseCurrentStreak = ({ onClose, currentStreak }) => {
   }, [currentStreak]);
 
   const handleShare = () => {
-    const shareText = `I have been smoke-free for ${currentStreak} ${currentStreak === 1 ? 'Day' : 'Days'}! I have been tracking my progress using an app called "Butt Kicker". See https://github.com/ArushC/butt-kicker.`;
+    const shareText = `I have been smoke-free for ${currentStreak} ${currentStreak === 1 ? 'Day' : 'Days'}! I have been tracking my progress using an app called "Butt Kicker". See https://butt-kicker.vercel.app/.`;
 
     const mailtoLink = `mailto:?subject=My Smoke-Free Progress&body=${encodeURIComponent(shareText)}`;
 

@@ -19,6 +19,50 @@ const Journal = () => {
 
   useAuthWithId(id);
 
+  //fetch this date's journal entry if saved
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/journal/${id}/${dateParam}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.entry) {
+          setEntry(data.entry);
+        }
+      })
+      .catch(err => console.error('Error fetching journal entry:', err));
+  }, [id, dateParam]);
+
+  //fetch the previous dates of this user's data entry if applicable
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/journal/${id}/dates`)
+      .then(response => response.json())
+      .then(data => {
+        setEntryDates(data);
+      })
+      .catch(err => console.error('Error fetching journal entry dates:', err));
+  }, [id]);
+
+  //function to save journal entry
+  const saveEntry = useCallback((entryToSave) => {
+    if (date === new Date().toISOString().split('T')[0]) {
+      fetch(`${API_BASE_URL}/api/journal/${id}/today`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ entry: entryToSave }) // Use entryToSave as the entry to be saved
+      }).catch(err => console.error('Error saving journal entry:', err));
+    }
+  }, [id, date]); // No need to include 'entry' in the dependency array
+
+  const startListening = useCallback(() => {
+    setIsListening(true);
+  }, []);
+
+  const stopListening = useCallback(() => {
+    setIsListening(false);
+    clearTimeout(phraseTimeoutRef.current);
+  }, []);
+
   // Define speech recognition setup as a memoized function to prevent re-creation on every render
   const recognition = useMemo(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -45,7 +89,12 @@ const Journal = () => {
         }
       }
       if (finalTranscript) {
-        setEntry(prevEntry => prevEntry.length > 0 ? prevEntry + ' ' + finalTranscript.trim() : finalTranscript.trim());
+        setEntry(prevEntry => {
+          const updatedEntry = `${prevEntry} ${finalTranscript.trim()}`;
+          saveEntry(updatedEntry); // Save the entry after updating
+          return updatedEntry;
+        });
+        //saveEntry();
         setInterimEntry('');
       }
       // Set a new timeout for end of phrase silence
@@ -68,7 +117,7 @@ const Journal = () => {
     };
 
     return recog;
-  }, []);
+  }, [saveEntry, stopListening]);
 
   // Effect to start and stop recognition based on isListening
   useEffect(() => {
@@ -85,45 +134,8 @@ const Journal = () => {
     };
   }, [isListening, recognition]);
 
-  const startListening = useCallback(() => {
-    setIsListening(true);
-  }, []);
-
-  const stopListening = useCallback(() => {
-    setIsListening(false);
-    clearTimeout(phraseTimeoutRef.current);
-  }, []);
-
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/api/journal/${id}/${dateParam}`)
-      .then(response => response.json())
-      .then(data => {
-        if (data.entry) {
-          setEntry(data.entry);
-        }
-      })
-      .catch(err => console.error('Error fetching journal entry:', err));
-  }, [id, dateParam]);
-
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/api/journal/${id}/dates`)
-      .then(response => response.json())
-      .then(data => {
-        setEntryDates(data);
-      })
-      .catch(err => console.error('Error fetching journal entry dates:', err));
-  }, [id]);
-
-  const handleBlur = () => {
-    if (date === new Date().toISOString().split('T')[0]) {
-      fetch(`${API_BASE_URL}/api/journal/${id}/today`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ entry })
-      }).catch(err => console.error('Error saving journal entry:', err));
-    }
+  const handleBlur = (updatedEntry) => {
+    saveEntry(updatedEntry);
   };
 
   const handleDateClick = (clickedDate) => {
@@ -151,7 +163,7 @@ const Journal = () => {
           }}
           value={entry}
           onChange={e => setEntry(e.target.value)}
-          onBlur={handleBlur}
+          onBlur={() => handleBlur(entry)}
           readOnly={dateParam && date !== new Date().toISOString().split('T')[0]}
         />
         {date === new Date().toISOString().split('T')[0] && (

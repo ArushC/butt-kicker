@@ -103,18 +103,26 @@ const Forum = () => {
   };
 
   const handleVoiceInput = () => {
-    const recognition = new window.webkitSpeechRecognition();
+    // Check if the SpeechRecognition API is available
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  
+    if (!SpeechRecognition) {
+      console.error('Speech recognition not supported in this browser.');
+      return; // Exit if SpeechRecognition is not supported
+    }
+  
+    const recognition = new SpeechRecognition();
     recognition.continuous = false;
     recognition.interimResults = true;
-
+  
     recognition.onstart = () => {
       setIsListening(true);
     };
-
+  
     recognition.onend = () => {
       setIsListening(false);
     };
-
+  
     recognition.onresult = (event) => {
       let interimTranscript = '';
       let finalTranscript = '';
@@ -128,7 +136,7 @@ const Forum = () => {
       setInterimTranscript(interimTranscript);
       setMessage(prevMessage => `${prevMessage.trim()} ${finalTranscript.trim()}`); // Add a single space between the previous contents and new contents
     };
-
+  
     recognition.start();
   };
 

@@ -6,6 +6,10 @@ The deployment for this application can be viewed here: [https://butt-kicker.ver
 
 A high-fidelity prototype of an application to help users quit smoking, brought to you by the Builder Bros (Arush, Ad, and Andy).
 
+## Important Note Regarding Browser Compatibility
+
+The voice features are fully supported on Chrome, but may not work on other browsers like Safari and Firefox.
+
 ## Prerequisites for Local Setup
 
 - Node.js

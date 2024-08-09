@@ -21,8 +21,12 @@ const Journal = () => {
 
   // Define speech recognition setup as a memoized function to prevent re-creation on every render
   const recognition = useMemo(() => {
-    const speechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recog = new speechRecognition();
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      console.error('SpeechRecognition not supported in this browser.');
+      return null;
+    }
+    const recog = new SpeechRecognition();
     recog.continuous = true;
     recog.interimResults = true;
     recog.lang = 'en-US';  // Specify the language as needed
@@ -52,6 +56,9 @@ const Journal = () => {
 
     recog.onerror = event => {
       console.error('Speech recognition error:', event.error);
+      if (event.error === 'not-allowed') {
+        alert('Microphone access is denied. Please enable it in your browser settings.');
+      }
       setIsListening(false);
     };
 
@@ -65,15 +72,15 @@ const Journal = () => {
 
   // Effect to start and stop recognition based on isListening
   useEffect(() => {
-    if (isListening) {
+    if (isListening && recognition) {
       recognition.start();
     } else {
-      recognition.stop();
+      recognition && recognition.stop();
     }
 
     // Ensure the recognition is stopped when the component unmounts
     return () => {
-      recognition.stop();
+      recognition && recognition.stop();
       clearTimeout(phraseTimeoutRef.current);
     };
   }, [isListening, recognition]);
@@ -247,15 +254,15 @@ const Journal = () => {
               key={index}
               style={{
                 display: 'block',
-                width: '100%',
-                margin: '10px 0',
-                padding: '15px 0',
+                margin: '10px auto',
+                padding: '10px',
                 backgroundColor: '#4B0082',
                 color: '#fff',
                 border: 'none',
                 borderRadius: '5px',
                 cursor: 'pointer',
-                fontSize: '16px'
+                width: '80%',
+                maxWidth: '300px'
               }}
               onClick={() => handleDateClick(entryDate)}
             >

@@ -76,7 +76,10 @@ const FinancialSavingsAnalysis = () => {
 
   const handleInputChange = inputValue => {
     setSearchValue(inputValue);
-    setFilteredCities(cities.filter(city => city.label.toLowerCase().includes(inputValue.toLowerCase())));
+    const filtered = cities
+    .filter(city => city.label.toLowerCase().includes(inputValue.toLowerCase()))
+    .slice(0, 50); // Limit to 50 results to prevent lag
+    setFilteredCities(filtered);
   };
 
   const handleMenuOpen = () => {

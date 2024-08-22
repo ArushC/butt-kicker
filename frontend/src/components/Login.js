@@ -10,6 +10,8 @@ const Login = () => {
   const location = useLocation();
   const [flashMessage, setFlashMessage] = useState(''); // State for success message
   const [errorMessage, setErrorMessage] = useState(''); // State for error message
+  const [showNote, setShowNote] = useState(false); // State to control the display of the note
+  //const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
   useEffect(() => {
     const query = new URLSearchParams(location.search);
@@ -19,9 +21,24 @@ const Login = () => {
     }
   }, [location]);
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    let noteTimeout;
+  
+    if (isLoading) {
+      noteTimeout = setTimeout(() => {
+        setShowNote(true); // Show note after 5 seconds
+      }, 5000);
+    }
+  
+    return () => clearTimeout(noteTimeout); // Cleanup the timeout if the component unmounts or login finishes
+  }, [isLoading]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true); // Show spinner when form is submitted
+
+    // Introduce a delay of 10 seconds for testing the spinbar feature
+    //await delay(10000);
 
     fetch(`${API_BASE_URL}/api/login`, {
       credentials: 'include',
@@ -57,6 +74,7 @@ const Login = () => {
         <div style={styles.spinner}>
           <div style={styles.spinnerInner}></div>
           <p>Login in progress...</p>
+          {showNote && <p style={styles.note}>Login may take a while if the server is booting up. Thank you for your patience!</p>}
         </div>
       ) : (
         <form onSubmit={handleSubmit} style={styles.form}>
@@ -172,6 +190,12 @@ const styles = {
     borderTop: '4px solid #3498db',
     borderRadius: '50%',
     animation: 'spin 2s linear infinite',
+  },
+  note: {
+  marginTop: '10px',
+  color: '#666',
+  fontSize: '14px',
+  textAlign: 'center',
   },
 };
 

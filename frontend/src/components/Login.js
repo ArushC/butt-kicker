@@ -1,4 +1,3 @@
-// src/components/Login.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { API_BASE_URL } from '../config';
@@ -6,9 +5,10 @@ import { API_BASE_URL } from '../config';
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false); // State for spinner
   const navigate = useNavigate();
   const location = useLocation();
-  const [flashMessage, setFlashMessage] = useState(''); //State for success message
+  const [flashMessage, setFlashMessage] = useState(''); // State for success message
   const [errorMessage, setErrorMessage] = useState(''); // State for error message
 
   useEffect(() => {
@@ -21,28 +21,30 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsLoading(true); // Show spinner when form is submitted
 
     fetch(`${API_BASE_URL}/api/login`, {
       credentials: 'include',
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify({ username, password }),
     })
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-      throw new Error('Login failed: invalid username or password');
-    })
-    .then(data => {
-      navigate(`/home/${data.userId}`);
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      setErrorMessage('Login failed: invalid username or password'); // Set error message
-    });
+      .then((response) => {
+        setIsLoading(false); // Hide spinner after response is received
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error('Login failed: invalid username or password');
+      })
+      .then((data) => {
+        navigate(`/home/${data.userId}`);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        setErrorMessage('Login failed: invalid username or password'); // Set error message
+      });
   };
 
   return (
@@ -51,25 +53,34 @@ const Login = () => {
       <h2 style={styles.description}>Put smoking in the past</h2>
       {flashMessage && <div style={styles.flashMessage}>{flashMessage}</div>}
       {errorMessage && <div style={styles.errorMessage}>{errorMessage}</div>} {/* Display error message */}
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <input
-          type="text"
-          value={username}
-          onChange={e => setUsername(e.target.value)}
-          placeholder="Username"
-          required
-          style={styles.input}
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          placeholder="Password"
-          required
-          style={styles.input}
-        />
-        <button type="submit" style={styles.button}>Login</button>
-      </form>
+      {isLoading ? (
+        <div style={styles.spinner}>
+          <div style={styles.spinnerInner}></div>
+          <p>Login in progress...</p>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit} style={styles.form}>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Username"
+            required
+            style={styles.input}
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            required
+            style={styles.input}
+          />
+          <button type="submit" style={styles.button}>
+            Login
+          </button>
+        </form>
+      )}
       <p>Is this your first time here?</p>
       <button onClick={() => navigate('/register')} style={styles.registerButton}>
         Create A New Account
@@ -88,19 +99,19 @@ const styles = {
     backgroundColor: '#d3f0ff',
     borderRadius: '10px',
     maxWidth: '500px',
-    margin: '50px auto 0 auto'
+    margin: '50px auto 0 auto',
   },
   title: {
     fontSize: '32px',
     marginBottom: '10px',
     color: '#4B0082',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   description: {
     fontSize: '24px',
     marginBottom: '20px',
     color: '#4B0082',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   flashMessage: {
     backgroundColor: '#d4edda',
@@ -108,7 +119,7 @@ const styles = {
     padding: '10px',
     borderRadius: '5px',
     marginBottom: '20px',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   errorMessage: {
     backgroundColor: '#f8d7da',
@@ -116,20 +127,20 @@ const styles = {
     padding: '10px',
     borderRadius: '5px',
     marginBottom: '20px',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   form: {
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   input: {
     width: '100%',
     padding: '10px',
     margin: '10px 0',
     borderRadius: '5px',
-    border: '1px solid #ccc'
+    border: '1px solid #ccc',
   },
   button: {
     padding: '10px 20px',
@@ -138,7 +149,7 @@ const styles = {
     border: 'none',
     borderRadius: '5px',
     cursor: 'pointer',
-    marginTop: '10px'
+    marginTop: '10px',
   },
   registerButton: {
     padding: '10px 20px',
@@ -147,8 +158,21 @@ const styles = {
     border: 'none',
     borderRadius: '5px',
     cursor: 'pointer',
-    marginTop: '10px'
-  }
+    marginTop: '10px',
+  },
+  spinner: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  spinnerInner: {
+    width: '40px',
+    height: '40px',
+    border: '4px solid #f3f3f3',
+    borderTop: '4px solid #3498db',
+    borderRadius: '50%',
+    animation: 'spin 2s linear infinite',
+  },
 };
 
 export default Login;

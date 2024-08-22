@@ -1,6 +1,6 @@
 # Butt Kicker
 
-The deployment for this application can be viewed here: [https://butt-kicker.vercel.app/](https://butt-kicker.vercel.app/).
+The deployment for this application can be viewed here: [https://butt-kicker.vercel.app/](https://butt-kicker.vercel.app/). Note that the backend server on Render periodically purges data after long periods of inactivity. Due to server spindown, logging in for the first time may also take a while. 
 
 ## Description
 

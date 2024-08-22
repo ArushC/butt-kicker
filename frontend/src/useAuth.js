@@ -22,7 +22,7 @@ const useAuthWithId = (id) => {
           sessionStorage.setItem('userId', data.userId);
         } else {
           // User is not authenticated or ID mismatch, so go to login page
-          navigate('/login');
+          //navigate('/login');
         }
       } catch (error) {
         // Handle any other errors (optional)

@@ -158,23 +158,25 @@ const styles = {
     margin: '10px 0',
     borderRadius: '5px',
     border: '1px solid #ccc',
-    boxSizing: 'border-box', // Ensure padding is included in the element's width and height
+    boxSizing: 'border-box',
   },
   confirmPasswordContainer: {
     position: 'relative',
     width: '100%',
     display: 'flex',
-    alignItems: 'center', // Ensures the text field and checkmark are vertically aligned
+    alignItems: 'center',
   },
   checkMark: {
-    marginLeft: '10px', // Adds space between the input field and the checkmark
+    marginLeft: '10px',
     color: 'green',
-    fontSize: '20px',
+    fontSize: '24px', // Increase the font size to match the height of the input field
+    lineHeight: '40px', // Adjust line height to center the mark vertically
   },
   errorMark: {
-    marginLeft: '10px', // Adds space between the input field and the error mark
+    marginLeft: '10px',
     color: 'red',
-    fontSize: '20px',
+    fontSize: '24px', // Increase the font size to match the height of the input field
+    lineHeight: '40px', // Adjust line height to center the mark vertically
   },
   button: {
     padding: '10px 20px',

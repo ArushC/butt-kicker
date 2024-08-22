@@ -7,32 +7,33 @@ function Register() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
-  const [flashMessage, setFlashMessage] = useState(''); 
-  const [isLoading, setIsLoading] = useState(false); // New state for spinner
-  const [showNote, setShowNote] = useState(false); // New state for note display
+  const [flashMessage, setFlashMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [showNote, setShowNote] = useState(false);
+  const [passwordMatch, setPasswordMatch] = useState(true);
   const navigate = useNavigate();
-  const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+  //const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
   useEffect(() => {
     let noteTimeout;
     if (isLoading) {
       noteTimeout = setTimeout(() => {
-        setShowNote(true); // Show note after 5 seconds
+        setShowNote(true);
       }, 5000);
     }
-    return () => clearTimeout(noteTimeout); // Cleanup on unmount or form submission completion
+    return () => clearTimeout(noteTimeout);
   }, [isLoading]);
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    setIsLoading(true); // Show spinner when form is submitted
+    setIsLoading(true);
 
     // Introduce a delay of 10 seconds for testing the spinbar feature
-    await delay(10000);
+    //await delay(10000);
 
     if (password !== confirmPassword) {
       setFlashMessage('Passwords do not match');
-      setIsLoading(false); // Hide spinner if error occurs
+      setIsLoading(false);
       return;
     }
 
@@ -43,7 +44,7 @@ function Register() {
       body: JSON.stringify({ username, password, name })
     });
 
-    setIsLoading(false); // Hide spinner after response is received
+    setIsLoading(false);
     if (response.ok) {
       navigate(`/login?flashMessage=Successfully registered an account for ${username}. Please log in.`);
     } else {
@@ -52,17 +53,23 @@ function Register() {
     }
   };
 
+  const handleConfirmPasswordChange = (e) => {
+    const value = e.target.value;
+    setConfirmPassword(value);
+    setPasswordMatch(password === value);
+  };
+
   const isFormValid = password === confirmPassword && username && password && confirmPassword;
 
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Create a New Account</h1>
-      {flashMessage && <div style={styles.flashMessage}>{flashMessage}</div>} {/* Display flash message */}
+      {flashMessage && <div style={styles.flashMessage}>{flashMessage}</div>}
       {isLoading ? (
         <div style={styles.spinner}>
           <div style={styles.spinnerInner}></div>
           <p>Registration in progress...</p>
-          {showNote && <p style={styles.note}>Registration may take long if the server is booting up. Thank you for your patience!</p>}
+          {showNote && <p style={styles.note}>Please note, registration may take longer if the server is booting up. Thank you for your patience!</p>}
         </div>
       ) : (
         <form onSubmit={handleRegister} style={styles.form}>
@@ -82,14 +89,21 @@ function Register() {
             required
             style={styles.input}
           />
-          <input
-            type="password"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={e => setConfirmPassword(e.target.value)}
-            required
-            style={styles.input}
-          />
+          <div style={styles.confirmPasswordContainer}>
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChange={handleConfirmPasswordChange}
+              required
+              style={styles.input}
+            />
+            {confirmPassword && (
+              <span style={!password || !passwordMatch ? styles.errorMark : styles.checkMark}>
+                {!password || !passwordMatch ? '✘' : '✔'}
+              </span>
+            )}
+          </div>
           <input
             type="text"
             placeholder="Name (optional)"
@@ -125,8 +139,8 @@ const styles = {
     textAlign: 'center'
   },
   flashMessage: {
-    backgroundColor: '#f8d7da', // Red background for error messages
-    color: '#721c24', // Dark red text for error messages
+    backgroundColor: '#f8d7da',
+    color: '#721c24',
     padding: '10px',
     borderRadius: '5px',
     marginBottom: '20px',
@@ -143,7 +157,24 @@ const styles = {
     padding: '10px',
     margin: '10px 0',
     borderRadius: '5px',
-    border: '1px solid #ccc'
+    border: '1px solid #ccc',
+    boxSizing: 'border-box', // Ensure padding is included in the element's width and height
+  },
+  confirmPasswordContainer: {
+    position: 'relative',
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center', // Ensures the text field and checkmark are vertically aligned
+  },
+  checkMark: {
+    marginLeft: '10px', // Adds space between the input field and the checkmark
+    color: 'green',
+    fontSize: '20px',
+  },
+  errorMark: {
+    marginLeft: '10px', // Adds space between the input field and the error mark
+    color: 'red',
+    fontSize: '20px',
   },
   button: {
     padding: '10px 20px',

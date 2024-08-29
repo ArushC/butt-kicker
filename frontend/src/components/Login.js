@@ -74,7 +74,7 @@ const Login = () => {
         <div style={styles.spinner}>
           <div style={styles.spinnerInner}></div>
           <p>Login in progress...</p>
-          {showNote && <p style={styles.note}>Login may take a while if the server is booting up. Thank you for your patience!</p>}
+          {showNote && <p style={styles.note}>Login may take up to a minute if the server is booting up. Thank you for your patience!</p>}
         </div>
       ) : (
         <form onSubmit={handleSubmit} style={styles.form}>

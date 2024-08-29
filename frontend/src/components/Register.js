@@ -69,7 +69,7 @@ function Register() {
         <div style={styles.spinner}>
           <div style={styles.spinnerInner}></div>
           <p>Registration in progress...</p>
-          {showNote && <p style={styles.note}>Registration may take a while if the server is booting up. Thank you for your patience!</p>}
+          {showNote && <p style={styles.note}>Registration may take up to a minute if the server is booting up. Thank you for your patience!</p>}
         </div>
       ) : (
         <form onSubmit={handleRegister} style={styles.form}>

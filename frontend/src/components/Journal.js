@@ -24,9 +24,7 @@ const Journal = () => {
     fetch(`${API_BASE_URL}/api/journal/${id}/${dateParam}`)
       .then(response => response.json())
       .then(data => {
-        if (data.entry) {
-          setEntry(data.entry);
-        }
+        setEntry(data.entry || '');
       })
       .catch(err => console.error('Error fetching journal entry:', err));
   }, [id, dateParam]);
